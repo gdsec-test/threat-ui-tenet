@@ -41,7 +41,7 @@ export const IndexPage = () => (
       <div className='card ux-card'>
 
         <div className='card-title'>
-          <h1 className='p-t-1'>Welcome to Gasket!</h1>
+          <h1 className='p-t-1'>Welcome to Threat UI!</h1>
           <p className='description'>To get started, edit <code>pages/index.js</code> and save to reload.</p>
         </div>
 

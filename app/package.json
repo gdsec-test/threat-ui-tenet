@@ -6,6 +6,7 @@
     "build": "gasket build",
     "start": "gasket start",
     "local": "gasket local",
+    "local:debug": "npx -n --inspect gasket local",
     "analyze": "gasket analyze",
     "upload-coverage": "upload-coverage tenet",
     "size-limit": "size-limit",
