@@ -1,0 +1,24 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+
+# testing
+reports
+
+# production
+build
+.next
+
+# misc
+.env
+*.log
+.DS_Store
+
+# special
+app.config.local.js*
+gasket.config.local.js*
+.docs
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json

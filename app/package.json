@@ -1,0 +1,87 @@
+{
+  "name": "threat-ui-tenet",
+  "version": "0.0.0",
+  "description": "Threat API UI aka Tenet",
+  "scripts": {
+    "build": "gasket build",
+    "start": "gasket start",
+    "local": "gasket local",
+    "analyze": "gasket analyze",
+    "upload-coverage": "upload-coverage tenet",
+    "size-limit": "size-limit",
+    "test": "npm run test:runner",
+    "test:runner": "mocha --require setup-env --recursive \"test/**/*.*(test|spec).js\"",
+    "test:coverage": "nyc --reporter=text --reporter=json-summary npm run test:runner",
+    "test:watch": "npm run test:runner -- --watch",
+    "lint": "eslint --ext .js,.jsx .",
+    "lint:fix": "npm run lint -- --fix",
+    "stylelint": "stylelint \"**/*.scss\"",
+    "stylelint:fix": "npm run stylelint -- --fix",
+    "posttest": "npm run lint && npm run stylelint"
+  },
+  "dependencies": {
+    "@gasket/assets": "^5.6.0",
+    "@gasket/cli": "^5.7.0",
+    "@gasket/intl": "^5.7.0",
+    "@gasket/log": "^5.6.0",
+    "@gasket/plugin-mocha": "^5.6.0",
+    "@gasket/redux": "^5.6.0",
+    "@godaddy/gasket-auth": "^1.4.1",
+    "@godaddy/gasket-cookies": "^1.0.0",
+    "@godaddy/gasket-next": "^1.6.3",
+    "@godaddy/gasket-preset-webapp": "^1.1.1",
+    "@rigor/upload-coverage": "^1.0.0",
+    "@size-limit/preset-big-lib": "^4.7.0",
+    "@ux/uxcore2": "^2002.1.2",
+    "browserslist-config-godaddy": "^3.0.0",
+    "express": "^4.16.3",
+    "next": "^9.1.2",
+    "next-redux-wrapper": "^4.0.1",
+    "prop-types": "^15.6.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-intl": "^4.5.3",
+    "react-redux": "^7.1.0",
+    "react-transition-group": "^4.3.0",
+    "redux": "^4.0.4",
+    "size-limit": "^4.7.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/register": "^7.0.0",
+    "@godaddy/eslint-plugin-react-intl": "^1.1.0",
+    "chai": "^4.2.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "eslint": ">=6.0.0",
+    "eslint-config-godaddy-react": "^6.0.1",
+    "jsdom": "^15.0.0",
+    "mocha": "^6.2.0",
+    "nyc": "^14.1.1",
+    "setup-env": "^1.2.2",
+    "sinon": "^7.4.1",
+    "stylelint": "^12.0.0",
+    "stylelint-config-godaddy": "^0.4.0"
+  },
+  "browserslist": [
+    "extends browserslist-config-godaddy"
+  ],
+  "eslintConfig": {
+    "extends": [
+      "godaddy-react",
+      "plugin:@godaddy/react-intl/recommended"
+    ],
+    "env": {
+      "mocha": true
+    }
+  },
+  "stylelint": {
+    "extends": [
+      "stylelint-config-godaddy"
+    ]
+  },
+  "eslintIgnore": [
+    "coverage/",
+    "build/"
+  ]
+}
