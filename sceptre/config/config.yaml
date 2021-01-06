@@ -3,7 +3,4 @@ region: us-west-2
 ecr_version: "1.1.0"
 fargate_cluster_version: "1.0.0"
 fargate_service_version: "1.6.3"
-iam_policy_version: "1.0.0"
-iam_role_version: "1.0.7"
 # TODO - clean up account number from pcp-ui configs
-account_number: 345790377847

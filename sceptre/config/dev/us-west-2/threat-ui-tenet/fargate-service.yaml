@@ -1,11 +1,11 @@
 template_path: sc-fargate-service.yaml
-stack_name: {{project_code}}-{{project_code}}-fargate-service3
+stack_name: {{project_code}}-fargate-service
 parameters:
-  ClusterName: {{project_code}}-cluster3
+  ClusterName: {{project_code}}-cluster
   ECRRepoSuffix: dkr.ecr.{{region}}.amazonaws.com/com.godaddy.{{project_code}}
-  ServiceName: {{project_code}}-fargate3
-  # CertificateId: {{certificate_id}}
-  HealthCheckPath: /healthcheck-react
+  ServiceName: {{project_code}}-fargate
+  CertificateId: {{certificate_id}}
+  HealthCheckPath: /healthcheck
   HealthCheckGracePeriodSeconds: "240"
   TrafficType: internal
   ProductVersion: {{fargate_service_version}}
@@ -18,9 +18,8 @@ parameters:
   Cpu: "1024"
   Memory: "2GB"
   EnvironmentVariablesJson: "[{\"Name\":\"NODE_ENV\",\"Value\":\"{{node_env}}\"},{\"Name\":\"AWS\",\"Value\":\"true\"}]"
-
 dependencies:
   - {{environment}}/{{region}}/{{project_code}}/fargate-cluster.yaml
 # hooks:
 #   before_create:
-#     - !deploy --path ./src --project_code com.godaddy.{{project_code}}
+#     - !deploy --path ./src --service_name com.godaddy.{{project_code}}
