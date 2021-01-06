@@ -1,0 +1,7 @@
+template_path: sc-ecr.yaml
+stack_name: {{project_code}}-{{project_code}}-ecr
+parameters:
+  ECRRepoName: com.godaddy.{{project_code}}
+  ProductVersion: {{ecr_version}}
+
+  

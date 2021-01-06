@@ -1,0 +1,20 @@
+Parameters:
+  ClusterName:
+    Type: String
+    Description: Required. The name of the Fargate Cluster
+  ProductVersion:
+    Type: String
+    Default: "1.0.0"
+Resources:
+  FargateCluster:
+    Type: AWS::ServiceCatalog::CloudFormationProvisionedProduct
+    Properties:
+      ProductName: FargateCluster
+      ProvisioningArtifactName: !Ref ProductVersion
+      ProvisionedProductName: !Sub ${ClusterName}-cluster
+      ProvisioningParameters:
+        - Key: ClusterName
+          Value: !Ref ClusterName
+      Tags:
+        - Key: doNotShutDown
+          Value: true

@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Deploy the ECR Service Catalog Product
+Parameters:
+  # Use default value or override in Stack Config
+  ECRRepoName:
+    Type: String
+    Description: The name of the repo (com.godaddy.example)
+  MaxImageCount:
+    Type: Number
+    Description: Max Image Versions to keep
+    Default: 5
+  ECRLifecyclePolicyOverride:
+    Type: String
+    Description: Override of the lifecycle policy JSON
+    Default: ""
+  ProductVersion:
+    Type: String
+    Default: "1.1.0"
+Resources:
+  Repository:
+    Type: AWS::ServiceCatalog::CloudFormationProvisionedProduct
+    Properties:
+      ProductName: ECR
+      ProvisioningArtifactName: !Ref ProductVersion
+      ProvisionedProductName: !Sub ${ECRRepoName}-ecr
+      ProvisioningParameters:
+        # required parameter
+        - Key: ECRRepoName
+          Value: !Ref ECRRepoName
+        # common optional parameter
+        - Key: ECRMaxImageCount
+          Value: !Ref MaxImageCount
+        - Key: ECRLifecyclePolicyOverride
+          Value: !Ref ECRLifecyclePolicyOverride
+      Tags:
+        - Key: doNotShutDown
+          Value: true

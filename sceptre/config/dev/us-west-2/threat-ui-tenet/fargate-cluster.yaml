@@ -1,0 +1,5 @@
+template_path: sc-fargate-cluster.yaml
+stack_name: {{project_code}}-{{project_code}}-fargate-cluster3
+parameters:
+  ClusterName: {{project_code}}-cluster3
+  ProductVersion: {{fargate_cluster_version}}

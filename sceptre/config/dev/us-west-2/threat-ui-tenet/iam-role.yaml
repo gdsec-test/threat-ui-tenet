@@ -1,0 +1,10 @@
+template_path: sc-iam-role-hub.yaml
+stack_name: {{project_code}}-fargate-role
+parameters:
+   ProductVersion: {{iam_role_version}}
+   RoleNameSuffix: {{project_code}}-fargate-role 
+   AssumingServices: ecs-tasks.amazonaws.com
+   ServiceName: {{project_code}}
+dependencies:
+  - {{environment}}/{{region}}/{{project_code}}/iam-policy.yaml
+

@@ -1,0 +1,6 @@
+template_path: sc-iam-policy.yaml
+stack_name: {{project_code}}-{{project_code}}-kinesis-policy
+parameters:
+   ProductVersion: {{iam_policy_version}}
+   PolicyNameSuffix: {{project_code}}-log-policy
+   ServiceName: {{project_code}}
