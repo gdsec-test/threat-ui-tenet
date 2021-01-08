@@ -4,6 +4,7 @@ module.exports = {
       '@godaddy/webapp'
     ],
     add: [
+      '@godaddy/gasket-plugin-auth',
       '@gasket/mocha'
     ]
   },

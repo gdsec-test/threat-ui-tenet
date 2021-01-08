@@ -3,7 +3,11 @@
 // @see: https://github.com/zeit/next-plugins/issues/282
 import '../styles/_app.scss';
 
-import { App, reportWebVitals } from '@godaddy/gasket-next';
+import { App, reportWebVitals, withPageEnhancers } from '@godaddy/gasket-next';
+import { withAuthRequired } from '@godaddy/gasket-auth';
 
 export { reportWebVitals };
-export default App;
+
+export default withPageEnhancers([
+  withAuthRequired({ realm: 'jomax' })
+])(App);
