@@ -5,8 +5,8 @@
   "scripts": {
     "build": "gasket build",
     "start": "gasket start",
-    "local": "gasket local",
-    "local:debug": "npx -n --inspect gasket local",
+    "local": "gasket local --env=production",
+    "local:debug": "npx -n --inspect gasket local --env=production",
     "analyze": "gasket analyze",
     "upload-coverage": "upload-coverage tenet",
     "size-limit": "size-limit",
@@ -23,6 +23,7 @@
   "dependencies": {
     "@gasket/assets": "^5.6.0",
     "@gasket/cli": "^5.7.0",
+    "@gasket/fetch": "^5.6.0",
     "@gasket/intl": "^5.7.0",
     "@gasket/log": "^5.6.0",
     "@gasket/plugin-mocha": "^5.6.0",
@@ -30,6 +31,7 @@
     "@godaddy/gasket-auth": "^1.4.1",
     "@godaddy/gasket-cookies": "^1.0.0",
     "@godaddy/gasket-next": "^1.6.3",
+    "@godaddy/gasket-plugin-proxy": "^1.1.1",
     "@godaddy/gasket-preset-webapp": "^1.1.1",
     "@rigor/upload-coverage": "^1.0.0",
     "@size-limit/preset-big-lib": "^4.7.0",

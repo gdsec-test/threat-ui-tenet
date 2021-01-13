@@ -8,6 +8,7 @@ reports
 
 # production
 build
+cert
 .next
 
 # misc

@@ -3,6 +3,7 @@ import { Pivots, ProgressBar } from '@ux/uxcore2';
 import { withLocaleRequired } from '@gasket/intl';
 import { FormattedMessage } from 'react-intl';
 import Head from '../components/head';
+import fetch from '../api/fetch';
 
 const pivotList = [
   {
@@ -48,7 +49,9 @@ export const IndexPage = () => (
         <div className='card-block'>
           <Pivots pivotList={ pivotList } grid={ ({ md: 6 }) } />
         </div>
-
+        <button onClick={() => {
+          fetch();
+        }} >Get Jobs</button>
         <ProgressBar
           striped
           value={ 5 }
