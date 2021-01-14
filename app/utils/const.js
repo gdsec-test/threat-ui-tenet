@@ -1,0 +1,22 @@
+export const IOC_TYPE = {
+  unknown: { desc: 'Unknown', id: 'unknown' },
+  domain: { desc: 'Domain', id: 'domain' },
+  email: { desc: 'Email Address', id: 'email' },
+  cve: { desc: 'CVE', id: 'cve' },
+  cwe: { desc: 'CWE', id: 'cwe' },
+  capec: { desc: 'CAPEC', id: 'capec' },
+  cpe: { desc: 'CPE', id: 'cpe' },
+  url: { desc: 'URL', id: 'url' },
+  md5: { desc: 'MD5 Hash', id: 'md5' },
+  sha1: { desc: 'SHA1 Hash', id: 'sha1' },
+  sha256: { desc: 'SHA256 Hash', id: 'sha256' },
+  sha512: { desc: 'SHA512 Hash', id: 'sha512' },
+  ip: { desc: 'IP Address', id: 'ip' },
+  hostname: { desc: 'Hostname (GoDaddy machine hostnames)', id: 'hostname' },
+  awshostname: { desc: 'Hostname (AWS hostnames)', id: 'awshostname' },
+  godaddy_username: { desc: 'GoDaddy Username', id: 'godaddy_username' },
+  mitre_tactic: { desc: 'Mitre Tactic', id: 'mitre_tactic' },
+  mitre_technique: { desc: 'Mitre Technique', id: 'mitre_technique' },
+  mitre_subtechnique: { desc: 'Mitre Subtechnique', id: 'mitre_subtechnique' },
+  mitre_mitigation: { desc: 'Mitre Mitigation', id: 'mitre_mitigation' }
+}
