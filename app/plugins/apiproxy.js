@@ -1,4 +1,5 @@
 const fetch = require('@gasket/fetch');
+const { getLoginUrlFromRequest } = require('@gasket/auth/lib/utils');
 const express = require('express');
 
 
@@ -17,8 +18,12 @@ function getApiProxy() {
       payload.body = JSON.stringify(req.body);
     }
     const response = await fetch(url, payload);
+
     if (response.status === 401) {
-      // handle SSO redirect
+    const ssoLogin = getLoginUrlFromRequest(req);
+    if (ssoLogin) {
+      originalResponse.redirect(ssoLogin);
+    }
     } else {
       return response.json();
     }

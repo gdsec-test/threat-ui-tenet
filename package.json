@@ -1,0 +1,11 @@
+{
+  "name": "threat-ui-tenet-root",
+  "version": "0.0.0",
+  "description": "Threat API UI aka Tenet",
+  "scripts": {
+    "build": "cd app && npm run build",
+    "start": "cd app && npm run start",
+    "local": "cd app && npm run local",
+    "local:debug": "cd app && npm run local:debug"
+  }
+}
