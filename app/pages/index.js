@@ -3,7 +3,8 @@ import { Pivots, ProgressBar } from '@ux/uxcore2';
 import { withLocaleRequired } from '@gasket/intl';
 import { FormattedMessage } from 'react-intl';
 import Head from '../components/head';
-import fetch from '../api/fetch';
+import getJobs from '../api/getJobs';
+import createJob from '../api/createJob';
 
 const pivotList = [
   {
@@ -49,9 +50,25 @@ export const IndexPage = () => (
         <div className='card-block'>
           <Pivots pivotList={ pivotList } grid={ ({ md: 6 }) } />
         </div>
-        <button onClick={() => {
-          fetch();
-        }} >Get Jobs</button>
+        <button onClick={async () => {
+          const resp = await getJobs();
+          console.log(resp);
+        }} >GET JOBS</button>
+        <button onClick={async () => {
+          const resp = await createJob({
+            inputType: 'godaddy_username',
+            inputs: [
+              "clake1",
+              "gbailey",
+              "dcomes",
+              "jmwhite"
+            ],
+            modules: [
+              "whois"
+            ]
+          });
+          console.log(resp);
+        }} >Post JOB</button>
         <ProgressBar
           striped
           value={ 5 }

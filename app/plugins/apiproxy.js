@@ -1,40 +1,57 @@
 const fetch = require('@gasket/fetch');
+const express = require('express');
+
+
+function getApiProxy() {
+  return async function (req, originalResponse) {
+    const url = 'https://api-private.threat.int.gdcorp.tools' + req.path;
+    const payload = {
+      method: req.method,
+      headers: {
+        // 'Accept': 'application/json',
+        // 'Content-Type': 'application/json',
+        cookie: req.get('cookie')
+      }
+    };
+    if (req.method !== 'GET') {
+      payload.body = JSON.stringify(req.body);
+    }
+    const response = await fetch(url, payload);
+    if (response.status === 401) {
+      // handle SSO redirect
+    } else {
+      return response.json();
+    }
+  };
+}
+
 
 module.exports = {
   name: 'threatpi',
   hooks: {
 
     middleware: function (gasket) {
-      function getJobsProxy(uri, req) {
-        return async function (params) {
-          const url = 'https://api-private.threat.int.gdcorp.tools' + uri;
-          const response = await fetch(url, {
-            headers: {
-              cookie: req.get('cookie')
-            }
-          });
-          console.log(response.ok);
-          console.log(response.status);
-          console.log(response.headers);
-          
-          const json = response.json();
-          console.log(json);
-          
-          return json;
-        };
-      }
 
       return function (req, res, next) {
-        req.getJobs = getJobsProxy('/jobs', req);
+        req.getApiProxy = getApiProxy();
         next();
       };
     },
 
     express: function (gasket, app) {
+      app.use(express.json()) // for parsing application/json
+      app.use(express.urlencoded({ extended: true })) 
       app.get('/jobs', async function (req, res) {
-        const { query, params } = req;
-        const data = await req.getJobs({ query, params });
-        res.send(data);
+        const data = await req.getApiProxy(req, res);
+        res.json(data);
+      });
+      app.get('/job/:jobId', async function (req, res) {
+        const data = await req.getApiProxy(req, res);
+        res.json(data);
+      });
+      app.post('/job', async function (req, res) {
+        const data = await req.getApiProxy(req, res);
+        res.json(data);
       });
     }
   }

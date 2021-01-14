@@ -5,7 +5,7 @@
   "scripts": {
     "build": "gasket build",
     "start": "gasket start",
-    "local": "gasket local --env=production",
+    "local": "gasket local",
     "local:debug": "npx -n --inspect gasket local --env=production",
     "analyze": "gasket analyze",
     "upload-coverage": "upload-coverage tenet",
