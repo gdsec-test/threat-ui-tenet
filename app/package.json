@@ -5,8 +5,8 @@
   "scripts": {
     "build": "gasket build --env=production",
     "start": "gasket start --env=production",
-    "local": "gasket local --env=production",
-    "local:debug": "npx -n --inspect gasket local --env=production"
+    "local": "gasket local",
+    "local:debug": "npx -n --inspect gasket local"
   },
   "dependencies": {
     "@gasket/assets": "^5.6.0",

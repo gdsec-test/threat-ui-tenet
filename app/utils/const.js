@@ -1,4 +1,27 @@
 export const IOC_TYPE = {
+  AWSHOSTNAME: 'awshostname',
+  CAPEC: 'capec',
+  CPE: 'cpe',
+  CVE: 'cve',
+  CWE: 'cwe',
+  DOMAIN: 'domain',
+  EMAIL: 'email',
+  GODADDY_USERNAME: 'godaddy_username',
+  HOSTNAME: 'hostname',
+  IP: 'ip',
+  MD5: 'md5',
+  MITRE_MITIGATION: 'mitre_mitigation',
+  MITRE_SUBTECHNIQUE: 'mitre_subtechnique',
+  MITRE_TACTIC: 'mitre_tactic',
+  MITRE_TECHNIQUE: 'mitre_technique',
+  SHA1: 'sha1',
+  SHA256: 'sha256',
+  SHA512: 'sha512',
+  UNKNOWN: 'unknown',
+  URL: 'url'
+}
+
+export const IOC_TYPE_DESC = {
   unknown: { desc: 'Unknown', id: 'unknown' },
   domain: { desc: 'Domain', id: 'domain' },
   email: { desc: 'Email Address', id: 'email' },

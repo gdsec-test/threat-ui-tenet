@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import getIOCTypeByInput from '../api/getIOCTypeByInput';
 import getModulesListByIOCType from '../api/getModulesListByIOCType';
 import createJob from "../api/createJob";
+import getJobs from "../api/getJobs";
+import {IOC_TYPE} from "../utils/const";
 
 import {
   FormElement,
@@ -16,13 +18,15 @@ import {
 
 const { DropdownItem } = Dropdown;
 
+const getKeys = map => [...map.keys()];
+
 export default class InputForm extends React.Component {
   constructor() {
     super(...arguments);
     this.state = {
-      detectedIOCType: "Unknown",
-      detectedIOCModules: [],
-      selectedIOCModules: [],
+      detectedIOCTypes: [],
+      detectedIOCModules: new Map(),
+      selectedIOCModules: [IOC_TYPE.UNKNOWN],
     };
     this.onIOCModuleChange = this.onIOCModuleChange.bind(this);
     this.detectIOCType = this.detectIOCType.bind(this);
@@ -30,10 +34,10 @@ export default class InputForm extends React.Component {
   }
 
   async detectIOCType({ target: { value } }) {
-    const detectedIOCType = await getIOCTypeByInput(value);
-    const detectedIOCModules = await getModulesListByIOCType(detectedIOCType);
+    const detectedIOCTypes = await getIOCTypeByInput(value);
+    const detectedIOCModules = await getModulesListByIOCType(detectedIOCTypes);
     this.setState({
-      detectedIOCType, detectedIOCModules, selectedIOCModules: detectedIOCModules.map((_, idx) => idx)
+      detectedIOCTypes, detectedIOCModules, selectedIOCModules: getKeys(detectedIOCModules).map((_,i) => i)
     })
   }
 
@@ -43,7 +47,7 @@ export default class InputForm extends React.Component {
       selectedIOCModules
     } = this.state;
 
-    const newIndex = detectedIOCModules.indexOf(value);
+    const newIndex = getKeys(detectedIOCModules).indexOf(value);
     selectedIOCModules = [...selectedIOCModules];
 
     let foundIOCIndex = selectedIOCModules.indexOf(newIndex);
@@ -55,14 +59,14 @@ export default class InputForm extends React.Component {
     this.setState({ selectedIOCModules });
   }
 
-  createJob() {
-    // await createJob();
+  async createJob() {
+    const jobs = await getJobs();
+    console.log(jobs);
     
   }
 
   render() {
     const { detectedIOCModules } = this.state;
-
     return <Form
       className={'InputForm'}
       action=''
@@ -71,26 +75,27 @@ export default class InputForm extends React.Component {
         this.createJob();
 
       }}>
-        <FormElement label='IOC' name='IOC'
+        <FormElement label='IOC (Indicator Of Compromise)' name='IOC'
           className='InputForm_IOCType'
           autoComplete='off'
           placeholder='Start typing IOC'
           onChange={this.detectIOCType}
         />
-        <p >Your detected IOC Type is: {this.state.detectedIOCType}</p>
+        <p >Your detected IOC Types are: {this.state.detectedIOCTypes.
+          map(({ input, type ='' }) => <Fragment><b>{input}</b>:<span style={{ color: 'red'}}>{type.toUpperCase()}</span>, </Fragment>)}</p>
         <Dropdown
           type='multiselect'
           label={<span style={{ fontWeight: 'bold' }}>
-                <Tooltip title='Type of IOC' message='Choose Types of Indicator Of Compromise supported for current Input'>IOC Modules</Tooltip>
+                <Tooltip title='Type of IOC' message='Choose Modules supported for current IOC'>IOC Modules</Tooltip>
                 </span> }
           name='IOC Types'
           onChange={this.onIOCModuleChange}
           selected={this.state.selectedIOCModules}
         >
-          {detectedIOCModules.map(module => {
-              return <DropdownItem key={ module } value={ module }>{ module }</DropdownItem>;
+          {[...detectedIOCModules.entries()].map(([module, item]) => {
+            const desc = `${item.values.map(({ type, input }) => `${type}:${input}`).join(', ')}`;
+            return <DropdownItem key={ module } value={ module }>{ `${module}` }</DropdownItem>;
           })}
-        <input />
       </Dropdown>
       <Button design='primary' disabled='' title='Submit' type='submit'>Submit</Button>
     </Form>
