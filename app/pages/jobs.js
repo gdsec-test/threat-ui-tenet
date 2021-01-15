@@ -1,12 +1,11 @@
 import React from 'react';
 import { withLocaleRequired } from '@gasket/intl';
-import InputForm from '../components/InputForm';
 import Layout from '../components/Layout';
 
 
 export const IndexPage = () => (
-  <Layout links={[{ url: '/jobs', caption: 'Go To My Jobs List' }]}>
-    <InputForm />
+  <Layout links={[{ url: '/', caption: 'Go To Home' }]}>
+    <div>My jobs go here</div>
   </Layout>
 );
 

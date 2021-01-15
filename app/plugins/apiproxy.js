@@ -5,7 +5,7 @@ const express = require('express');
 
 function getApiProxy() {
   return async function (req, originalResponse) {
-    const url = 'https://api-private.threat.int.dev-gdcorp.tools' + req.path;
+    const url = 'https://api-private.threat.int.dev-gdcorp.tools' + req.path.replace('/api', '');
     const payload = {
       method: req.method,
       headers: {
@@ -46,15 +46,15 @@ module.exports = {
     express: function (gasket, app) {
       app.use(express.json()) // for parsing application/json
       app.use(express.urlencoded({ extended: true }))
-      app.get('/jobs', async function (req, res) {
+      app.get('/api/jobs', async function (req, res) {
         const data = await req.getApiProxy(req, res);
         res.json(data);
       });
-      app.get('/job/:jobId', async function (req, res) {
+      app.get('/api/job/:jobId', async function (req, res) {
         const data = await req.getApiProxy(req, res);
         res.json(data);
       });
-      app.post('/job', async function (req, res) {
+      app.post('/api/job', async function (req, res) {
         const data = await req.getApiProxy(req, res);
         res.json(data);
       });
