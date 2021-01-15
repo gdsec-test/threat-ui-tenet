@@ -5,7 +5,7 @@ const express = require('express');
 
 function getApiProxy() {
   return async function (req, originalResponse) {
-    const url = 'https://api-private.threat.int.gdcorp.tools' + req.path;
+    const url = 'https://api-private.threat.int.dev-gdcorp.tools' + req.path;
     const payload = {
       method: req.method,
       headers: {

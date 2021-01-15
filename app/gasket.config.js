@@ -14,12 +14,12 @@ module.exports = {
   },
   environments: {
     local: {
-      hostname: 'ui.threat.int.gdcorp.tools',
+      hostname: 'ui.threat.int.dev-gdcorp.tools',
       rootDomain: 'gdcorp.tools',
       https: {
         root: './cert',
-        key: 'ui.threat.int.gdcorp.tools.key',
-        cert: ['ui.threat.int.gdcorp.tools.crt']
+        key: 'ui.threat.int.dev-gdcorp.tools.key',
+        cert: ['ui.threat.int.dev-gdcorp.tools.crt']
       },
     },
     production: {
