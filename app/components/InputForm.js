@@ -1,7 +1,7 @@
 import React from 'react';
 import getIOCTypeByInput from '../api/getIOCTypeByInput';
 import getModulesListByIOCType from '../api/getModulesListByIOCType';
-// import createJob from "../api/createJob";
+import createJob from "../api/createJob";
 
 import {
   FormElement,
@@ -26,7 +26,7 @@ export default class InputForm extends React.Component {
     };
     this.onIOCModuleChange = this.onIOCModuleChange.bind(this);
     this.detectIOCType = this.detectIOCType.bind(this);
-    //this.select = this.select.bind(this);
+    this.createJob = this.createJob.bind(this);
   }
 
   async detectIOCType({ target: { value } }) {
@@ -44,7 +44,7 @@ export default class InputForm extends React.Component {
     } = this.state;
 
     const newIndex = detectedIOCModules.indexOf(value);
-    selectedIOCModules = selectedIOCModules.slice();
+    selectedIOCModules = [...selectedIOCModules];
 
     let foundIOCIndex = selectedIOCModules.indexOf(newIndex);
     if (foundIOCIndex >= 0) {
@@ -55,22 +55,33 @@ export default class InputForm extends React.Component {
     this.setState({ selectedIOCModules });
   }
 
+  createJob() {
+    // await createJob();
+    
+  }
+
   render() {
     const { detectedIOCModules } = this.state;
 
     return <Form
-      action='#'
-      onSubmit={() => {}}>
+      className={'InputForm'}
+      action=''
+      onSubmit={(e) => {
+        e.preventDefault();
+        this.createJob();
+
+      }}>
         <FormElement label='IOC' name='IOC'
+          className='InputForm_IOCType'
           autoComplete='off'
           placeholder='Start typing IOC'
           onChange={this.detectIOCType}
         />
-        <div>Your detected IOC Type is: {this.state.detectedIOCType}</div>
+        <p >Your detected IOC Type is: {this.state.detectedIOCType}</p>
         <Dropdown
           type='multiselect'
           label={<span style={{ fontWeight: 'bold' }}>
-                <Tooltip title='Type of IOC' message='Choose Types of Indicator Of Compromise supported for current Input'>IOC Types</Tooltip>
+                <Tooltip title='Type of IOC' message='Choose Types of Indicator Of Compromise supported for current Input'>IOC Modules</Tooltip>
                 </span> }
           name='IOC Types'
           onChange={this.onIOCModuleChange}
@@ -79,8 +90,9 @@ export default class InputForm extends React.Component {
           {detectedIOCModules.map(module => {
               return <DropdownItem key={ module } value={ module }>{ module }</DropdownItem>;
           })}
+        <input />
       </Dropdown>
-
+      <Button design='primary' disabled='' title='Submit' type='submit'>Submit</Button>
     </Form>
   }
 }

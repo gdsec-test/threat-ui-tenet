@@ -12,7 +12,7 @@ export const IndexPage = () => (
     <Head title='Home'/>
     <div className='row'>
       <div className='card ux-card'>
-        <InputForm />
+        <InputForm className='blblblb'/>
 
       </div>
     </div>
