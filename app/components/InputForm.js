@@ -60,8 +60,33 @@ export default class InputForm extends React.Component {
   }
 
   async createJob() {
-    const jobs = await getJobs();
-    console.log(jobs);
+    const { detectedIOCModules, detectedIOCTypes } = this.state;
+    const jobs = new Map();
+    [...detectedIOCModules.entries()].forEach(([module, item]) => {
+      const IOCTypes = item.values;
+      IOCTypes.forEach(({ input, type}) => {
+        if (!jobs.has(type)) {
+          jobs.set(type, {
+            modules: [],
+            inputs: []
+          });
+        }
+        const job = jobs.get(type);
+        if (job.modules.indexOf(module) <0) {
+          job.modules.push(module);
+        }
+        if (job.inputs.indexOf(input) <0) {
+          job.inputs.push(input);
+        }
+      });
+    }, {});
+
+
+    [...jobs.entries()].forEach(async ([IOCType, item]) => {
+      const { job_id } = await createJob({ inputType: IOCType, inputs: item.inputs, modules: item.modules});
+      console.log('JOB CREATED:' + job_id);
+    });
+    
   }
 
   render() {
