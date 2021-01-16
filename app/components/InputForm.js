@@ -62,7 +62,6 @@ export default class InputForm extends React.Component {
   async createJob() {
     const jobs = await getJobs();
     console.log(jobs);
-    
   }
 
   render() {

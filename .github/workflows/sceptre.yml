@@ -1,0 +1,100 @@
+# Builds, tests and create docker image
+# TODO: GD artificatory
+#
+# Requirements:
+# - An initialized npm project with tests
+# - A project.json with values for "version" and "scripts"["test"]
+#
+# Example values:
+# "version": "1.0.1",
+# "scripts": {
+#     "test": "mocha test.js"
+# },
+#
+# - An .npmrc file containing:
+#
+# registry=https://npm.pkg.github.com/<organization>
+
+name: deploy-sceptre-infrastructure
+
+on:
+  pull_request: # for testing
+    branches: [main]
+    paths:
+      - "sceptre/**"
+  push:
+    branches: [main]
+    paths:
+      - "sceptre/**"
+
+jobs:
+  tartufo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@5a4ac90 # Checkout this repository
+      - name: Checkout GoDaddy Actions repo # Checkout shared actions repository gd-actions
+        uses: actions/checkout@5a4ac90
+        with:
+          repository: gdcorp-cp/gd-actions
+          token: ${{ secrets.REPO_CLONE_TOKEN_SA_PAT }} # PAT with read access to gdcorp-cp/gd-actions
+          path: gd-actions # Relative to github working directory
+          persist-credentials: false
+      - uses: ./gd-actions/tartufo # Relative reference to action in gd-actions repository
+        with:
+          github_token: ${{ secrets.REPO_CLONE_TOKEN_SA_PAT }}
+
+  checkout:
+    runs-on: self-hosted
+    needs: tartufo
+    steps:
+      - name: Checkout this repo on to a job runner.
+        uses: actions/checkout@5a4ac90 # Checkout this repository.
+
+  login-to-aws:
+    runs-on: self-hosted
+    needs: checkout
+    steps:
+      - name: Configure AWS credentials using Cloud Key Based Service Accounts
+        uses: aws-actions/configure-aws-credentials@1417e62
+        with:
+          aws-access-key-id: ${{ secrets.DEV_PRIVATE_AWS_ACCESS_KEY_ID_TEST }}
+          aws-secret-access-key: ${{ secrets.DEV_PRIVATE_AWS_SECRET_KEY_TEST }}
+          role-to-assume: ${{ secrets.DEV_PRIVATE_DEPLOY_ROLE_TEST }}
+          role-duration-seconds: 3600
+          aws-region: us-west-2
+      - name: Deploy / Update ECR sceptre deployment
+        working-directory: ./sceptre
+        run: |
+          sceptre launch -y dev/us-west-2/threat-ui-tenet/ecr.yaml
+          sceptre launch -y dev/us-west-2/threat-ui-tenet/iam-role.yaml
+          sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-cluster.yaml
+          sceptre delete -y dev/us-west-2/threat-ui-tenet/fargate-service.yaml
+          sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-service.yaml
+  #
+  # =============== unsure about below code
+  #
+  # # launch-ecr:
+  #   runs-on: self-hosted
+  #   needs: login-to-aws
+  #   steps:
+  #     - name: Deploy / Update ECR sceptre deployment
+  #       working-directory: ./sceptre
+  #       run: |
+  #         sceptre launch -y dev/us-west-2/threat-ui-tenet/ecr.yaml
+  # launch-iam:
+  #   runs-on: self-hosted
+  #   needs: login-to-aws
+  #   steps:
+  #     - name: Deploy / Update IAM role sceptre deployment
+  #       working-directory: ./sceptre
+  #       run: |
+  #         sceptre launch -y dev/us-west-2/threat-ui-tenet/iam-role.yaml
+  # launch-fargate:
+  #   runs-on: self-hosted
+  #   needs: launch-iam
+  #   steps:
+  #     - name: Deploy / Update Fargate sceptre deployment
+  #       working-directory: ./sceptre
+  #       run: |
+  #         sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-cluster.yaml
+  #         sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-service.yaml

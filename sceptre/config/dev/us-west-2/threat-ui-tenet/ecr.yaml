@@ -3,5 +3,3 @@ stack_name: {{project_code}}-ecr
 parameters:
   ECRRepoName: com.godaddy.{{project_code}}
   ProductVersion: {{ecr_version}}
-
-  

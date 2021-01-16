@@ -3,4 +3,4 @@ region: us-west-2
 ecr_version: "1.1.0"
 fargate_cluster_version: "1.0.0"
 fargate_service_version: "1.6.3"
-# TODO - clean up account number from pcp-ui configs
+iam_role_version: "1.0.7"

@@ -45,7 +45,7 @@ module.exports = {
 
     express: function (gasket, app) {
       app.use(express.json()) // for parsing application/json
-      app.use(express.urlencoded({ extended: true })) 
+      app.use(express.urlencoded({ extended: true }))
       app.get('/jobs', async function (req, res) {
         const data = await req.getApiProxy(req, res);
         res.json(data);

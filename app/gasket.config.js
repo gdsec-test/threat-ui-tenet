@@ -1,4 +1,5 @@
 module.exports = {
+  http: 8080,
   plugins: {
     presets: [
       '@godaddy/webapp'
