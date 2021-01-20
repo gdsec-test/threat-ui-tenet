@@ -4,7 +4,7 @@ Parameters:
     Description: Required. The name of the Fargate Cluster
   ProductVersion:
     Type: String
-    Default: "1.0.0"
+    Default: '1.0.0'
 Resources:
   FargateCluster:
     Type: AWS::ServiceCatalog::CloudFormationProvisionedProduct

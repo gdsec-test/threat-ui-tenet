@@ -24,18 +24,20 @@ const MODULES = {
 };
 
 export default (IOCTypes) => {
-  return new Promise(resolve => {
-    resolve(IOCTypes.reduce((acc, { type, input }) => {
-      const modules = MODULES[type];
-      modules.forEach(module => {
-        if (!acc.has(module)) {
-          acc.set(module, { count: 0, values: []});
-        }
-        const moduleItem = acc.get(module);
-        moduleItem.count++;
-        moduleItem.values.push({ type, input });
-      });
-      return acc;
-    }, new Map()));
+  return new Promise((resolve) => {
+    resolve(
+      IOCTypes.reduce((acc, { type, input }) => {
+        const modules = MODULES[type];
+        modules.forEach((module) => {
+          if (!acc.has(module)) {
+            acc.set(module, { count: 0, values: [] });
+          }
+          const moduleItem = acc.get(module);
+          moduleItem.count++;
+          moduleItem.values.push({ type, input });
+        });
+        return acc;
+      }, new Map())
+    );
   });
 };

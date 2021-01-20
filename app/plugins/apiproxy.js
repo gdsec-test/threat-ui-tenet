@@ -2,7 +2,6 @@ const fetch = require('@gasket/fetch');
 const { getLoginUrlFromRequest } = require('@gasket/auth/lib/utils');
 const express = require('express');
 
-
 function getApiProxy() {
   return async function (req, originalResponse) {
     const url = 'https://api-private.threat.int.dev-gdcorp.tools' + req.path.replace('/api', '');
@@ -20,23 +19,20 @@ function getApiProxy() {
     const response = await fetch(url, payload);
 
     if (response.status === 401) {
-    const ssoLogin = getLoginUrlFromRequest(req);
-    if (ssoLogin) {
-      originalResponse.status(401).send({ error: 'Unauthorized', ssoLogin });
-    }
+      const ssoLogin = getLoginUrlFromRequest(req);
+      if (ssoLogin) {
+        originalResponse.status(401).send({ error: 'Unauthorized', ssoLogin });
+      }
     } else {
       return response.json();
     }
   };
 }
 
-
 module.exports = {
   name: 'threatpi',
   hooks: {
-
     middleware: function () {
-
       return function (req, res, next) {
         req.getApiProxy = getApiProxy();
         next();

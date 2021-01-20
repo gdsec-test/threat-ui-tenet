@@ -14,18 +14,17 @@ export const Layout = ({ children, links = [] }) => (
         </a>
         <div className='p-3'>
           {links.map(({ url, caption }) => (
-              <Link key={url} href={url}>
-                <Button design='secondary' className='m-3'>{caption}</Button>
-              </Link>
+            <Link key={url} href={url}>
+              <Button design='secondary' className='m-3'>
+                {caption}
+              </Button>
+            </Link>
           ))}
         </div>
-
       </div>
     </div>
     <div className='row'>
-      <div className='card ux-card'>
-        {children}
-      </div>
+      <div className='card ux-card'>{children}</div>
     </div>
   </div>
 );

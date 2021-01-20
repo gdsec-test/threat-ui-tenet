@@ -4,7 +4,7 @@ export default async ({ url, params = {}, method = 'GET' }) => {
   const payload = {
     method,
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json'
     }
   };

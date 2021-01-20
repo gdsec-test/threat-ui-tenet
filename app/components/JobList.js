@@ -16,7 +16,7 @@ export default class JobList extends React.Component {
   }
 
   componentDidMount() {
-    getJobs().then(jobsList => {
+    getJobs().then((jobsList) => {
       this.setState({
         isLoading: false,
         jobsList: jobsList instanceof Array ? jobsList : []
@@ -28,7 +28,7 @@ export default class JobList extends React.Component {
     const { jobsList, pageSelected, pageItems } = this.state;
     const start = (pageSelected - 1) * pageItems;
     const end = start + pageItems;
-    return jobsList.slice(start, end).map(id => {
+    return jobsList.slice(start, end).map((id) => {
       const row = {};
       row.id = (
         <td key='id'>
@@ -48,12 +48,7 @@ export default class JobList extends React.Component {
     }
     return (
       <Fragment>
-        <Table
-          className='table table-hover table-striped'
-          data={this.renderRows()}
-          order='id'
-          sortable={true}
-        >
+        <Table className='table table-hover table-striped' data={this.renderRows()} order='id' sortable={true}>
           <thead>
             <tr>
               <th column='id'>{'Job ID'}</th>

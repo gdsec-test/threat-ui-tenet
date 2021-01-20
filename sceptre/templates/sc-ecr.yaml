@@ -12,10 +12,10 @@ Parameters:
   ECRLifecyclePolicyOverride:
     Type: String
     Description: Override of the lifecycle policy JSON
-    Default: ""
+    Default: ''
   ProductVersion:
     Type: String
-    Default: "1.1.0"
+    Default: '1.1.0'
 Resources:
   Repository:
     Type: AWS::ServiceCatalog::CloudFormationProvisionedProduct

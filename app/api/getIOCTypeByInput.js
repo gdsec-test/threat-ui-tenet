@@ -23,15 +23,19 @@ const REGEX = {
   [IOC_TYPE.MITRE_MITIGATION]: /^$/gi
 };
 
-export default async inputs => {
-  return await new Promise(resolve => {
-    const names = inputs.replaceAll(' ', '').split(',').map(input => {
-      const type = Object.keys(REGEX).find(regexName => {
-        const regex = REGEX[regexName];
-        return regex.test(input);
-      }) || IOC_TYPE.UNKNOWN;
-      return { input, type };
-    });
+export default async (inputs) => {
+  return await new Promise((resolve) => {
+    const names = inputs
+      .replaceAll(' ', '')
+      .split(',')
+      .map((input) => {
+        const type =
+          Object.keys(REGEX).find((regexName) => {
+            const regex = REGEX[regexName];
+            return regex.test(input);
+          }) || IOC_TYPE.UNKNOWN;
+        return { input, type };
+      });
     resolve(names);
   });
 };

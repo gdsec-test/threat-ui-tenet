@@ -2,19 +2,13 @@ import React, { Fragment } from 'react';
 import getIOCTypeByInput from '../api/getIOCTypeByInput';
 import getModulesListByIOCType from '../api/getModulesListByIOCType';
 import createJob from '../api/createJob';
-import {IOC_TYPE} from '../utils/const';
+import { IOC_TYPE } from '../utils/const';
 
-import {
-  FormElement,
-  Form,
-  Dropdown,
-  Tooltip,
-  Button
-} from '@ux/uxcore2';
+import { FormElement, Form, Dropdown, Tooltip, Button } from '@ux/uxcore2';
 
 const { DropdownItem } = Dropdown;
 
-const getKeys = map => [...map.keys()];
+const getKeys = (map) => [...map.keys()];
 
 export default class InputForm extends React.Component {
   constructor() {
@@ -33,15 +27,14 @@ export default class InputForm extends React.Component {
     const detectedIOCTypes = await getIOCTypeByInput(value);
     const detectedIOCModules = await getModulesListByIOCType(detectedIOCTypes);
     this.setState({
-      detectedIOCTypes, detectedIOCModules, selectedIOCModules: getKeys(detectedIOCModules).map((_, i) => i)
+      detectedIOCTypes,
+      detectedIOCModules,
+      selectedIOCModules: getKeys(detectedIOCModules).map((_, i) => i)
     });
   }
 
   onIOCModuleChange({ value }) {
-    let {
-      detectedIOCModules,
-      selectedIOCModules
-    } = this.state;
+    let { detectedIOCModules, selectedIOCModules } = this.state;
 
     const newIndex = getKeys(detectedIOCModules).indexOf(value);
     selectedIOCModules = [...selectedIOCModules];
@@ -60,7 +53,7 @@ export default class InputForm extends React.Component {
     const jobs = new Map();
     [...detectedIOCModules.entries()].forEach(([module, item]) => {
       const IOCTypes = item.values;
-      IOCTypes.forEach(({ input, type}) => {
+      IOCTypes.forEach(({ input, type }) => {
         if (!jobs.has(type)) {
           jobs.set(type, {
             modules: [],
@@ -77,47 +70,61 @@ export default class InputForm extends React.Component {
       });
     }, {});
 
-
     [...jobs.entries()].forEach(async ([IOCType, item]) => {
       /* eslint-disable-next-line */
-      const { job_id } = await createJob({ inputType: IOCType, inputs: item.inputs, modules: item.modules});
+      const { job_id } = await createJob({ inputType: IOCType, inputs: item.inputs, modules: item.modules });
     });
-
   }
 
   render() {
     const { detectedIOCModules } = this.state;
-    return <Form
-      className={'InputForm'}
-      action=''
-      onSubmit={(e) => {
-        e.preventDefault();
-        this.createJob();
-
-      }}>
-        <FormElement label='IOC (Indicator Of Compromise)' name='IOC'
+    return (
+      <Form
+        className={'InputForm'}
+        action=''
+        onSubmit={(e) => {
+          e.preventDefault();
+          this.createJob();
+        }}
+      >
+        <FormElement
+          label='IOC (Indicator Of Compromise)'
+          name='IOC'
           className='InputForm_IOCType'
           autoComplete='off'
           placeholder='Start typing IOC'
           onChange={this.detectIOCType}
         />
-        <p >Your detected IOC Types are: {this.state.detectedIOCTypes.map(({ input, type = '' }) =>
-          <Fragment key={input}><b>{input}</b>:<span style={{ color: 'red'}}>{type.toUpperCase()}</span>, </Fragment>)}</p>
+        <p>
+          Your detected IOC Types are:{' '}
+          {this.state.detectedIOCTypes.map(({ input, type = '' }) => (
+            <Fragment key={input}>
+              <b>{input}</b>:<span style={{ color: 'red' }}>{type.toUpperCase()}</span>,{' '}
+            </Fragment>
+          ))}
+        </p>
         <Dropdown
           type='multiselect'
-          label={<span style={{ fontWeight: 'bold' }}>
-                <Tooltip title='Modules List' message='Choose Modules supported for current IOC'>IOC Modules</Tooltip>
-                </span> }
+          label={
+            <span style={{ fontWeight: 'bold' }}>
+              <Tooltip title='Modules List' message='Choose Modules supported for current IOC'>
+                IOC Modules
+              </Tooltip>
+            </span>
+          }
           name='IOC Types'
           onChange={this.onIOCModuleChange}
           selected={this.state.selectedIOCModules}
         >
           {[...detectedIOCModules.entries()].map(([module, item]) => {
             const desc = `${item.values.map(({ type, input }) => `${type}:${input}`).join(', ')}`;
-            return <DropdownItem key={ desc } value={ module }>{ `${module}` }</DropdownItem>;
+            return <DropdownItem key={desc} value={module}>{`${module}`}</DropdownItem>;
           })}
-      </Dropdown>
-      <Button design='primary' disabled='' title='Submit' type='submit'>Submit</Button>
-    </Form>;
+        </Dropdown>
+        <Button design='primary' disabled='' title='Submit' type='submit'>
+          Submit
+        </Button>
+      </Form>
+    );
   }
 }

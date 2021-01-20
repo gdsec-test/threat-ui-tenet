@@ -1,0 +1,9 @@
+scss_files: 'app/**/*.scss'
+linters:
+  BorderZero:
+    enabled: false
+  Indentation:
+    severity: warning
+    width: 2
+  SelectorFormat:
+    enabled: false
