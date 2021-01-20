@@ -13,5 +13,10 @@ export default async ({ url, params = {}, method = 'GET' }) => {
   }
   // handle if it's not JSON
   const resp = await fetch(url, payload);
+  if (resp.status === 401) {
+    const { ssoLogin } = await resp.json();
+    location.assign(ssoLogin);
+    return {};
+  }
   return await resp.json();
 };
