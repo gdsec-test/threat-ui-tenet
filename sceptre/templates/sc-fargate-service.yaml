@@ -15,26 +15,26 @@ Parameters:
     Type: String
     Description: (optional) SSM Parameter for VPC ID for cluster to live in
     Default: /AdminParams/VPC/ID
-    AllowedPattern: "/AdminParams/VPC[2-9]{0,1}/ID"
+    AllowedPattern: '/AdminParams/VPC[2-9]{0,1}/ID'
   ImageTag:
     Type: String
     Description: (optional) The tag of the docker image to deploy in the Task definition
     Default: latest
   ProductVersion:
     Type: String
-    Default: "1.3.0"
+    Default: '1.3.0'
   EnvironmentVariablesJson:
     Type: String
-    Default: "{}"
+    Default: '{}'
     Description: (optional) Pass environment variables to the Lambda function. This has to be a JSON escaped string.
   CustomIAMRoleNameSuffix:
     Type: String
     Description: (optional) Naming suffix for custom role (ex. team-custom-SUFFIX) for the containers to run as. Ensure the ECS service can assume it.
-    Default: ""
+    Default: ''
   ContainerPort:
     Type: String
     Description: (optional) What port does the container expose
-    Default: "8443"
+    Default: '8443'
   ContainerProtocol:
     Type: String
     Description: (optional) Protocol for ALB <-> Container connections
@@ -60,47 +60,47 @@ Parameters:
   MinContainers:
     Type: String
     Description: (optional) Min number of containers in the Autoscaling Group (0 to 20)
-    Default: "0"
+    Default: '0'
   DesiredContainers:
     Type: String
     Description: (optional) Desired/default number of containers in the Autoscaling Group (0 to 20)
-    Default: "0"
+    Default: '0'
   MaxContainers:
     Type: String
     Description: (optional) Max number of containers in the Autoscaling Group (1 to 20)
-    Default: "5"
+    Default: '5'
   Cpu:
     Type: String
     Description: (optional) How much Cpu to allocate for the container workloads
-    Default: "256"
+    Default: '256'
     AllowedValues:
-      - "256"   # (.25 vCPU) - Available memory values: 0.5GB, 1GB, 2GB
-      - "512"   # (.5 vCPU)  - Available memory values: 1GB, 2GB, 3GB, 4GB
-      - "1024"  # (1 vCPU)   - Available memory values: 2GB, 3GB, 4GB, 5GB, 6GB, 7GB, 8GB
-      - "2048"  # (2 vCPU)   - Available memory values: Between 4GB and 16GB in 1GB increments
-      - "4096"  # (4 vCPU)   - Available memory values: Between 8GB and 30GB in 1GB increments
+      - '256' # (.25 vCPU) - Available memory values: 0.5GB, 1GB, 2GB
+      - '512' # (.5 vCPU)  - Available memory values: 1GB, 2GB, 3GB, 4GB
+      - '1024' # (1 vCPU)   - Available memory values: 2GB, 3GB, 4GB, 5GB, 6GB, 7GB, 8GB
+      - '2048' # (2 vCPU)   - Available memory values: Between 4GB and 16GB in 1GB increments
+      - '4096' # (4 vCPU)   - Available memory values: Between 8GB and 30GB in 1GB increments
   Memory:
     Type: String
     Description: (optional) How much memory (in GB) to allocate to the container workloads
-    Default: "0.5GB"
+    Default: '0.5GB'
     AllowedValues:
-      - "0.5GB" # Available cpu values: 256 (.25 vCPU)
-      - "1GB"   # Available cpu values: 256 (.25 vCPU), 512 (.5 vCPU)
-      - "2GB"   # Available cpu values: 256 (.25 vCPU), 512 (.5 vCPU), 1024 (1 vCPU)
-      - "3GB"   # Available cpu values: 512 (.5 vCPU), 1024 (1 vCPU)
-      - "4GB"   # Available cpu values: 512 (.5 vCPU), 1024 (1 vCPU), 2048 (2 vCPU)
-      - "5GB"   # Available cpu values: 1024 (1 vCPU), 2048 (2 vCPU)
-      - "6GB"   # Available cpu values: 1024 (1 vCPU), 2048 (2 vCPU)
-      - "7GB"   # Available cpu values: 1024 (1 vCPU), 2048 (2 vCPU)
-      - "8GB"   # Available cpu values: 1024 (1 vCPU), 2048 (2 vCPU)
-      - "9GB"   # Available cpu values: 2048 (2 vCPU), 4096 (4 vCPU)
-      - "10GB"  # Available cpu values: 2048 (2 vCPU), 4096 (4 vCPU)
-      - "11GB"  # Available cpu values: 2048 (2 vCPU), 4096 (4 vCPU)
-      - "12GB"  # Available cpu values: 2048 (2 vCPU), 4096 (4 vCPU)
-      - "13GB"  # Available cpu values: 2048 (2 vCPU), 4096 (4 vCPU)
-      - "14GB"  # Available cpu values: 2048 (2 vCPU), 4096 (4 vCPU)
-      - "15GB"  # Available cpu values: 2048 (2 vCPU), 4096 (4 vCPU)
-      - "16GB"  # Available cpu values: 2048 (2 vCPU), 4096 (4 vCPU)
+      - '0.5GB' # Available cpu values: 256 (.25 vCPU)
+      - '1GB' # Available cpu values: 256 (.25 vCPU), 512 (.5 vCPU)
+      - '2GB' # Available cpu values: 256 (.25 vCPU), 512 (.5 vCPU), 1024 (1 vCPU)
+      - '3GB' # Available cpu values: 512 (.5 vCPU), 1024 (1 vCPU)
+      - '4GB' # Available cpu values: 512 (.5 vCPU), 1024 (1 vCPU), 2048 (2 vCPU)
+      - '5GB' # Available cpu values: 1024 (1 vCPU), 2048 (2 vCPU)
+      - '6GB' # Available cpu values: 1024 (1 vCPU), 2048 (2 vCPU)
+      - '7GB' # Available cpu values: 1024 (1 vCPU), 2048 (2 vCPU)
+      - '8GB' # Available cpu values: 1024 (1 vCPU), 2048 (2 vCPU)
+      - '9GB' # Available cpu values: 2048 (2 vCPU), 4096 (4 vCPU)
+      - '10GB' # Available cpu values: 2048 (2 vCPU), 4096 (4 vCPU)
+      - '11GB' # Available cpu values: 2048 (2 vCPU), 4096 (4 vCPU)
+      - '12GB' # Available cpu values: 2048 (2 vCPU), 4096 (4 vCPU)
+      - '13GB' # Available cpu values: 2048 (2 vCPU), 4096 (4 vCPU)
+      - '14GB' # Available cpu values: 2048 (2 vCPU), 4096 (4 vCPU)
+      - '15GB' # Available cpu values: 2048 (2 vCPU), 4096 (4 vCPU)
+      - '16GB' # Available cpu values: 2048 (2 vCPU), 4096 (4 vCPU)
   AccessLogsEnabled:
     Type: String
     Description: (optional) Enabled ALB access logging

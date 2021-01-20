@@ -8,6 +8,4 @@ import { withAuthRequired } from '@godaddy/gasket-auth';
 
 export { reportWebVitals };
 
-export default withPageEnhancers([
-  withAuthRequired({ realm: 'jomax' })
-])(App);
+export default withPageEnhancers([withAuthRequired({ realm: 'jomax' })])(App);

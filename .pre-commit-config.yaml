@@ -1,3 +1,4 @@
+exclude: .*node_modules/.*
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.2.0
@@ -17,3 +18,26 @@ repos:
     rev: v2.0.1
     hooks:
       - id: tartufo
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: '' # Use the sha / tag you want to point at
+    hooks:
+      - id: eslint
+        files: \.[jt]sx?$
+        args: [--fix]
+        additional_dependencies:
+          - eslint-config-godaddy-react
+          - eslint-loader
+          - eslint-plugin-json
+          - eslint-plugin-jsx-a11y
+          - eslint-plugin-react
+          - eslint-plugin-react-hooks
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: '' # Use the sha / tag you want to point at
+    hooks:
+      - id: prettier
+        additional_dependencies:
+          - prettier
+  -   repo: https://github.com/pre-commit/mirrors-scss-lint
+      rev: ''  # Use the sha / tag you want to point at
+      hooks:
+      -   id: scss-lint

@@ -7,5 +7,11 @@
     "start": "cd app && npm run start",
     "local": "cd app && npm run local",
     "local:debug": "cd app && npm run local:debug"
+  },
+  "devDependencies": {
+    "eslint": "^7.18.0",
+    "eslint-config-godaddy-react": "^6.0.1",
+    "eslint-plugin-mocha": "^8.0.0",
+    "eslint-plugin-react-hooks": "^4.2.0"
   }
 }

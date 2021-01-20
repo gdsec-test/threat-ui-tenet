@@ -5,7 +5,6 @@ module.exports = [
     brotli: true,
     webpack: false,
     limit: '62 KB'
-
   },
   {
     name: 'pages',

@@ -4,10 +4,10 @@ export default async ({ url, params = {}, method = 'GET' }) => {
   const payload = {
     method,
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
     }
-  }
+  };
   if (method !== 'GET') {
     payload.body = JSON.stringify(params);
   }
