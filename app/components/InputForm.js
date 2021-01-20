@@ -84,7 +84,7 @@ export default class InputForm extends React.Component {
 
     [...jobs.entries()].forEach(async ([IOCType, item]) => {
       const { job_id } = await createJob({ inputType: IOCType, inputs: item.inputs, modules: item.modules});
-      console.log('JOB CREATED:' + job_id);
+      alert('JOB CREATED:' + job_id);
     });
     
   }
@@ -110,7 +110,7 @@ export default class InputForm extends React.Component {
         <Dropdown
           type='multiselect'
           label={<span style={{ fontWeight: 'bold' }}>
-                <Tooltip title='Type of IOC' message='Choose Modules supported for current IOC'>IOC Modules</Tooltip>
+                <Tooltip title='Modules List' message='Choose Modules supported for current IOC'>IOC Modules</Tooltip>
                 </span> }
           name='IOC Types'
           onChange={this.onIOCModuleChange}

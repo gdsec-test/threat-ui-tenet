@@ -7,7 +7,9 @@ import { useRouter } from 'next/router';
 export const IndexPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  return <Layout links={[{ url: '/', caption: 'Go To Home' }]}>
+  return <Layout links={[
+    { url: '/', caption: 'Go Home'},
+    { url: '/jobs', caption: 'See My Jobs List' }]}>
     <JobDetails id={id} />
   </Layout>
 };

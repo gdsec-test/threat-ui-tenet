@@ -5,7 +5,7 @@ import Layout from '../components/Layout';
 
 
 export const IndexPage = () => (
-  <Layout links={[{ url: '/jobs', caption: 'Go To My Jobs List' }]}>
+  <Layout links={[{ url: '/jobs', caption: 'See My Jobs List' }]}>
     <InputForm />
   </Layout>
 );

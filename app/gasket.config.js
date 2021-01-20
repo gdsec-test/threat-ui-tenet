@@ -36,7 +36,7 @@ module.exports = {
   presentationCentral: {
     params: {
       app: 'threat-ui-tenet',
-      header: 'no-header'
+      header: 'internal-header'
     }
   }
 };

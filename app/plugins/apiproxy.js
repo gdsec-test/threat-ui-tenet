@@ -22,7 +22,7 @@ function getApiProxy() {
     if (response.status === 401) {
     const ssoLogin = getLoginUrlFromRequest(req);
     if (ssoLogin) {
-      originalResponse.redirect(ssoLogin);
+      originalResponse.status(401).send({ error: 'Unauthorized', ssoLogin })
     }
     } else {
       return response.json();

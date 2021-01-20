@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { Spinner } from '@ux/uxcore2';
 import getJob from '../api/getJob';
 
 export default class JobDetails extends React.Component {
@@ -31,9 +32,9 @@ export default class JobDetails extends React.Component {
       isLoading
     } = this.state;
     if (isLoading) {
-      return <div>Is Loading........</div>;
+      return <Spinner inline size='lg' />;
     }
-    return <div><div>JOB RESULTS
+    return <div className='m-3'><div>JOB RESULTS
       </div>
       <div>{JSON.stringify(jobDetails)}</div>
     </div>
