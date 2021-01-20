@@ -1,13 +1,13 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Spinner } from '@ux/uxcore2';
 import getJob from '../api/getJob';
 
 export default class JobDetails extends React.Component {
-  constructor () {
+  constructor() {
     super(...arguments);
     this.state = {
       isLoading: true
-    }
+    };
   }
 
   componentDidMount() {
@@ -36,7 +36,8 @@ export default class JobDetails extends React.Component {
     }
     return <div className='m-3'><div>JOB RESULTS
       </div>
+      <div>{id}</div>
       <div>{JSON.stringify(jobDetails)}</div>
-    </div>
+    </div>;
   }
 }

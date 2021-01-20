@@ -11,7 +11,7 @@ export const IndexPage = () => {
     { url: '/', caption: 'Go Home'},
     { url: '/jobs', caption: 'See My Jobs List' }]}>
     <JobDetails id={id} />
-  </Layout>
+  </Layout>;
 };
 
 export default withLocaleRequired('threat-ui-tenet')(IndexPage);

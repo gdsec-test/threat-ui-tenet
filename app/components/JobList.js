@@ -1,48 +1,48 @@
-import React, { Fragment } from 'react'
-import { Table, Pagination, Spinner } from '@ux/uxcore2'
-import Link from 'next/link'
-import getJobs from '../api/getJobs'
+import React, { Fragment } from 'react';
+import { Table, Pagination, Spinner } from '@ux/uxcore2';
+import Link from 'next/link';
+import getJobs from '../api/getJobs';
 
 export default class JobList extends React.Component {
-  constructor () {
-    super(...arguments)
+  constructor() {
+    super(...arguments);
     this.state = {
       isLoading: true,
       pageSelected: 1,
       pageItems: 5,
       jobsList: []
-    }
-    this.renderRows = this.renderRows.bind(this)
+    };
+    this.renderRows = this.renderRows.bind(this);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     getJobs().then(jobsList => {
       this.setState({
         isLoading: false,
         jobsList: jobsList instanceof Array ? jobsList : []
-      })
-    })
+      });
+    });
   }
 
-  renderRows () {
+  renderRows() {
     const { jobsList, pageSelected, pageItems } = this.state;
     const start = (pageSelected - 1) * pageItems;
     const end = start + pageItems;
     return jobsList.slice(start, end).map(id => {
-      const row = {}
+      const row = {};
       row.id = (
         <td key='id'>
           <Link href={`/job/${id}`}>
             <a>{id}</a>
           </Link>
         </td>
-      )
-      return row
-    })
+      );
+      return row;
+    });
   }
 
-  render () {
-    const { jobsList, isLoading, pageItems } = this.state
+  render() {
+    const { jobsList, isLoading, pageItems } = this.state;
     if (isLoading) {
       return <Spinner inline size='lg' />;
     }
@@ -63,7 +63,7 @@ export default class JobList extends React.Component {
         <Pagination
           defaultSelected={1}
           onChange={(pageSelected, pageItems) => {
-            this.setState({ pageSelected, pageItems })
+            this.setState({ pageSelected, pageItems });
           }}
           pageItems={pageItems}
           size={'sm'}
@@ -71,6 +71,6 @@ export default class JobList extends React.Component {
           maxPageLinks={10}
         />
       </Fragment>
-    )
+    );
   }
 }

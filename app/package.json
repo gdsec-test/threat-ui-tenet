@@ -58,15 +58,6 @@
   "browserslist": [
     "extends browserslist-config-godaddy"
   ],
-  "eslintConfig": {
-    "extends": [
-      "godaddy-react",
-      "plugin:@godaddy/react-intl/recommended"
-    ],
-    "env": {
-      "mocha": true
-    }
-  },
   "stylelint": {
     "extends": [
       "stylelint-config-godaddy"

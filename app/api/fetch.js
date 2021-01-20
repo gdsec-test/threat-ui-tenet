@@ -5,9 +5,9 @@ export default async ({ url, params = {}, method = 'GET' }) => {
     method,
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     }
-  }
+  };
   if (method !== 'GET') {
     payload.body = JSON.stringify(params);
   }

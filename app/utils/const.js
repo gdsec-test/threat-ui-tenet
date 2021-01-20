@@ -19,7 +19,7 @@ export const IOC_TYPE = {
   SHA512: 'sha512',
   UNKNOWN: 'unknown',
   URL: 'url'
-}
+};
 
 export const IOC_TYPE_DESC = {
   unknown: { desc: 'Unknown', id: 'unknown' },
@@ -42,4 +42,4 @@ export const IOC_TYPE_DESC = {
   mitre_technique: { desc: 'Mitre Technique', id: 'mitre_technique' },
   mitre_subtechnique: { desc: 'Mitre Subtechnique', id: 'mitre_subtechnique' },
   mitre_mitigation: { desc: 'Mitre Mitigation', id: 'mitre_mitigation' }
-}
+};

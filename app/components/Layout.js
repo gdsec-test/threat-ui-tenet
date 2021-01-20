@@ -9,12 +9,12 @@ export const Layout = ({ children, links = [] }) => (
     <Head title='Home' />
     <div className='row'>
       <div className='card ux-card p-3'>
-        <a target='_blank' href='https://github.com/gdcorp-infosec/threat-api/blob/main/docs/USAGE.md'>
+        <a target='_blank' rel='noreferrer' href='https://github.com/gdcorp-infosec/threat-api/blob/main/docs/USAGE.md'>
           Threat API Docs
         </a>
         <div className='p-3'>
           {links.map(({ url, caption }) => (
-              <Link href={url}>
+              <Link key={url} href={url}>
                 <Button design='secondary' className='m-3'>{caption}</Button>
               </Link>
           ))}

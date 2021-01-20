@@ -1,18 +1,14 @@
 import React, { Fragment } from 'react';
 import getIOCTypeByInput from '../api/getIOCTypeByInput';
 import getModulesListByIOCType from '../api/getModulesListByIOCType';
-import createJob from "../api/createJob";
-import getJobs from "../api/getJobs";
-import {IOC_TYPE} from "../utils/const";
+import createJob from '../api/createJob';
+import {IOC_TYPE} from '../utils/const';
 
 import {
   FormElement,
   Form,
-  Criteria,
   Dropdown,
-  Checkbox,
   Tooltip,
-  RadioGroup,
   Button
 } from '@ux/uxcore2';
 
@@ -26,7 +22,7 @@ export default class InputForm extends React.Component {
     this.state = {
       detectedIOCTypes: [],
       detectedIOCModules: new Map(),
-      selectedIOCModules: [IOC_TYPE.UNKNOWN],
+      selectedIOCModules: [IOC_TYPE.UNKNOWN]
     };
     this.onIOCModuleChange = this.onIOCModuleChange.bind(this);
     this.detectIOCType = this.detectIOCType.bind(this);
@@ -37,8 +33,8 @@ export default class InputForm extends React.Component {
     const detectedIOCTypes = await getIOCTypeByInput(value);
     const detectedIOCModules = await getModulesListByIOCType(detectedIOCTypes);
     this.setState({
-      detectedIOCTypes, detectedIOCModules, selectedIOCModules: getKeys(detectedIOCModules).map((_,i) => i)
-    })
+      detectedIOCTypes, detectedIOCModules, selectedIOCModules: getKeys(detectedIOCModules).map((_, i) => i)
+    });
   }
 
   onIOCModuleChange({ value }) {
@@ -50,7 +46,7 @@ export default class InputForm extends React.Component {
     const newIndex = getKeys(detectedIOCModules).indexOf(value);
     selectedIOCModules = [...selectedIOCModules];
 
-    let foundIOCIndex = selectedIOCModules.indexOf(newIndex);
+    const foundIOCIndex = selectedIOCModules.indexOf(newIndex);
     if (foundIOCIndex >= 0) {
       selectedIOCModules.splice(foundIOCIndex, 1);
     } else {
@@ -60,7 +56,7 @@ export default class InputForm extends React.Component {
   }
 
   async createJob() {
-    const { detectedIOCModules, detectedIOCTypes } = this.state;
+    const { detectedIOCModules } = this.state;
     const jobs = new Map();
     [...detectedIOCModules.entries()].forEach(([module, item]) => {
       const IOCTypes = item.values;
@@ -72,10 +68,10 @@ export default class InputForm extends React.Component {
           });
         }
         const job = jobs.get(type);
-        if (job.modules.indexOf(module) <0) {
+        if (job.modules.indexOf(module) < 0) {
           job.modules.push(module);
         }
-        if (job.inputs.indexOf(input) <0) {
+        if (job.inputs.indexOf(input) < 0) {
           job.inputs.push(input);
         }
       });
@@ -83,10 +79,10 @@ export default class InputForm extends React.Component {
 
 
     [...jobs.entries()].forEach(async ([IOCType, item]) => {
+      /* eslint-disable-next-line */
       const { job_id } = await createJob({ inputType: IOCType, inputs: item.inputs, modules: item.modules});
-      alert('JOB CREATED:' + job_id);
     });
-    
+
   }
 
   render() {
@@ -105,8 +101,8 @@ export default class InputForm extends React.Component {
           placeholder='Start typing IOC'
           onChange={this.detectIOCType}
         />
-        <p >Your detected IOC Types are: {this.state.detectedIOCTypes.
-          map(({ input, type ='' }) => <Fragment><b>{input}</b>:<span style={{ color: 'red'}}>{type.toUpperCase()}</span>, </Fragment>)}</p>
+        <p >Your detected IOC Types are: {this.state.detectedIOCTypes.map(({ input, type = '' }) =>
+          <Fragment key={input}><b>{input}</b>:<span style={{ color: 'red'}}>{type.toUpperCase()}</span>, </Fragment>)}</p>
         <Dropdown
           type='multiselect'
           label={<span style={{ fontWeight: 'bold' }}>
@@ -118,10 +114,10 @@ export default class InputForm extends React.Component {
         >
           {[...detectedIOCModules.entries()].map(([module, item]) => {
             const desc = `${item.values.map(({ type, input }) => `${type}:${input}`).join(', ')}`;
-            return <DropdownItem key={ module } value={ module }>{ `${module}` }</DropdownItem>;
+            return <DropdownItem key={ desc } value={ module }>{ `${module}` }</DropdownItem>;
           })}
       </Dropdown>
       <Button design='primary' disabled='' title='Submit' type='submit'>Submit</Button>
-    </Form>
+    </Form>;
   }
 }

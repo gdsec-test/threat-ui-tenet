@@ -21,7 +21,7 @@ module.exports = {
         root: './cert',
         key: 'ui.threat.int.dev-gdcorp.tools.key',
         cert: ['ui.threat.int.dev-gdcorp.tools.crt']
-      },
+      }
     },
     production: {
       hostname: 'ui.threat.int.gdcorp.tools',
@@ -30,7 +30,7 @@ module.exports = {
         root: './cert',
         key: 'ui.threat.int.gdcorp.tools.key',
         cert: ['ui.threat.int.gdcorp.tools.crt']
-      },
+      }
     }
   },
   presentationCentral: {
