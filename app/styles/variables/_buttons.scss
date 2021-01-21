@@ -1,0 +1,484 @@
+// Buttons
+
+$brand-buttons: () !default;
+
+$buttons-default: (
+  primary: (
+    color: palette(black, base, contrast),
+    bg: palette(black),
+    border: palette(black),
+    box-shadow: false,
+    color-hover: palette(gray, midrange, contrast),
+    bg-hover: palette(gray, midrange),
+    border-hover: palette(gray, midrange),
+    box-shadow-hover: false,
+    color-active: palette(primary-o, base, contrast),
+    bg-active: palette(primary-o),
+    border-active: palette(primary-o),
+    box-shadow-active: false,
+    border-focus: palette(gray, midrange)
+  ),
+  success: (
+    color: palette(black, base, contrast),
+    bg: palette(black),
+    border: palette(black),
+    box-shadow: false,
+    color-hover: palette(gray, midrange, contrast),
+    bg-hover: palette(gray, midrange),
+    border-hover: palette(gray, midrange),
+    box-shadow-hover: false,
+    color-active: palette(primary-o, base, contrast),
+    bg-active: palette(primary-o),
+    border-active: palette(primary-o),
+    box-shadow-active: false,
+    border-focus: palette(gray, midrange)
+  ),
+  info: (
+    color: palette(black, base, contrast),
+    bg: palette(black),
+    border: palette(black),
+    box-shadow: false,
+    color-hover: palette(gray, midrange, contrast),
+    bg-hover: palette(gray, midrange),
+    border-hover: palette(gray, midrange),
+    box-shadow-hover: false,
+    color-active: palette(primary-o, base, contrast),
+    bg-active: palette(primary-o),
+    border-active: palette(primary-o),
+    box-shadow-active: false,
+    border-focus: palette(gray, midrange)
+  ),
+  warning: (
+    color: palette(black, base, contrast),
+    bg: palette(black),
+    border: palette(black),
+    box-shadow: false,
+    color-hover: palette(gray, midrange, contrast),
+    bg-hover: palette(gray, midrange),
+    border-hover: palette(gray, midrange),
+    box-shadow-hover: false,
+    color-active: palette(primary-o, base, contrast),
+    bg-active: palette(primary-o),
+    border-active: palette(primary-o),
+    box-shadow-active: false,
+    border-focus: palette(gray, midrange)
+  ),
+  danger: (
+    color: palette(danger, midrange, contrast),
+    bg: palette(danger, midrange),
+    border: palette(danger, midrange),
+    box-shadow: false,
+    color-hover: palette(danger, base, contrast),
+    bg-hover: palette(danger),
+    border-hover: palette(danger),
+    box-shadow-hover: false,
+    color-active: palette(danger, dark, contrast),
+    bg-active: palette(danger, dark),
+    border-active: palette(danger, dark),
+    box-shadow-active: false,
+    border-focus: palette(danger)
+  ),
+  purchase: (
+    color: palette(black, base, contrast),
+    bg: palette(black),
+    border: palette(black),
+    box-shadow: false,
+    color-hover: palette(gray, midrange, contrast),
+    bg-hover: palette(gray, midrange),
+    border-hover: palette(gray, midrange),
+    box-shadow-hover: false,
+    color-active: palette(primary-o, base, contrast),
+    bg-active: palette(primary-o),
+    border-active: palette(primary-o),
+    box-shadow-active: false,
+    border-focus: palette(gray, midrange)
+  ),
+  feature: (
+    color: palette(black, base, contrast),
+    bg: palette(black),
+    border: palette(black),
+    box-shadow: false,
+    color-hover: palette(gray, midrange, contrast),
+    bg-hover: palette(gray, midrange),
+    border-hover: palette(gray, midrange),
+    box-shadow-hover: false,
+    color-active: palette(primary-o, base, contrast),
+    bg-active: palette(primary-o),
+    border-active: palette(primary-o),
+    box-shadow-active: false,
+    border-focus: palette(gray, midrange)
+  ),
+  canvas: (
+    color: palette(black, base),
+    bg: palette(white),
+    border: palette(gray, light),
+    box-shadow: false,
+    color-hover: palette(black, base),
+    bg-hover: palette(white),
+    border-hover: palette(black, base),
+    box-shadow-hover: false,
+    color-active: palette(primary),
+    bg-active: palette(white),
+    border-active: palette(primary),
+    box-shadow-active: false,
+    border-focus: palette(primary)
+  ),
+  default: (
+    color: palette(white, base, contrast),
+    bg: palette(white),
+    border: palette(black),
+    box-shadow: false,
+    color-hover: palette(primary-o, midrange),
+    bg-hover: palette(white),
+    border-hover: palette(black),
+    box-shadow-hover: false,
+    color-active: palette(primary-o, base, contrast),
+    bg-active: palette(primary-o, base),
+    border-active: palette(primary-o, base),
+    box-shadow-active: false,
+    border-focus: palette(black)
+  ),
+  default-dark: (
+    color: palette(black, dark),
+    bg: transparent,
+    border: palette(black, dark),
+    box-shadow: false,
+    color-hover: palette(black, dark, contrast),
+    bg-hover: palette(black, dark),
+    border-hover: palette(black, dark),
+    box-shadow-hover: false,
+    color-active: palette(black, dark, contrast),
+    bg-active: palette(black, dark),
+    border-active: palette(black, dark),
+    box-shadow-active: false,
+    border-focus: palette(black, dark)
+  ),
+  default-light: (
+    color: palette(white, base, contrast),
+    bg: palette(white),
+    border: palette(white),
+    box-shadow: false,
+    color-hover: palette(white, base, contrast),
+    bg-hover: rgba(palette(white), 0.8),
+    border-hover: transparent,
+    box-shadow-hover: false,
+    color-active: palette(primary-o),
+    bg-active: palette(white),
+    border-active: palette(white),
+    box-shadow-active: false,
+    border-focus: transparent
+  ),
+  default-light-secondary: (
+    color: palette(white),
+    bg: transparent,
+    border: palette(white),
+    box-shadow: false,
+    color-hover: palette(white, base, contrast),
+    bg-hover: rgba(palette(white), 0.8),
+    border-hover: transparent,
+    box-shadow-hover: false,
+    color-active: palette(primary-o),
+    bg-active: palette(white),
+    border-active: palette(white),
+    box-shadow-active: false,
+    border-focus: transparent
+  ),
+  default-primary: (
+    color: palette(white, base, contrast),
+    bg: palette(white),
+    border: palette(black),
+    box-shadow: false,
+    color-hover: palette(primary-o, midrange),
+    bg-hover: palette(white),
+    border-hover: palette(black),
+    box-shadow-hover: false,
+    color-active: palette(primary-o, base, contrast),
+    bg-active: palette(primary-o, base),
+    border-active: palette(primary-o, base),
+    box-shadow-active: false,
+    border-focus: palette(black)
+  ),
+  default-purchase: (
+    color: palette(white, base, contrast),
+    bg: palette(white),
+    border: palette(black),
+    box-shadow: false,
+    color-hover: palette(primary-o, midrange),
+    bg-hover: palette(white),
+    border-hover: palette(black),
+    box-shadow-hover: false,
+    color-active: palette(primary-o, base, contrast),
+    bg-active: palette(primary-o, base),
+    border-active: palette(primary-o, base),
+    box-shadow-active: false,
+    border-focus: palette(black)
+  ),
+  default-info: (
+    color: palette(white, base, contrast),
+    bg: palette(white),
+    border: palette(black),
+    box-shadow: false,
+    color-hover: palette(primary-o, midrange),
+    bg-hover: palette(white),
+    border-hover: palette(black),
+    box-shadow-hover: false,
+    color-active: palette(primary-o, base, contrast),
+    bg-active: palette(primary-o, base),
+    border-active: palette(primary-o, base),
+    box-shadow-active: false,
+    border-focus: palette(black)
+  ),
+  default-warning: (
+    color: palette(white, base, contrast),
+    bg: palette(white),
+    border: palette(black),
+    box-shadow: false,
+    color-hover: palette(primary-o, midrange),
+    bg-hover: palette(white),
+    border-hover: palette(black),
+    box-shadow-hover: false,
+    color-active: palette(primary-o, base, contrast),
+    bg-active: palette(primary-o, base),
+    border-active: palette(primary-o, base),
+    box-shadow-active: false,
+    border-focus: palette(black)
+  ),
+  default-danger: (
+    color: palette(white, base, contrast),
+    bg: palette(white),
+    border: palette(black),
+    box-shadow: false,
+    color-hover: palette(primary-o, midrange),
+    bg-hover: palette(white),
+    border-hover: palette(black),
+    box-shadow-hover: false,
+    color-active: palette(primary-o, base, contrast),
+    bg-active: palette(primary-o, base),
+    border-active: palette(primary-o, base),
+    box-shadow-active: false,
+    border-focus: palette(black)
+  ),
+  default-success: (
+    color: palette(white, base, contrast),
+    bg: palette(white),
+    border: palette(black),
+    box-shadow: false,
+    color-hover: palette(primary-o, midrange),
+    bg-hover: palette(white),
+    border-hover: palette(black),
+    box-shadow-hover: false,
+    color-active: palette(primary-o, base, contrast),
+    bg-active: palette(primary-o, base),
+    border-active: palette(primary-o, base),
+    box-shadow-active: false,
+    border-focus: palette(black)
+  ),
+  default-feature: (
+    color: palette(white, base, contrast),
+    bg: palette(white),
+    border: palette(black),
+    box-shadow: false,
+    color-hover: palette(primary-o, midrange),
+    bg-hover: palette(white),
+    border-hover: palette(black),
+    box-shadow-hover: false,
+    color-active: palette(primary-o, base, contrast),
+    bg-active: palette(primary-o, base),
+    border-active: palette(primary-o, base),
+    box-shadow-active: false,
+    border-focus: palette(black)
+  ),
+  // Link buttons not buttons that are links
+  link:
+    (
+      color: palette(primary-o, midrange),
+      bg: transparent,
+      border: transparent,
+      box-shadow: false,
+      color-hover: palette(primary-o, midrange),
+      bg-hover: palette(primary-o, pastel),
+      border-hover: transparent,
+      box-shadow-hover: false,
+      color-active: palette(primary-o, base, contrast),
+      bg-active: palette(primary-o),
+      border-active: palette(primary-o),
+      box-shadow-active: false,
+      border-focus: transparent
+    ),
+  link-light: (
+    color: palette(white),
+    bg: transparent,
+    border: transparent,
+    box-shadow: false,
+    color-hover: palette(primary-o, midrange),
+    bg-hover: rgba(palette(white), 0.8),
+    border-hover: transparent,
+    box-shadow-hover: false,
+    color-active: palette(primary-o),
+    bg-active: palette(white),
+    border-active: palette(white),
+    box-shadow-active: false,
+    border-focus: transparent
+  ),
+  // Merchandising buttons
+  merch:
+    (
+      color: palette(white),
+      bg: palette(black),
+      border: palette(black),
+      box-shadow: false,
+      color-hover: palette(white),
+      bg-hover: palette(black),
+      border-hover: palette(black),
+      box-shadow-hover: false,
+      color-active: palette(white),
+      bg-active: rgba(palette(black), 0.8),
+      border-active: palette(black),
+      box-shadow-active: false,
+      border-focus: transparent
+    ),
+  merch-sec: (
+    color: palette(black),
+    bg: palette(white),
+    border: palette(black),
+    box-shadow: false,
+    color-hover: palette(black),
+    bg-hover: palette(white),
+    border-hover: palette(black),
+    box-shadow-hover: false,
+    color-active: rgba(palette(black), 0.8),
+    bg-active: palette(white),
+    border-active: rgba(palette(black), 0.8),
+    box-shadow-active: false,
+    border-focus: palette(black)
+  ),
+  merch-light: (
+    color: palette(black),
+    bg: palette(white),
+    border: palette(white),
+    box-shadow: false,
+    color-hover: palette(black),
+    bg-hover: palette(white),
+    border-hover: palette(white),
+    box-shadow-hover: false,
+    color-active: palette(black),
+    bg-active: rgba(palette(white), 0.8),
+    border-active: palette(white),
+    box-shadow-active: false,
+    border-focus: transparent
+  ),
+  merch-sec-light: (
+    color: palette(white),
+    bg: transparent,
+    border: palette(white),
+    box-shadow: false,
+    color-hover: palette(black),
+    bg-hover: palette(white),
+    border-hover: palette(white),
+    box-shadow-hover: false,
+    color-active: rgba(palette(black), 0.8),
+    bg-active: rgba(palette(white), 0.8),
+    border-active: transparent,
+    box-shadow-active: false,
+    border-focus: transparent
+  )
+);
+
+$buttons: non-destructive-map-merge($buttons-default, $brand-buttons);
+
+$btn-height: 2.75rem;
+$btn-height-lg: 3.125rem;
+$btn-height-sm: 2rem;
+
+$btn-merch-height: 3.25rem;
+$btn-merch-height-lg: 4rem;
+$btn-merch-height-sm: 2.5rem;
+
+$btn-merch-padding-y: 0.875rem;
+$btn-merch-padding-y-lg: 1.25rem;
+$btn-merch-padding-y-sm: 0.5rem;
+
+$btn-merch-padding-x: 3rem;
+$btn-merch-padding-x-lg: 4rem;
+$btn-merch-padding-x-sm: 2rem;
+
+$btn-merch-padding-hover-x: 2.125rem;
+$btn-merch-padding-hover-x-lg: 3rem;
+$btn-merch-padding-hover-x-sm: 1.125rem;
+
+$btn-font-size: $font-size-base; // 16px
+$btn-font-size-lg: $font-size-base + 0.25rem; // 20px
+$btn-font-size-sm: $font-size-base - 0.125rem !default; // 14px
+$btn-font-size-pill: $font-size-base - 0.25rem !default; // 12px
+
+$btn-line-height: $line-height;
+$btn-line-height-lg: $line-height;
+$btn-line-height-sm: $line-height;
+$btn-line-height-pill: $btn-font-size-pill + 0.25;
+
+$btn-border-width-bottom: 0;
+$btn-border-width-bottom-lg: 0;
+$btn-border-width-bottom-sm: 0;
+
+$btn-border-width: 0;
+$btn-border-width-lg: 0;
+$btn-border-width-sm: 0;
+$btn-border-width-defaults: 0.125rem;
+$btn-border-width-canvas: 0px;
+
+$btn-border-width-merch: 0px;
+$btn-border-width-merch-sec: 0.125rem;
+
+$btn-border-syle-merch: solid;
+$btn-border-style-focus: solid;
+$btn-border-style-pill: solid;
+
+$btn-merch-after: '\e477';
+$btn-merch-after-size: 1.25rem;
+
+// Padding called in button-padding function
+// in functions/overrides/_buttons.scss
+
+// Left right padding
+$btn-padding-x: 1.5rem;
+$btn-padding-x-lg: 2rem;
+$btn-padding-x-sm: 0.75rem;
+$btn-padding-x-pill: $btn-padding-x-sm;
+
+// Starting top padding
+$btn-padding-y: 0.625rem;
+$btn-padding-y-lg: 0.8125rem;
+$btn-padding-y-sm: 0.25rem;
+$btn-padding-y-pill: 0.3125rem;
+$btn-padding-y-default-sm: $btn-padding-y-sm;
+
+// Calculate padding off the starting top padding, so text tops align for all btn styles
+$btn-padding: button-padding($btn-padding-y, $btn-padding-x);
+
+$btn-padding-lg: button-padding($btn-padding-y-lg, $btn-padding-x-lg);
+
+$btn-padding-sm: button-padding-sm($btn-padding-y-sm, $btn-padding-x-sm);
+
+$btn-padding-defaults: button-padding-defaults($btn-padding-y, $btn-padding-x, $btn-border-width-defaults);
+
+$btn-padding-defaults-lg: button-padding-defaults($btn-padding-y-lg, $btn-padding-x-lg, $btn-border-width-defaults);
+
+$btn-padding-defaults-sm: button-padding-defaults-sm(
+  $btn-padding-y-default-sm,
+  $btn-padding-x-sm,
+  $btn-border-width-defaults
+);
+
+$button-padding-canvas: button-padding-canvas($btn-padding-y, $btn-padding-x);
+
+$btn-transition: none !default;
+$btn-text-transform: none !default;
+
+$btn-disabled-opacity-on: true; // Opaque style
+$btn-disabled-colors-on: false; // Gray style
+
+// If using gray disabled style
+$btn-color-disabled: palette(gray);
+$btn-bg-disabled: transparent;
+$btn-border-disabled: palette(gray, light);
+$btn-box-shadow-disabled: false;

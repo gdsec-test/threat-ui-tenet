@@ -1,0 +1,13 @@
+:root {
+  //
+  // CSS variables that our partner teams can use as font-weight indication for
+  // our fonts. This allows us to easily change the weights when we move to a
+  // variable font weight which only allows the use of numeric values.
+  //
+  // The reason for normal font weight of 500 due to the font being thin at lower weights.
+  // The variable font only goes from 300-700 weights.
+
+  --uxp-font-weight-normal: 500;
+  --uxp-font-weight-semibold: 600;
+  --uxp-font-weight-bold: 700;
+}
