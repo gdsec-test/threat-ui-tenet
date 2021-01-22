@@ -25,7 +25,7 @@
     "@rigor/upload-coverage": "^1.0.0",
     "@size-limit/preset-big-lib": "^4.7.0",
     "@ux/scss-definitions": "^2002.0.3",
-    "@ux/uxcore2": "^2002.2.2",
+    "@ux/uxcore2": "^2002.2.3",
     "browserslist-config-godaddy": "^3.0.0",
     "evergreen-ui": "^5.1.2",
     "express": "^4.16.3",

@@ -37,8 +37,9 @@ export default class JobDetails extends React.Component {
     if (isLoading) {
       return <Spinner inline size='lg' />;
     }
-    /* eslint-disable-next-line camelcase, no-unused-vars */
+    /* eslint-disable */
     const { responses, start_time, job_status, job_percentage, request } = jobDetails;
+    let dateTime = new Date(start_time * 1000);
     return (
       <div className='m-3'>
         <Table
@@ -46,7 +47,7 @@ export default class JobDetails extends React.Component {
           data={[
             { name: 'Status', value: job_status },
             { name: 'Progress', value: job_percentage },
-            { name: 'Stared on', value: start_time },
+            { name: 'Started on', value: dateTime.toString() },
             { name: 'Input', value: request }
           ]}
         ></Table>
