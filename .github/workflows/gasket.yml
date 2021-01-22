@@ -16,15 +16,15 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - uses: actions/setup-node@c46424e
+      - uses: actions/setup-node@05f0551dbd620d7be8d92f9f7c1674ebf6bcb0eb
         with:
           node-version: 12
 
       - name: Checkout this repo on to a job runner.
-        uses: actions/checkout@5a4ac90 # Checkout this repository.
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # Checkout this repository.
 
       - name: Configure AWS credentials using Cloud Key Based Service Accounts
-        uses: aws-actions/configure-aws-credentials@1417e62
+        uses: aws-actions/configure-aws-credentials@9ea63e0c1c3b71af4bf6de1d7e251d3756673ed2
         with:
           aws-access-key-id: ${{ secrets.DEV_PRIVATE_AWS_ACCESS_KEY_ID_TEST }}
           aws-secret-access-key: ${{ secrets.DEV_PRIVATE_AWS_SECRET_KEY_TEST }}
@@ -59,7 +59,7 @@ jobs:
 
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@337a919
+        uses: aws-actions/amazon-ecr-login@a3b1dc9bc1598017eaab0d7f39725589b0bfb68b
 
       - name: Deploy image to ECR
         env:
