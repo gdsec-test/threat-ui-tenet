@@ -1,0 +1,20 @@
+//
+// Collection of all variables and mixins.
+//
+
+//
+// These are already included in FUNCTIONS because the sass-map
+// accessor functions in functions/overrides/_{markets,palette}.scss
+//
+// @import "./variables/overrides/_markets.scss";
+// @import "./variables/overrides/_colors.scss";
+
+//
+// Import all variable definitions, overrides should come before regular defintions
+// as the `!default` argument will prevent overriding already set variables.
+//
+
+@import './variables/_variablefont.scss';
+@import './variables/_colors.scss';
+
+@import './variables/_markets.scss';

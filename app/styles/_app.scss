@@ -2,5 +2,15 @@
 // Even if you do not add styling here, retain this file to avoid
 // a routing bug with loading scss files in other pages/components.
 // @see: https://github.com/zeit/next-plugins/issues/282
+@use "sass:map";
 
+@function map-deep-get($map, $keys...) {
+  @each $key in $keys {
+    $map: map-get($map, $key);
+  }
+  @return $map;
+}
+
+@import 'variables';
 @import 'inputForm';
+@import 'jobList';

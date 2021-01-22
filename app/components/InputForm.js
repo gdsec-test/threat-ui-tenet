@@ -116,9 +116,9 @@ export default class InputForm extends React.Component {
           onChange={this.onIOCModuleChange}
           selected={this.state.selectedIOCModules}
         >
-          {[...detectedIOCModules.entries()].map(([module, item]) => {
-            const desc = `${item.values.map(({ type, input }) => `${type}:${input}`).join(', ')}`;
-            return <DropdownItem key={desc} value={module}>{`${module}`}</DropdownItem>;
+          {[...detectedIOCModules.entries()].map(([module]) => {
+            // const desc = `${item.values.map(({ type, input }) => `${type}:${input}`).join(', ')}`;
+            return <DropdownItem key={module} value={module}>{`${module}`}</DropdownItem>;
           })}
         </Dropdown>
         <Button design='primary' disabled='' title='Submit' type='submit'>

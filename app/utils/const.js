@@ -21,6 +21,25 @@ export const IOC_TYPE = {
   URL: 'url'
 };
 
+export const MODULES = {
+  WHOIS: 'whois',
+  SPLUNK: 'splunk',
+  SNOW: 'snow',
+  RECORDEDFUTURE: 'recordedFuture',
+  CIRCL: 'circl',
+  AUTH0: 'auth0',
+  EMAILREPUTATION: 'emailReputation',
+  MITRE: 'mitre',
+  TANIUM: 'tanium',
+  URLHAUS: 'urlhaus',
+  GEOIP: 'geoip'
+};
+
+export const JOB_STATUS = {
+  PENDING: 'PENDING',
+  DONE: 'DONE'
+};
+
 export const IOC_TYPE_DESC = {
   unknown: { desc: 'Unknown', id: 'unknown' },
   domain: { desc: 'Domain', id: 'domain' },

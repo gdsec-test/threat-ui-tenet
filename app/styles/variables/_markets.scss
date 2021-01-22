@@ -1,0 +1,284 @@
+//
+// SASS Map for market groups which is indexed according to
+// IETF language tags (https://en.wikipedia.org/wiki/IETF_language_tag)
+//
+// e.g. zh-CN is composed of two distinct parts (or subtags):
+// 1. zh represents the **primary language subtag** (Chinese) from ISO-639
+//    (see: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+// 2. CN represents the **region subtag** (China) from ISO-3166-1 alpha-2
+//    (see: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+//
+// This is also a list of markets which exclude gd-sage
+//
+
+// Allow palettes to inject their own exceptions.
+$palette-market-groups: () !default;
+
+$market-groups: map-merge(
+  (
+    hi: mangal,
+    // Hindi
+    mr: mangal,
+    // Marathi
+    el: generic,
+    // Greek
+    en:
+      (
+        in: generic // India - English
+      ),
+    vi: generic,
+    // Vietnamese
+    pt:
+      (
+        br: generic // Portuguese
+      ),
+    ru: generic,
+    // Russian
+    ta: generic,
+    // Tamil
+    uk: generic,
+    // Ukrainian
+    zh:
+      (
+        cn: cn-simplified,
+        // China
+        sg: cn-simplified,
+        // Singapore
+        hk: cn-traditional,
+        // Hong Kong
+        tw: cn-traditional // Taiwan
+      ),
+    ar: generic
+  ),
+  $palette-market-groups
+) !default;
+
+$brand-fonts: (
+  base: (
+    family: '"gdsherpa", Helvetica, Arial, sans-serif',
+    weight: normal,
+    uppercase-safe: true
+  ),
+  primary-bold: (
+    family: '"gdsherpa", Helvetica, Arial, sans-serif',
+    weight: bold
+  ),
+  marketing: (
+    family: '"gd-sage", "Times New Roman", serif',
+    weight: bold
+  ),
+  sage: (
+    family: '"gd-sage", "Times New Roman", serif',
+    weight: normal
+  ),
+  sage-bold: (
+    family: '"gd-sage", "Times New Roman", serif',
+    weight: bold
+  )
+) !default;
+
+$market-fonts: map-merge(
+  (
+    // Generic
+    generic:
+      (
+        base: (
+          family: 'Helvetica, Arial, sans-serif',
+          weight: normal,
+          uppercase-safe: true
+        ),
+        primary-bold: (
+          family: 'Helvetica, Arial, sans-serif',
+          weight: bold
+        ),
+        marketing: (
+          family: '"Times New Roman", serif',
+          weight: bold
+        ),
+        sage: (
+          family: '"Times New Roman", serif',
+          weight: normal
+        ),
+        sage-bold: (
+          family: '"Times New Roman", serif',
+          weight: bold
+        )
+      ),
+    // Chinese Traditional
+    cn-traditional:
+      (
+        base: (
+          family: '"微軟正黑體", "Microsoft JhengHei", "Hiragino Sans GB", sans-serif',
+          weight: normal
+        ),
+        primary-bold: (
+          family: '"微軟正黑體", "Microsoft JhengHei", "Hiragino Sans GB", sans-serif',
+          weight: bold
+        ),
+        marketing: (
+          family: '"微軟正黑體", "Microsoft JhengHei", "Hiragino Sans GB", sans-serif',
+          weight: bold
+        ),
+        sage: (
+          family: '"微軟正黑體", "Microsoft JhengHei", "Hiragino Sans GB", sans-serif',
+          weight: normal
+        ),
+        sage-bold: (
+          family: '"微軟正黑體", "Microsoft JhengHei", "Hiragino Sans GB", sans-serif',
+          weight: bold
+        )
+      ),
+    // Chinese Simplified
+    cn-simplified:
+      (
+        base: (
+          family: '"微软雅黑", "Microsoft YaHei", "Hiragino Sans GB", sans-serif',
+          weight: normal
+        ),
+        primary-bold: (
+          family: '"微软雅黑", "Microsoft YaHei", "Hiragino Sans GB", sans-serif',
+          weight: bold
+        ),
+        marketing: (
+          family: '"微软雅黑", "Microsoft YaHei", "Hiragino Sans GB", sans-serif',
+          weight: bold
+        ),
+        sage: (
+          family: '"微软雅黑", "Microsoft YaHei", "Hiragino Sans GB", sans-serif',
+          weight: normal
+        ),
+        sage-bold: (
+          family: '"微软雅黑", "Microsoft YaHei", "Hiragino Sans GB", sans-serif',
+          weight: bold
+        )
+      ),
+    // Japanese
+    ja:
+      (
+        base: (
+          family: '"Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN", "メイリオ", Meiryo, sans-serif',
+          weight: normal
+        ),
+        primary-bold: (
+          family: '"Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN", "メイリオ", Meiryo, sans-serif',
+          weight: bold
+        ),
+        marketing: (
+          family: '"Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN", "メイリオ", Meiryo, sans-serif',
+          weight: bold
+        ),
+        sage: (
+          family: '"Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN", "メイリオ", Meiryo, sans-serif',
+          weight: normal
+        ),
+        sage-bold: (
+          family: '"Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN", "メイリオ", Meiryo, sans-serif',
+          weight: bold
+        )
+      ),
+    // Korean
+    ko:
+      (
+        base: (
+          family:
+            '"맑은 고딕", "Malgun Gothic", "Apple SD Gothic Neo", AppleGothic, "굴림", Gulim, "돋움", Dotum, sans-serif',
+          weight: normal
+        ),
+        primary-bold: (
+          family:
+            '"맑은 고딕", "Malgun Gothic", "Apple SD Gothic Neo", AppleGothic, "굴림", Gulim, "돋움", Dotum, sans-serif',
+          weight: bold
+        ),
+        marketing: (
+          family:
+            '"맑은 고딕", "Malgun Gothic", "Apple SD Gothic Neo", AppleGothic, "굴림", Gulim, "돋움", Dotum, sans-serif',
+          weight: bold
+        ),
+        sage: (
+          family:
+            '"맑은 고딕", "Malgun Gothic", "Apple SD Gothic Neo", AppleGothic, "굴림", Gulim, "돋움", Dotum, sans-serif',
+          weight: normal
+        ),
+        sage-bold: (
+          family:
+            '"맑은 고딕", "Malgun Gothic", "Apple SD Gothic Neo", AppleGothic, "굴림", Gulim, "돋움", Dotum, sans-serif',
+          weight: bold
+        )
+      ),
+    // Mangal
+    mangal:
+      (
+        base: (
+          family: 'Mangal, "Devanagari Sangam MN", Arial, sans-serif',
+          weight: normal
+        ),
+        primary-bold: (
+          family: 'Mangal, "Devanagari Sangam MN", Arial, sans-serif',
+          weight: bold
+        ),
+        marketing: (
+          family: 'Mangal, "Devanagari Sangam MN", Arial, sans-serif',
+          weight: bold
+        ),
+        sage: (
+          family: 'Mangal, "Devanagari Sangam MN", Arial, sans-serif',
+          weight: normal
+        ),
+        sage-bold: (
+          family: 'Mangal, "Devanagari Sangam MN", Arial, sans-serif',
+          weight: bold
+        )
+      ),
+    // Tamil
+    ta:
+      (
+        base: (
+          family: 'Latha, "Tamil Sangam MN", Arial, sans-serif',
+          weight: normal
+        ),
+        primary-bold: (
+          family: 'Latha, "Tamil Sangam MN", Arial, sans-serif',
+          weight: bold
+        ),
+        marketing: (
+          family: 'Latha, "Tamil Sangam MN", Arial, sans-serif',
+          weight: bold
+        ),
+        sage: (
+          family: 'Latha, "Tamil Sangam MN", Arial, sans-serif',
+          weight: normal
+        ),
+        sage-bold: (
+          family: 'Latha, "Tamil Sangam MN", Arial, sans-serif',
+          weight: bold
+        )
+      ),
+    // Thai
+    th:
+      (
+        base: (
+          family: 'Thonburi, Leelawadee, Tahoma, sans-serif',
+          weight: normal
+        ),
+        primary-bold: (
+          family: 'Thonburi, Leelawadee, Tahoma, sans-serif',
+          weight: bold
+        ),
+        marketing: (
+          family: 'Thonburi, Leelawadee, Tahoma, sans-serif',
+          weight: bold
+        ),
+        sage: (
+          family: 'Thonburi, Leelawadee, Tahoma, sans-serif',
+          weight: normal
+        ),
+        sage-bold: (
+          family: 'Thonburi, Leelawadee, Tahoma, sans-serif',
+          weight: bold
+        )
+      )
+  ),
+  (
+    brand: $brand-fonts
+  )
+) !default;

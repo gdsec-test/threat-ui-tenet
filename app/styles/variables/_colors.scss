@@ -1,0 +1,327 @@
+//
+// DO NOT REMOVE THE QUOTES AROUND white, black and gray. These are purposeful
+// to avoid libsass treating them as map-keys that are colors.
+// See: https://github.com/jgranstrom/sass-extract/issues/4
+//
+$palette-colors: (
+  'white': (
+    base: (
+      color: #fff,
+      contrast: #111
+    )
+  ),
+  'black': (
+    base: (
+      color: #111,
+      contrast: #fff
+    ),
+    dark: (
+      color: #000,
+      contrast: #fff
+    )
+  ),
+  'gray': (
+    faint: (
+      color: #f5f5f5,
+      contrast: #111
+    ),
+    light: (
+      color: #d6d6d6,
+      contrast: #111
+    ),
+    base: (
+      color: #767676,
+      contrast: #fff
+    ),
+    midrange: (
+      color: #444,
+      contrast: #fff
+    ),
+    dark: (
+      color: #2b2b2b,
+      contrast: #fff
+    )
+  ),
+  product: (
+    faint: (
+      color: #f5f7f8,
+      contrast: #111
+    ),
+    light: (
+      color: #f4f8fc,
+      contrast: #111
+    ),
+    base: (
+      color: #d4dbe0,
+      contrast: #111
+    ),
+    midrange: (
+      color: #bac0c3,
+      contrast: #111
+    ),
+    dark: (
+      color: #aab7c2,
+      contrast: #111
+    )
+  ),
+  // Green
+  success:
+    (
+      pastel: (
+        color: #d9f2e2,
+        contrast: #111
+      ),
+      highlight: (
+        color: #9fffb8,
+        contrast: #111
+      ),
+      base: (
+        color: #00a63f,
+        contrast: #fff
+      ),
+      midrange: (
+        color: #00782e,
+        contrast: #111
+      ),
+      dark: (
+        color: #003a15,
+        contrast: #fff
+      )
+    ),
+  // Teals
+  primary:
+    (
+      pastel: (
+        color: #d8efef,
+        contrast: #111
+      ),
+      highlight: (
+        color: #a6fff8,
+        contrast: #111
+      ),
+      base: (
+        color: #00a4a6,
+        contrast: #fff
+      ),
+      midrange: (
+        color: #09757a,
+        contrast: #fff
+      ),
+      dark: (
+        color: #004249,
+        contrast: #fff
+      )
+    ),
+  primary-o: (
+    pastel: (
+      color: #d8efef,
+      contrast: #111
+    ),
+    highlight: (
+      color: #a6fff8,
+      contrast: #111
+    ),
+    base: (
+      color: #00a4a6,
+      contrast: #fff
+    ),
+    midrange: (
+      color: #09757a,
+      contrast: #fff
+    ),
+    dark: (
+      color: #004249,
+      contrast: #fff
+    )
+  ),
+  // Blues
+  secondary:
+    (
+      pastel: (
+        color: #ddeaf8,
+        contrast: #111
+      ),
+      highlight: (
+        color: #a9edff,
+        contrast: #111
+      ),
+      base: (
+        color: #1976d2,
+        contrast: #fff
+      ),
+      midrange: (
+        color: #145fa9,
+        contrast: #fff
+      ),
+      dark: (
+        color: #0b3354,
+        contrast: #fff
+      )
+    ),
+  secondary-o: (
+    pastel: (
+      color: #ddeaf8,
+      contrast: #111
+    ),
+    highlight: (
+      color: #a9edff,
+      contrast: #111
+    ),
+    base: (
+      color: #1976d2,
+      contrast: #111
+    ),
+    midrange: (
+      color: #145fa9,
+      contrast: #111
+    ),
+    dark: (
+      color: #0b3354,
+      contrast: #fff
+    )
+  ),
+  // Oranges
+  nav:
+    (
+      pastel: (
+        color: #fde9db,
+        contrast: #111
+      ),
+      highlight: (
+        color: #ffcca9,
+        contrast: #111
+      ),
+      base: (
+        color: #ef6c0f,
+        contrast: #111
+      ),
+      midrange: (
+        color: #c4580c,
+        contrast: #fff
+      ),
+      dark: (
+        color: #6d3209,
+        contrast: #fff
+      )
+    ),
+  // Purples
+  info:
+    (
+      pastel: (
+        color: #e9e4f2,
+        contrast: #111
+      ),
+      highlight: (
+        color: #d3c1f7,
+        contrast: #111
+      ),
+      base: (
+        color: #744bc4,
+        contrast: #fff
+      ),
+      midrange: (
+        color: #613ea3,
+        contrast: #fff
+      ),
+      dark: (
+        color: #2f1c4c,
+        contrast: #fff
+      )
+    ),
+  // Yellows
+  warning:
+    (
+      pastel: (
+        color: #fffae3,
+        contrast: #111
+      ),
+      highlight: (
+        color: #ffeea9,
+        contrast: #111
+      ),
+      base: (
+        color: #fed317,
+        contrast: #111
+      ),
+      midrange: (
+        color: #eab303,
+        contrast: #111
+      ),
+      dark: (
+        color: #aa6d00,
+        contrast: #fff
+      )
+    ),
+  // Reds
+  danger:
+    (
+      pastel: (
+        color: #fadcd9,
+        contrast: #111
+      ),
+      highlight: (
+        color: #ffbbbb,
+        contrast: #111
+      ),
+      base: (
+        color: #db1802,
+        contrast: #fff
+      ),
+      midrange: (
+        color: #ae1302,
+        contrast: #fff
+      ),
+      dark: (
+        color: #600801,
+        contrast: #fff
+      )
+    ),
+  // Magentas
+  feature:
+    (
+      pastel: (
+        color: #fbd9ed,
+        contrast: #111
+      ),
+      highlight: (
+        color: #ffb3e6,
+        contrast: #111
+      ),
+      base: (
+        color: #e20087,
+        contrast: #fff
+      ),
+      midrange: (
+        color: #b4006c,
+        contrast: #fff
+      ),
+      dark: (
+        color: #5b003b,
+        contrast: #fff
+      )
+    ),
+  // Browns
+  natural:
+    (
+      pastel: (
+        color: #fff1e1,
+        contrast: #111
+      ),
+      highlight: (
+        color: #fed9b4,
+        contrast: #111
+      ),
+      base: (
+        color: #bd8150,
+        contrast: #111
+      ),
+      midrange: (
+        color: #a05932,
+        contrast: #fff
+      ),
+      dark: (
+        color: #4f271c,
+        contrast: #fff
+      )
+    )
+) !default;
