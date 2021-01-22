@@ -12,6 +12,7 @@ RUN chown -R nobody /app/.next
 RUN chown -R nobody /app/build
 RUN npm rebuild node-sass
 
+
 CMD npx gasket build --env=production && npx gasket start --env=production
 
 EXPOSE 80
