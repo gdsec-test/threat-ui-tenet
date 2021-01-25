@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
-import getIOCTypeByInput from '../api/getIOCTypeByInput';
+import getIOCTypesByInput from '../api/getIOCTypesByInput';
 import getModulesListByIOCType from '../api/getModulesListByIOCType';
 import createJob from '../api/createJob';
 import { IOC_TYPE } from '../utils/const';
 
-import { FormElement, Form, Dropdown, Tooltip, Button } from '@ux/uxcore2';
+import { FormElement, Form, Dropdown, Tooltip, Button, Spinner } from '@ux/uxcore2';
 
 const { DropdownItem } = Dropdown;
 
@@ -16,7 +16,9 @@ export default class InputForm extends React.Component {
     this.state = {
       detectedIOCTypes: [],
       detectedIOCModules: new Map(),
-      selectedIOCModules: [IOC_TYPE.UNKNOWN]
+      selectedIOCModules: [IOC_TYPE.UNKNOWN],
+      isSubmitJobs: false,
+      submittedJobs: []
     };
     this.onIOCModuleChange = this.onIOCModuleChange.bind(this);
     this.detectIOCType = this.detectIOCType.bind(this);
@@ -24,13 +26,17 @@ export default class InputForm extends React.Component {
   }
 
   async detectIOCType({ target: { value } }) {
-    const detectedIOCTypes = await getIOCTypeByInput(value);
+    const detectedIOCTypes = await getIOCTypesByInput(this.getIOCValues(value));
     const detectedIOCModules = await getModulesListByIOCType(detectedIOCTypes);
     this.setState({
       detectedIOCTypes,
       detectedIOCModules,
       selectedIOCModules: getKeys(detectedIOCModules).map((_, i) => i)
     });
+  }
+
+  getIOCValues(rawText) {
+    return rawText.split(',');
   }
 
   onIOCModuleChange({ value }) {
@@ -49,11 +55,15 @@ export default class InputForm extends React.Component {
   }
 
   async createJob() {
+    this.setState({
+      isSubmitJobs: true,
+      submittedJobs: []
+    });
     const { detectedIOCModules } = this.state;
     const jobs = new Map();
     [...detectedIOCModules.entries()].forEach(([module, item]) => {
       const IOCTypes = item.values;
-      IOCTypes.forEach(({ input, type }) => {
+      IOCTypes.forEach(({ input = [], type }) => {
         if (!jobs.has(type)) {
           jobs.set(type, {
             modules: [],
@@ -64,20 +74,40 @@ export default class InputForm extends React.Component {
         if (job.modules.indexOf(module) < 0) {
           job.modules.push(module);
         }
-        if (job.inputs.indexOf(input) < 0) {
-          job.inputs.push(input);
-        }
+        input.forEach((inp) => {
+          if (job.inputs.indexOf(inp) < 0) {
+            job.inputs.push(inp);
+          }
+        });
       });
     }, {});
-
-    [...jobs.entries()].forEach(async ([IOCType, item]) => {
-      /* eslint-disable-next-line */
-      const { job_id } = await createJob({ inputType: IOCType, inputs: item.inputs, modules: item.modules });
+    await Promise.all(
+      [...jobs.entries()].map(([IOCType, item]) =>
+        createJob({ inputType: IOCType, inputs: item.inputs, modules: item.modules }).then((res) => {
+          const { submittedJobs } = this.state;
+          this.setState({ submittedJobs: submittedJobs.slice().concat([res.job_id]) });
+          return res;
+        })
+      )
+    );
+    this.setState({
+      isSubmitJobs: false
     });
   }
 
   render() {
-    const { detectedIOCModules } = this.state;
+    const { detectedIOCModules, isSubmitJobs, submittedJobs } = this.state;
+    if (isSubmitJobs) {
+      return (
+        <div>
+          <div>Jobs are submitting...</div>
+          <Spinner inline size='lg' />
+          {submittedJobs.map((id) => (
+            <div key={id}>{`Job ${id} submitted successfully`}</div>
+          ))}
+        </div>
+      );
+    }
     return (
       <Form
         className={'InputForm'}
@@ -97,9 +127,9 @@ export default class InputForm extends React.Component {
         />
         <p>
           Your detected IOC Types are:{' '}
-          {this.state.detectedIOCTypes.map(({ input, type = '' }) => (
-            <Fragment key={input}>
-              <b>{input}</b>:<span style={{ color: 'red' }}>{type.toUpperCase()}</span>,{' '}
+          {this.state.detectedIOCTypes.map(({ input = [], type = '' }) => (
+            <Fragment key={input.join(',')}>
+              <b>{input.join(',')}</b>:<span style={{ color: 'red' }}>{type.toUpperCase()}</span>,{' '}
             </Fragment>
           ))}
         </p>

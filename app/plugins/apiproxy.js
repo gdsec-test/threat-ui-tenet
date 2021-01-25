@@ -54,6 +54,10 @@ module.exports = {
         const data = await req.getApiProxy(req, res);
         res.json(data);
       });
+      app.post('/api/classify', async function (req, res) {
+        const data = await req.getApiProxy(req, res);
+        res.json(data);
+      });
     }
   }
 };

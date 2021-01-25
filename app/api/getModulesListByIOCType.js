@@ -27,7 +27,7 @@ export default (IOCTypes) => {
   return new Promise((resolve) => {
     resolve(
       IOCTypes.reduce((acc, { type, input }) => {
-        const modules = MODULES[type];
+        const modules = MODULES[type] || [];
         modules.forEach((module) => {
           if (!acc.has(module)) {
             acc.set(module, { count: 0, values: [] });
