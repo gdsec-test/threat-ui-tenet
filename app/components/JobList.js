@@ -5,6 +5,7 @@ import { Table } from 'evergreen-ui';
 import getJobs from '../api/getJobs';
 import { JOB_STATUS } from '../utils/const';
 import { withRouter } from 'next/router';
+import '@ux/icon/chevron-down-lt/index.css';
 
 const COLUMNS = {
   ID: { name: 'Id', id: 'id' },

@@ -17,3 +17,5 @@ linters:
     enabled: false
   NestingDepth:
     enabled: false
+  PropertySortOrder:
+    enabled: false
