@@ -1,0 +1,24 @@
+.JobDetails {
+  margin: 1em;
+
+  .JobDetails_controls {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+
+    .JobDetails_controls_theme {
+      min-width: 200px;
+    }
+
+    .JobDetails_controls_export {
+      margin: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      > * {
+        padding-right: 1em;
+      }
+    }
+  }
+}
