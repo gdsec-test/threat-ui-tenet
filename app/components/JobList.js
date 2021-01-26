@@ -157,23 +157,6 @@ class JobList extends React.Component {
     });
   }
 
-  // renderRows() {
-  //   const { jobsList, pageSelected, pageItems } = this.state;
-  //   const start = (pageSelected - 1) * pageItems;
-  //   const end = start + pageItems;
-  //   return jobsList.slice(start, end).map(({ id }) => {
-  //     const row = {};
-  //     row.id = (
-  //       <td key='id' className='JobList_id'>
-  //         <Link href={`/job/${id}`}>
-  //           <a>{id}</a>
-  //         </Link>
-  //       </td>
-  //     );
-  //     return row;
-  //   });
-  // }
-
   render() {
     const { tableJobsList, isLoading } = this.state;
     if (isLoading) {
@@ -188,27 +171,6 @@ class JobList extends React.Component {
         </Table>
       </div>
     );
-    // return (
-    //   <Fragment>
-    //     <Table className='table table-hover table-striped JobList' data={this.renderRows()} order='id' sortable={true}>
-    //       <thead>
-    //         <tr>
-    //           <th column='id'>{'Job ID'}</th>
-    //         </tr>
-    //       </thead>
-    //     </Table>
-    //     <Pagination
-    //       defaultSelected={1}
-    //       onChange={(pageSelected, pageItems) => {
-    //         this.setState({ pageSelected, pageItems });
-    //       }}
-    //       pageItems={pageItems}
-    //       size={'sm'}
-    //       totalItems={jobsList.length}
-    //       maxPageLinks={10}
-    //     />
-    //   </Fragment>
-    // );
   }
 }
 

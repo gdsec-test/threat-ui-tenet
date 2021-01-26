@@ -14,19 +14,45 @@ export default class InputForm extends React.Component {
   constructor() {
     super(...arguments);
     this.state = this.resetForm();
+    this.state.isLoading = true;
     this.onIOCModuleChange = this.onIOCModuleChange.bind(this);
     this.detectIOCType = this.detectIOCType.bind(this);
     this.createJob = this.createJob.bind(this);
   }
 
+  componentDidMount() {
+    getModulesListByIOCType().then((allIOCModules) => {
+      this.setState({
+        isLoading: false,
+        allIOCModules
+      });
+    });
+  }
+
   async detectIOCType({ target: { value } }) {
+    const { allIOCModules } = this.state;
     const IOCValues = this.getIOCValues(value);
     const detectedIOCTypes = await getIOCTypesByInput(IOCValues);
-    const detectedIOCModules = await getModulesListByIOCType(detectedIOCTypes);
+    const detectedIOCModules = new Map();
+    const IOCTypeNames = Object.keys(detectedIOCTypes);
+    /* eslint-disable-next-line */
+    Object.entries(allIOCModules).forEach(([module, { supported_ioc_types = [] }]) => {
+      const typesPerModule = supported_ioc_types.filter((type) => IOCTypeNames.indexOf(type) >= 0);
+      if (typesPerModule.length) {
+        // only modules for IOC Types found in input values
+        detectedIOCModules.set(
+          module,
+          typesPerModule.map((ioctype) => ({
+            type: ioctype,
+            inputs: detectedIOCTypes[ioctype]
+          }))
+        );
+      }
+    });
     this.setState({
-      detectedIOCTypes,
       detectedIOCModules,
-      selectedIOCModules: getKeys(detectedIOCModules).map((_, i) => i)
+      selectedIOCModules: getKeys(detectedIOCModules).map((_, i) => i),
+      isNoIOCTypesDetected: !IOCTypeNames.find((type) => type !== 'unknown')
     });
   }
 
@@ -45,11 +71,12 @@ export default class InputForm extends React.Component {
 
   resetForm() {
     return {
-      detectedIOCTypes: [],
       detectedIOCModules: new Map(),
       selectedIOCModules: [IOC_TYPE.UNKNOWN],
       showSubmitPopup: false,
-      submittedJobs: []
+      submittedJobs: [],
+      isLoading: false,
+      isNoIOCTypesDetected: true
     };
   }
 
@@ -76,9 +103,11 @@ export default class InputForm extends React.Component {
     });
     const { detectedIOCModules } = this.state;
     const jobs = new Map();
-    [...detectedIOCModules.entries()].forEach(([module, item]) => {
-      const IOCTypes = item.values;
-      IOCTypes.forEach(({ input = [], type }) => {
+    [...detectedIOCModules.entries()].forEach(([module, IOCTypes = []]) => {
+      IOCTypes.forEach(({ inputs = [], type }) => {
+        if (type === 'unknown') {
+          return; // do not submit job for unknown ioc types
+        }
         if (!jobs.has(type)) {
           jobs.set(type, {
             modules: [],
@@ -89,7 +118,7 @@ export default class InputForm extends React.Component {
         if (job.modules.indexOf(module) < 0) {
           job.modules.push(module);
         }
-        input.forEach((inp) => {
+        inputs.forEach((inp) => {
           if (job.inputs.indexOf(inp) < 0) {
             job.inputs.push(inp);
           }
@@ -109,7 +138,17 @@ export default class InputForm extends React.Component {
   }
 
   render() {
-    const { detectedIOCModules, showSubmitPopup, submittedJobs, submitIsInProgress } = this.state;
+    const {
+      detectedIOCModules,
+      showSubmitPopup,
+      submittedJobs,
+      submitIsInProgress,
+      isLoading,
+      isNoIOCTypesDetected
+    } = this.state;
+    if (isLoading) {
+      return <Spinner inline size='lg' />;
+    }
     if (showSubmitPopup) {
       return (
         <div>
@@ -122,7 +161,9 @@ export default class InputForm extends React.Component {
           {submittedJobs.map((id) => (
             <div key={id}>{`Job ${id} submitted successfully`}</div>
           ))}
-          <Button onClick={() => this.setState(this.resetForm())}>Submit more jobs</Button>
+          <Button design='secondary' onClick={() => this.setState(this.resetForm())}>
+            Submit more jobs
+          </Button>
         </div>
       );
     }
@@ -146,11 +187,19 @@ export default class InputForm extends React.Component {
         />
         <p>
           Your detected IOC Types are:{' '}
-          {this.state.detectedIOCTypes.map(({ input = [], type = '' }) => (
-            <Fragment key={input.join(',')}>
-              <b>{input.join(',')}</b>:<span style={{ color: 'red' }}>{type.toUpperCase()}</span>,{' '}
-            </Fragment>
-          ))}
+          {[...detectedIOCModules.entries()].map(([module, arrInputs = []]) => {
+            return (
+              <Fragment key={module}>
+                <h5>{`For module: ${module}`}</h5>
+                {arrInputs.map(({ inputs, type }) => (
+                  <Fragment key={inputs.join(',')}>
+                    <b>{inputs.join(', ')}</b>:<span style={{ color: 'red' }}>{type.toUpperCase()}</span>
+                    <br />
+                  </Fragment>
+                ))}
+              </Fragment>
+            );
+          })}
         </p>
         <Dropdown
           type='multiselect'
@@ -166,11 +215,15 @@ export default class InputForm extends React.Component {
           selected={this.state.selectedIOCModules}
         >
           {[...detectedIOCModules.entries()].map(([module]) => {
-            // const desc = `${item.values.map(({ type, input }) => `${type}:${input}`).join(', ')}`;
             return <DropdownItem key={module} value={module}>{`${module}`}</DropdownItem>;
           })}
         </Dropdown>
-        <Button design='primary' disabled='' title='Submit' type='submit'>
+        {isNoIOCTypesDetected && (
+          <div style={{ color: 'red' }} className='m-3'>
+            No IOC Types recognized. Cannot submit jobs
+          </div>
+        )}
+        <Button disabled={isNoIOCTypesDetected} design='primary' title='Submit' type='submit'>
           Submit
         </Button>
       </Form>
