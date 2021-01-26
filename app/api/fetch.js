@@ -17,6 +17,8 @@ export default async ({ url, params = {}, method = 'GET' }) => {
     const { ssoLogin } = await resp.json();
     location.assign(ssoLogin);
     return {};
+  } else if (!resp.ok) {
+    return resp;
   }
   return await resp.json();
 };
