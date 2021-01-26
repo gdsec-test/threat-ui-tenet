@@ -13,20 +13,15 @@ const getKeys = (map) => [...map.keys()];
 export default class InputForm extends React.Component {
   constructor() {
     super(...arguments);
-    this.state = {
-      detectedIOCTypes: [],
-      detectedIOCModules: new Map(),
-      selectedIOCModules: [IOC_TYPE.UNKNOWN],
-      isSubmitJobs: false,
-      submittedJobs: []
-    };
+    this.state = this.resetForm();
     this.onIOCModuleChange = this.onIOCModuleChange.bind(this);
     this.detectIOCType = this.detectIOCType.bind(this);
     this.createJob = this.createJob.bind(this);
   }
 
   async detectIOCType({ target: { value } }) {
-    const detectedIOCTypes = await getIOCTypesByInput(this.getIOCValues(value));
+    const IOCValues = this.getIOCValues(value);
+    const detectedIOCTypes = await getIOCTypesByInput(IOCValues);
     const detectedIOCModules = await getModulesListByIOCType(detectedIOCTypes);
     this.setState({
       detectedIOCTypes,
@@ -36,7 +31,26 @@ export default class InputForm extends React.Component {
   }
 
   getIOCValues(rawText) {
-    return rawText.split(',');
+    return rawText
+      .replaceAll('\n', ',')
+      .replaceAll(' ', ',')
+      .split(',')
+      .reduce((acc, text) => {
+        if (text && text.trim()) {
+          acc.push(text);
+        }
+        return acc;
+      }, []);
+  }
+
+  resetForm() {
+    return {
+      detectedIOCTypes: [],
+      detectedIOCModules: new Map(),
+      selectedIOCModules: [IOC_TYPE.UNKNOWN],
+      showSubmitPopup: false,
+      submittedJobs: []
+    };
   }
 
   onIOCModuleChange({ value }) {
@@ -56,7 +70,8 @@ export default class InputForm extends React.Component {
 
   async createJob() {
     this.setState({
-      isSubmitJobs: true,
+      showSubmitPopup: true,
+      submitIsInProgress: true,
       submittedJobs: []
     });
     const { detectedIOCModules } = this.state;
@@ -90,21 +105,24 @@ export default class InputForm extends React.Component {
         })
       )
     );
-    this.setState({
-      isSubmitJobs: false
-    });
+    this.setState({ submitIsInProgress: false });
   }
 
   render() {
-    const { detectedIOCModules, isSubmitJobs, submittedJobs } = this.state;
-    if (isSubmitJobs) {
+    const { detectedIOCModules, showSubmitPopup, submittedJobs, submitIsInProgress } = this.state;
+    if (showSubmitPopup) {
       return (
         <div>
-          <div>Jobs are submitting...</div>
-          <Spinner inline size='lg' />
+          {submitIsInProgress && (
+            <Fragment>
+              <div>Jobs are submitting...</div>
+              <Spinner inline size='lg' />
+            </Fragment>
+          )}
           {submittedJobs.map((id) => (
             <div key={id}>{`Job ${id} submitted successfully`}</div>
           ))}
+          <Button onClick={() => this.setState(this.resetForm())}>Submit more jobs</Button>
         </div>
       );
     }
@@ -120,6 +138,7 @@ export default class InputForm extends React.Component {
         <FormElement
           label='IOC (Indicator Of Compromise)'
           name='IOC'
+          type='textarea'
           className='InputForm_IOCType'
           autoComplete='off'
           placeholder='Start typing IOC'
