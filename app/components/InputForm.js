@@ -3,8 +3,9 @@ import getIOCTypesByInput from '../api/getIOCTypesByInput';
 import getModulesListByIOCType from '../api/getModulesListByIOCType';
 import createJob from '../api/createJob';
 import { IOC_TYPE } from '../utils/const';
-
+import FileUpload from '@ux/file-upload';
 import { FormElement, Form, Dropdown, Tooltip, Button, Spinner } from '@ux/uxcore2';
+import '@ux/file-upload/dist/styles.css';
 
 const { DropdownItem } = Dropdown;
 
@@ -18,6 +19,7 @@ export default class InputForm extends React.Component {
     this.onIOCModuleChange = this.onIOCModuleChange.bind(this);
     this.detectIOCType = this.detectIOCType.bind(this);
     this.createJob = this.createJob.bind(this);
+    this.readFromFile = this.readFromFile.bind(this);
   }
 
   componentDidMount() {
@@ -67,6 +69,17 @@ export default class InputForm extends React.Component {
         }
         return acc;
       }, []);
+  }
+
+  readFromFile(fileList) {
+    fileList.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const text = reader.result;
+        this.setState({ IOCTextAreaValue: text });
+      };
+      reader.readAsText(file);
+    });
   }
 
   resetForm() {
@@ -144,7 +157,8 @@ export default class InputForm extends React.Component {
       submittedJobs,
       submitIsInProgress,
       isLoading,
-      isNoIOCTypesDetected
+      isNoIOCTypesDetected,
+      IOCTextAreaValue
     } = this.state;
     if (isLoading) {
       return <Spinner inline size='lg' />;
@@ -176,12 +190,21 @@ export default class InputForm extends React.Component {
           this.createJob();
         }}
       >
+        <FileUpload
+          accept='text/plain'
+          maxSize={1073741824}
+          onChange={this.readFromFile}
+          label='Add text files to parse'
+          buttonLabel='browse here'
+        />
+
         <FormElement
           label='IOC (Indicator Of Compromise)'
           name='IOC'
           type='textarea'
           className='InputForm_IOCType'
           autoComplete='off'
+          value={IOCTextAreaValue || ''}
           placeholder='Start typing IOC'
           onChange={this.detectIOCType}
         />

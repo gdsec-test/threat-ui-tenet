@@ -24,6 +24,7 @@
     "@godaddy/gasket-preset-webapp": "^1.1.1",
     "@rigor/upload-coverage": "^1.0.0",
     "@size-limit/preset-big-lib": "^4.7.0",
+    "@ux/file-upload": "^2002.2.3",
     "@ux/scss-definitions": "^2002.0.3",
     "@ux/uxcore2": "^2002.2.3",
     "browserslist-config-godaddy": "^3.0.0",
