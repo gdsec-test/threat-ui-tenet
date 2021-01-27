@@ -4,6 +4,7 @@ import getModulesListByIOCType from '../api/getModulesListByIOCType';
 import createJob from '../api/createJob';
 import { IOC_TYPE } from '../utils/const';
 import FileUpload from '@ux/file-upload';
+import { withRouter } from 'next/router';
 import { FormElement, Form, Dropdown, Tooltip, Button, Spinner } from '@ux/uxcore2';
 import '@ux/file-upload/dist/styles.css';
 
@@ -11,7 +12,7 @@ const { DropdownItem } = Dropdown;
 
 const getKeys = (map) => [...map.keys()];
 
-export default class InputForm extends React.Component {
+class InputForm extends React.Component {
   constructor() {
     super(...arguments);
     this.state = this.resetForm();
@@ -31,7 +32,7 @@ export default class InputForm extends React.Component {
     });
   }
 
-  async detectIOCType({ target: { value } }) {
+  async detectIOCType(value) {
     const { allIOCModules } = this.state;
     const IOCValues = this.getIOCValues(value);
     const detectedIOCTypes = await getIOCTypesByInput(IOCValues);
@@ -76,7 +77,8 @@ export default class InputForm extends React.Component {
       const reader = new FileReader();
       reader.onload = () => {
         const text = reader.result;
-        this.setState({ IOCTextAreaValue: text });
+        this.setState({ IOCValueFromFile: text });
+        this.detectIOCType(text);
       };
       reader.readAsText(file);
     });
@@ -158,8 +160,9 @@ export default class InputForm extends React.Component {
       submitIsInProgress,
       isLoading,
       isNoIOCTypesDetected,
-      IOCTextAreaValue
+      IOCValueFromFile
     } = this.state;
+    const { router } = this.props;
     if (isLoading) {
       return <Spinner inline size='lg' />;
     }
@@ -175,8 +178,8 @@ export default class InputForm extends React.Component {
           {submittedJobs.map((id) => (
             <div key={id}>{`Job ${id} submitted successfully`}</div>
           ))}
-          <Button design='secondary' onClick={() => this.setState(this.resetForm())}>
-            Submit more jobs
+          <Button design='secondary' onClick={() => router.push(`/jobs?jobIds=${submittedJobs.join(',')}`)}>
+            See created jobs
           </Button>
         </div>
       );
@@ -192,22 +195,24 @@ export default class InputForm extends React.Component {
       >
         <FileUpload
           accept='text/plain'
-          maxSize={1073741824}
           onChange={this.readFromFile}
           label='Add text files to parse'
           buttonLabel='browse here'
+          showFiles={false}
         />
 
         <FormElement
+          key={`textIOCinput${IOCValueFromFile ? 'fromFile' : ''}`}
           label='IOC (Indicator Of Compromise)'
           name='IOC'
           type='textarea'
           className='InputForm_IOCType'
           autoComplete='off'
-          value={IOCTextAreaValue || ''}
           placeholder='Start typing IOC'
-          onChange={this.detectIOCType}
+          onChange={({ target: { value } }) => this.detectIOCType(value)}
+          {...(IOCValueFromFile ? { defaultValue: IOCValueFromFile } : {})}
         />
+
         <p>
           Your detected IOC Types are:{' '}
           {[...detectedIOCModules.entries()].map(([module, arrInputs = []]) => {
@@ -253,3 +258,5 @@ export default class InputForm extends React.Component {
     );
   }
 }
+
+export default withRouter(InputForm);

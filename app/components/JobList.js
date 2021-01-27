@@ -28,21 +28,33 @@ class JobList extends React.Component {
       pageItems: 5,
       jobsList: [],
       tableJobsList: [],
-      sortBy: {}
+      sortBy: {},
+      filterBy: {}
     };
     this.renderHead = this.renderHead.bind(this);
     this.handleTagsFilterChange = this.handleTagsFilterChange.bind(this);
     this.renderRow = this.renderRow.bind(this);
+    this.applyFilters = this.applyFilters.bind(this);
   }
 
   componentDidMount() {
     getJobs().then((jobsListData) => {
+      let {
+        router: {
+          query: { jobIds }
+        }
+      } = this.props;
       const jobsList = jobsListData instanceof Array ? jobsListData : [];
-      this.setState({
-        isLoading: false,
-        jobsList,
-        tableJobsList: jobsList.slice()
-      });
+      jobIds = jobIds ? jobIds.split(',') : [];
+      this.setState(
+        {
+          isLoading: false,
+          jobsList,
+          tableJobsList: jobsList.slice(),
+          filterBy: { jobIds }
+        },
+        () => this.applyFilters()
+      );
     });
   }
 
@@ -136,25 +148,37 @@ class JobList extends React.Component {
     );
   }
 
-  handleTagsFilterChange(searchTagsQuery) {
-    const { jobsList } = this.state;
-    if (!searchTagsQuery) {
-      this.setState({
-        tableJobsList: this.state.jobsList.slice(),
-        searchTagsQuery: null
-      });
-      return;
-    }
+  applyFilters() {
+    const {
+      filterBy: { searchTagsQuery, jobIds },
+      jobsList
+    } = this.state;
+    let tableJobsList = jobsList.slice();
     const formattedQuery = (searchTagsQuery || '')
       .replaceAll(' ', ',')
       .split(',')
       .filter((item) => item);
-    this.setState({
-      tableJobsList: jobsList.filter(({ tags }) =>
+    if (jobIds.length) {
+      tableJobsList = tableJobsList.filter(({ id }) => jobIds.indexOf(id) >= 0);
+    }
+    if (formattedQuery.length) {
+      tableJobsList = tableJobsList.filter(({ tags }) =>
         tags.find((tag) => formattedQuery.find((query) => tag.indexOf(query) >= 0))
-      ),
-      searchTagsQuery
+      );
+    }
+    this.setState({
+      tableJobsList
     });
+  }
+
+  handleTagsFilterChange(searchTagsQuery) {
+    const { filterBy } = this.state;
+    this.setState(
+      {
+        filterBy: { ...filterBy, searchTagsQuery }
+      },
+      () => this.applyFilters()
+    );
   }
 
   render() {
