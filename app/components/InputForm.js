@@ -3,9 +3,10 @@ import getIOCTypesByInput from '../api/getIOCTypesByInput';
 import getModulesListByIOCType from '../api/getModulesListByIOCType';
 import createJob from '../api/createJob';
 import { IOC_TYPE } from '../utils/const';
+import Loader from './common/Loader';
 import FileUpload from '@ux/file-upload';
 import { withRouter } from 'next/router';
-import { FormElement, Form, Dropdown, Tooltip, Button, Spinner } from '@ux/uxcore2';
+import { FormElement, Form, Dropdown, Tooltip, Button } from '@ux/uxcore2';
 import '@ux/file-upload/dist/styles.css';
 
 const { DropdownItem } = Dropdown;
@@ -73,11 +74,13 @@ class InputForm extends React.Component {
   }
 
   readFromFile(fileList) {
+    let fullText = '';
     fileList.forEach((file) => {
       const reader = new FileReader();
       reader.onload = () => {
         const text = reader.result;
-        this.setState({ IOCValueFromFile: text });
+        fullText += text + '\n';
+        this.setState({ IOCValueFromFile: fullText });
         this.detectIOCType(text);
       };
       reader.readAsText(file);
@@ -164,7 +167,7 @@ class InputForm extends React.Component {
     } = this.state;
     const { router } = this.props;
     if (isLoading) {
-      return <Spinner inline size='lg' />;
+      return <Loader inline size='lg' />;
     }
     if (showSubmitPopup) {
       return (
@@ -172,7 +175,7 @@ class InputForm extends React.Component {
           {submitIsInProgress && (
             <Fragment>
               <div>Jobs are submitting...</div>
-              <Spinner inline size='lg' />
+              <Loader inline size='lg' />
             </Fragment>
           )}
           {submittedJobs.map((id) => (
@@ -193,14 +196,15 @@ class InputForm extends React.Component {
           this.createJob();
         }}
       >
-        <FileUpload
-          accept='text/plain'
-          onChange={this.readFromFile}
-          label='Add text files to parse'
-          buttonLabel='browse here'
-          showFiles={false}
-        />
-
+        <div className='InputForm_FileUpload'>
+          <FileUpload
+            accept='text/plain'
+            onChange={this.readFromFile}
+            label='Parse file'
+            buttonLabel='sasdf'
+            showFiles={false}
+          />
+        </div>
         <FormElement
           key={`textIOCinput${IOCValueFromFile ? 'fromFile' : ''}`}
           label='IOC (Indicator Of Compromise)'

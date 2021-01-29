@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spinner, Table, Dropdown } from '@ux/uxcore2';
+import { Table, Dropdown } from '@ux/uxcore2';
 import Clipboard from '@ux/icon/clipboard';
 import Download from '@ux/icon/download';
 import { Tooltip } from 'evergreen-ui';
@@ -7,6 +7,7 @@ import getJob from '../api/getJob';
 import { THEMES } from '../utils/const';
 import JSONTree from 'react-json-tree';
 import ReactJson from 'react-json-view';
+import Loader from './common/Loader';
 const { DropdownItem } = Dropdown;
 import '@ux/icon/clipboard/index.css';
 import '@ux/icon/download/index.css';
@@ -68,7 +69,7 @@ export default class JobDetails extends React.Component {
   render() {
     const { jobDetails, isLoading, theme, isShowCopyTooltip } = this.state;
     if (isLoading) {
-      return <Spinner inline size='lg' />;
+      return <Loader inline size='lg' />;
     }
     /* eslint-disable */
     const { responses, start_time, job_status, job_percentage, request } = jobDetails;

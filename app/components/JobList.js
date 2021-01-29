@@ -1,11 +1,14 @@
 import React, { Fragment } from 'react';
-import { Spinner, Tooltip } from '@ux/uxcore2';
+import { Tooltip } from '@ux/uxcore2';
 import ChevronDown from '@ux/icon/chevron-down-lt';
+import Cross from '@ux/icon/x';
 import { Table } from 'evergreen-ui';
 import getJobs from '../api/getJobs';
 import { JOB_STATUS } from '../utils/const';
 import { withRouter } from 'next/router';
+import Loader from './common/Loader';
 import '@ux/icon/chevron-down-lt/index.css';
+import '@ux/icon/x/index.css';
 
 const COLUMNS = {
   ID: { name: 'Id', id: 'id' },
@@ -39,13 +42,8 @@ class JobList extends React.Component {
 
   componentDidMount() {
     getJobs().then((jobsListData) => {
-      let {
-        router: {
-          query: { jobIds }
-        }
-      } = this.props;
       const jobsList = jobsListData instanceof Array ? jobsListData : [];
-      jobIds = jobIds ? jobIds.split(',') : [];
+      const { jobIds } = this.getUrlQueryParams();
       this.setState(
         {
           isLoading: false,
@@ -148,6 +146,15 @@ class JobList extends React.Component {
     );
   }
 
+  getUrlQueryParams() {
+    const {
+      router: {
+        query: { jobIds }
+      }
+    } = this.props;
+    return { jobIds: jobIds ? jobIds.split(',') : [] };
+  }
+
   applyFilters() {
     const {
       filterBy: { searchTagsQuery, jobIds },
@@ -158,8 +165,12 @@ class JobList extends React.Component {
       .replaceAll(' ', ',')
       .split(',')
       .filter((item) => item);
-    if (jobIds.length) {
+    if (jobIds && jobIds.length) {
       tableJobsList = tableJobsList.filter(({ id }) => jobIds.indexOf(id) >= 0);
+    } else if (this.getUrlQueryParams().jobIds.length) {
+      const { router } = this.props;
+      // we need to clean up URL from jobs if any
+      router.push(`/jobs`);
     }
     if (formattedQuery.length) {
       tableJobsList = tableJobsList.filter(({ tags }) =>
@@ -182,13 +193,41 @@ class JobList extends React.Component {
   }
 
   render() {
-    const { tableJobsList, isLoading } = this.state;
+    const { tableJobsList, isLoading, filterBy } = this.state;
     if (isLoading) {
-      return <Spinner inline size='lg' />;
+      return <Loader inline size='lg' />;
     }
-
+    const filterByNames = Object.keys(filterBy).filter((filter) => filterBy[filter].length);
     return (
       <div className='JobList'>
+        {filterByNames.length ? (
+          <div className='JobList_filter_list'>
+            <div>Filters:</div>
+            <div>
+              {filterByNames.map((filter) => {
+                let filterValue = filterBy[filter];
+                filterValue =
+                  filterValue instanceof Array
+                    ? filterValue.map((s) => s.substring(0, 6) + '...').join(',')
+                    : filterValue.toString();
+                return (
+                  <span className='JobList_filter' key={filter}>
+                    {`${filter}: ${filterValue}`}
+                    <Cross
+                      onClick={() => {
+                        const filterBy = { ...this.state.filterBy };
+                        delete filterBy[filter];
+                        this.setState({ filterBy }, () => this.applyFilters());
+                      }}
+                      width={'1em'}
+                      height={'1em'}
+                    />
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
         <Table border>
           {this.renderHead()}
           <Table.VirtualBody height={640}>{tableJobsList.map((item) => this.renderRow(item))}</Table.VirtualBody>

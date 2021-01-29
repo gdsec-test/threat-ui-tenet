@@ -1,11 +1,33 @@
 .JobList {
+  padding: 1em;
+
+  .JobList_filter_list {
+    margin: 1em;
+
+    .JobList_filter {
+      margin: 5px;
+      padding: 5px;
+      background: map-deep-get($palette-colors, 'primary', 'pastel', 'color');
+
+      &:hover {
+        background: map-deep-get($palette-colors, 'primary', 'highlight', 'color');
+      }
+
+      svg {
+        vertical-align: middle;
+      }
+    }
+  }
+
   .JobList_row {
     align-items: center;
+
     .pending {
       * {
         color: map-deep-get($palette-colors, 'danger', 'base', 'color');
       }
     }
+
     &:hover {
       color: map-deep-get($palette-colors, 'primary', 'base', 'color');
       font-weight: bold;
@@ -18,9 +40,6 @@
       text-overflow: ellipsis;
       display: inline;
       white-space: nowrap;
-    }
-
-    .JobList_modules {
     }
   }
 
@@ -49,6 +68,7 @@
           font-weight: bold;
           font-size: 1.05em;
         }
+
         .JobList_sortButton {
           color: map-deep-get($palette-colors, 'primary', 'base', 'color');
         }

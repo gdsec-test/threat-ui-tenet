@@ -58,7 +58,7 @@
     "nyc": "^14.1.1",
     "setup-env": "^1.2.2",
     "sinon": "^7.4.1",
-    "stylelint": "^12.0.0",
+    "stylelint": "^13.9.0",
     "stylelint-config-godaddy": "^0.4.0"
   },
   "browserslist": [

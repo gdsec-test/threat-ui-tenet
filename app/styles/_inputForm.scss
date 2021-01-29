@@ -1,5 +1,6 @@
 .InputForm {
   padding: 2em;
+  position: relative;
 
   button:last-child {
     margin-top: 10px;
@@ -8,5 +9,24 @@
   .InputForm_IOCType {
     border-radius: 2px;
     min-height: 200px;
+  }
+
+  .InputForm_FileUpload {
+    width: 60px;
+    position: absolute;
+    top: 70px;
+    right: 50px;
+    z-index: 1;
+
+    .ux-file-upload-dropzone {
+      > * {
+        display: none;
+      }
+
+      .ux-button {
+        display: initial;
+        white-space: normal;
+      }
+    }
   }
 }
