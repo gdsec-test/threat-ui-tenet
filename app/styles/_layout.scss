@@ -1,0 +1,18 @@
+.Layout {
+  .Layout_Navigation {
+    color: red;
+    flex-direction: row;
+
+    .Layout_Navigation_Button {
+      border-radius: 5px;
+
+      &:hover {
+        background: map-deep-get($palette-colors, 'primary', 'highlight', 'color');
+      }
+    }
+
+    .Layout_Navigation_Back {
+      transform: rotate(180deg);
+    }
+  }
+}

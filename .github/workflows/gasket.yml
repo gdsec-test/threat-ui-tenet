@@ -44,7 +44,7 @@ jobs:
         working-directory: app
         run: |
           npm i
-          npm run build
+          npm run build --env=production
           npm prune --production
 
       - name: Log into golden image ECR

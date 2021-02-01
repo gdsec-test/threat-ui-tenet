@@ -10,8 +10,8 @@ export const IndexPage = () => {
   return (
     <Layout
       links={[
-        { url: '/', caption: 'Go Home' },
-        { url: '/jobs', caption: 'See My Jobs List' }
+        { url: '/', caption: 'Submit Job' },
+        { url: '/jobs', caption: 'Jobs List' }
       ]}
     >
       <JobDetails id={id} />
