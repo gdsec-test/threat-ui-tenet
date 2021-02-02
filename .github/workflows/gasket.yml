@@ -1,4 +1,4 @@
-name: docker test
+name: Deploy New Build
 
 on:
   pull_request:
@@ -32,26 +32,28 @@ jobs:
           role-duration-seconds: 3600
           aws-region: us-west-2
 
-      - name: Print caller-identity
-        run: aws sts get-caller-identity
-
       - name: Copy artificatory token into .npmrc
         working-directory: app
         run: |
           echo ${{ secrets.NPM_ARTIFACTORY_TOKEN }} >> .npmrc
 
-      - name: Install node_modules
+      - name: Install node modules
         working-directory: app
         run: |
           npm i
-          npm run build --env=production
           npm prune --production
+
+      - name: Build application code (also generate self-signed SSL certs)
+        working-directory: app
+        run: |
+          npm run createcert
+          npm run build --env=production
 
       - name: Log into golden image ECR
         run: |
           aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 764525110978.dkr.ecr.us-west-2.amazonaws.com
 
-      - name: Build container
+      - name: Build docker container
         id: container
         run: |
           docker build . -t tmp

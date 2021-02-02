@@ -21,8 +21,8 @@ module.exports = {
           newConfig.https = {
             root: config.root,
             port: 8443,
-            cert: fs.readFileSync(`${process.cwd()}/server.crt`, { encoding: 'utf8' }),
-            key: fs.readFileSync(`${process.cwd()}/server.key`, { encoding: 'utf8' })
+            cert: fs.readFileSync(`${process.cwd()}/cert/server.crt`, { encoding: 'utf8' }),
+            key: fs.readFileSync(`${process.cwd()}/cert/server.key`, { encoding: 'utf8' })
           };
         }
 

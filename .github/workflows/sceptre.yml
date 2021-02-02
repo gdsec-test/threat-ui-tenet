@@ -15,7 +15,7 @@
 #
 # registry=https://npm.pkg.github.com/<organization>
 
-name: deploy-sceptre-infrastructure
+name: Update AWS Infrastructure
 
 on:
   pull_request: # for testing
