@@ -6,6 +6,10 @@ WORKDIR /app
 
 USER root
 
+RUN apk add --no-cache \
+    git \
+    openssl
+
 RUN mkdir /.cache && chown nobody /.cache
 RUN chown nobody /app
 RUN chown -R nobody /app/.next
