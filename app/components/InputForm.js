@@ -219,14 +219,57 @@ class InputForm extends React.Component {
       );
     }
     return (
-      <Fragment>
-        <Form
-          className={'InputForm'}
-          action=''
-          onSubmit={(e) => {
-            e.preventDefault();
-            this.createJob();
-          }}
+      <Form
+        className={'InputForm'}
+        action=''
+        onSubmit={(e) => {
+          e.preventDefault();
+          this.createJob();
+        }}
+      >
+        <div className='InputForm_FileUpload'>
+          <FileUpload onChange={this.readFromFile} label='Parse file' buttonLabel='sasdf' showFiles={false} />
+        </div>
+        <FormElement
+          key={`textIOCinput${IOCValueFromFile ? 'fromFile' : ''}`}
+          label='IOC (Indicator Of Compromise)'
+          name='IOC'
+          type='textarea'
+          className='InputForm_IOCType'
+          autoComplete='off'
+          placeholder='Start typing IOC'
+          onChange={({ target: { value } }) => this.detectIOCType(value)}
+          {...(IOCValueFromFile ? { defaultValue: IOCValueFromFile } : {})}
+        />
+
+        <p>
+          Your detected IOC Types are:{' '}
+          {[...detectedIOCModules.entries()].map(([module, arrInputs = []]) => {
+            return (
+              <Fragment key={module}>
+                <h5>{`For module: ${module}`}</h5>
+                {arrInputs.map(({ inputs, type }) => (
+                  <Fragment key={inputs.join(',')}>
+                    <b>{inputs.join(', ')}</b>:<span style={{ color: 'red' }}>{type.toUpperCase()}</span>
+                    <br />
+                  </Fragment>
+                ))}
+              </Fragment>
+            );
+          })}
+        </p>
+        <Dropdown
+          type='multiselect'
+          label={
+            <span style={{ fontWeight: 'bold' }}>
+              <Tooltip title='Modules List' message='Choose Modules supported for current IOC'>
+                IOC Modules
+              </Tooltip>
+            </span>
+          }
+          name='IOC Types'
+          onChange={this.onIOCModuleChange}
+          selected={this.state.selectedIOCModules}
         >
           <div>
             <label htmlFor='addtag' className='form-control-label'>

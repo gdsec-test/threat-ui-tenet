@@ -4,10 +4,14 @@
     flex-direction: row;
 
     .Layout_Navigation_Button {
-      border-radius: 5px;
+      border-right: 1px solid map-deep-get($palette-colors, 'gray', 'light', 'color');
+
+      &:first-child {
+        border-left: 1px solid map-deep-get($palette-colors, 'gray', 'light', 'color');
+      }
 
       &:hover {
-        background: map-deep-get($palette-colors, 'primary', 'highlight', 'color');
+        background: map-deep-get($palette-colors, 'primary', 'pastel', 'color');
       }
     }
 
