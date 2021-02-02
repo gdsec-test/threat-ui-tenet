@@ -19,12 +19,7 @@ module.exports = {
     },
     production: {
       hostname: 'ui.threat.int.gdcorp.tools',
-      rootDomain: 'gdcorp.tools',
-      https: {
-        root: './cert',
-        key: 'ui.threat.int.gdcorp.tools.key',
-        cert: ['ui.threat.int.gdcorp.tools.crt']
-      }
+      rootDomain: 'gdcorp.tools'
     }
   },
   presentationCentral: {
