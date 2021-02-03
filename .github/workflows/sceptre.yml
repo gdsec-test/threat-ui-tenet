@@ -45,14 +45,14 @@ jobs:
 
   checkout-code:
     runs-on: self-hosted
-    needs: tartufo
+    needs: tartufo-code-secrets-scan
     steps:
       - name: Checkout this repo on to a job runner.
         uses: actions/checkout@5a4ac90 # Checkout this repository.
 
   deploy-fargate-infrastructure:
     runs-on: self-hosted
-    needs: checkout
+    needs: checkout-code
     steps:
       - name: Configure AWS credentials using Cloud Key Based Service Accounts
         uses: aws-actions/configure-aws-credentials@1417e62
