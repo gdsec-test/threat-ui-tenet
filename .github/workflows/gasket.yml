@@ -40,7 +40,6 @@ jobs:
       - name: Install node modules
         working-directory: app
         run: |
-          npm install -g npx
           npm i
           npx dotenv -- cross-var npm prune
 
