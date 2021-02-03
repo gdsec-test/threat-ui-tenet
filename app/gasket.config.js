@@ -1,5 +1,4 @@
 module.exports = {
-  https: 8080,
   plugins: {
     presets: ['@godaddy/webapp'],
     add: ['@godaddy/gasket-plugin-auth', '@godaddy/gasket-plugin-proxy', '@gasket/mocha']
