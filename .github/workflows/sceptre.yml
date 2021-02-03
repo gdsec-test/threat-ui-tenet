@@ -65,6 +65,8 @@ jobs:
       - name: Deploy / Update ECR sceptre deployment
         working-directory: ./sceptre
         run: |
+          apt-get install npm
+          npm install -g npx
           npm install --save-dev dotenv dotenv-cli cross-var
           npx dotenv -- cross-var sceptre launch -y dev/us-west-2/threat-ui-tenet/ecr.yaml
           npx dotenv -- cross-var sceptre launch -y dev/us-west-2/threat-ui-tenet/iam-role.yaml
