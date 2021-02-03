@@ -14,11 +14,13 @@ module.exports = {
         root: './cert',
         key: 'ui.threat.int.dev-gdcorp.tools.key',
         cert: ['ui.threat.int.dev-gdcorp.tools.crt']
-      }
+      },
+      apiBaseUrl: 'https://api-private.threat.int.dev-gdcorp.tools'
     },
     production: {
       hostname: 'ui.threat.int.gdcorp.tools',
-      rootDomain: 'gdcorp.tools'
+      rootDomain: 'gdcorp.tools',
+      apiBaseUrl: 'https://api-private.threat.int.gdcorp.tools'
     }
   },
   presentationCentral: {

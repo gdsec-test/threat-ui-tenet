@@ -2,9 +2,9 @@ const fetch = require('@gasket/fetch');
 const { getLoginUrlFromRequest } = require('@gasket/auth/lib/utils');
 const express = require('express');
 
-function getApiProxy() {
+function getApiProxy(apiBaseUrl) {
   return async function (req, originalResponse) {
-    const url = 'https://api-private.threat.int.dev-gdcorp.tools' + req.path.replace('/api', '');
+    const url = apiBaseUrl + req.path.replace('/api', '');
     const payload = {
       method: req.method,
       headers: {
@@ -32,9 +32,10 @@ function getApiProxy() {
 module.exports = {
   name: 'threatpi',
   hooks: {
-    middleware: function () {
+    middleware: function (gasket) {
       return function (req, res, next) {
-        req.getApiProxy = getApiProxy();
+        const apiBaseUrl = gasket.config.apiBaseUrl;
+        req.getApiProxy = getApiProxy(apiBaseUrl);
         next();
       };
     },

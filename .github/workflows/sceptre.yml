@@ -28,7 +28,7 @@ on:
       - "sceptre/**"
 
 jobs:
-  tartufo:
+  tartufo-code-secrets-scan:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@5a4ac90 # Checkout this repository
@@ -43,14 +43,14 @@ jobs:
         with:
           github_token: ${{ secrets.REPO_CLONE_TOKEN_SA_PAT }}
 
-  checkout:
+  checkout-code:
     runs-on: self-hosted
     needs: tartufo
     steps:
       - name: Checkout this repo on to a job runner.
         uses: actions/checkout@5a4ac90 # Checkout this repository.
 
-  login-to-aws:
+  deploy-fargate-infrastructure:
     runs-on: self-hosted
     needs: checkout
     steps:
@@ -70,33 +70,3 @@ jobs:
           sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-cluster.yaml
           sceptre delete -y dev/us-west-2/threat-ui-tenet/fargate-service.yaml
           sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-service.yaml
-
-
-  #
-  # =============== unsure about below code
-  #
-  # # launch-ecr:
-  #   runs-on: self-hosted
-  #   needs: login-to-aws
-  #   steps:
-  #     - name: Deploy / Update ECR sceptre deployment
-  #       working-directory: ./sceptre
-  #       run: |
-  #         sceptre launch -y dev/us-west-2/threat-ui-tenet/ecr.yaml
-  # launch-iam:
-  #   runs-on: self-hosted
-  #   needs: login-to-aws
-  #   steps:
-  #     - name: Deploy / Update IAM role sceptre deployment
-  #       working-directory: ./sceptre
-  #       run: |
-  #         sceptre launch -y dev/us-west-2/threat-ui-tenet/iam-role.yaml
-  # launch-fargate:
-  #   runs-on: self-hosted
-  #   needs: launch-iam
-  #   steps:
-  #     - name: Deploy / Update Fargate sceptre deployment
-  #       working-directory: ./sceptre
-  #       run: |
-  #         sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-cluster.yaml
-  #         sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-service.yaml
