@@ -17,10 +17,15 @@ module.exports = {
       },
       apiBaseUrl: 'https://api-private.threat.int.dev-gdcorp.tools'
     },
+    development: {
+      hostname: 'ui.threat.int.dev-gdcorp.tools',
+      rootDomain: 'gdcorp.tools',
+      apiBaseUrl: 'https://api-private.threat.int.dev-gdcorp.tools'
+    },
     production: {
       hostname: 'ui.threat.int.gdcorp.tools',
       rootDomain: 'gdcorp.tools',
-      apiBaseUrl: 'https://api-private.threat.int.gdcorp.tools'
+      apiBaseUrl: 'https://api.threat.int.gdcorp.tools'
     }
   },
   presentationCentral: {
