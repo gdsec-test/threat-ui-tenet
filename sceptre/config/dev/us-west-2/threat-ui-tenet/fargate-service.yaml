@@ -12,7 +12,7 @@ parameters:
   CustomIAMRoleNameSuffix: custom-fargate-role
   DesiredContainers: "1"
   MinContainers: "1"
-  MaxContainers: "2"
+  MaxContainers: "3"
   ContainerPort: "8443"
   ContainerProtocol: "HTTPS"
   Cpu: "1024"
