@@ -18,10 +18,6 @@
 name: Update AWS Infrastructure
 
 on:
-  pull_request: # for testing
-    branches: [main]
-    paths:
-      - "sceptre/**"
   push:
     branches: [main]
     paths:
