@@ -56,7 +56,6 @@ jobs:
       - name: Build docker container
         id: container
         run: |
-          npm install --save-dev dotenv dotenv-cli cross-var
           npx dotenv -- cross-var docker build --build-arg NODE_ENV=%NODE_ENV% -t tmp .
           echo "::set-output name=id::$(docker images -q tmp)"
 
