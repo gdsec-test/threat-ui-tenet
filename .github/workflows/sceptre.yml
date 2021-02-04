@@ -65,10 +65,9 @@ jobs:
       - name: Deploy / Update ECR sceptre deployment
         working-directory: ./sceptre
         run: |
-          npm install -g npx
-          npm install --save-dev dotenv dotenv-cli cross-var
-          npx dotenv -- cross-var sceptre launch -y dev/us-west-2/threat-ui-tenet/ecr.yaml
-          npx dotenv -- cross-var sceptre launch -y dev/us-west-2/threat-ui-tenet/iam-role.yaml
-          npx dotenv -- cross-var sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-cluster.yaml
-          npx dotenv -- cross-var sceptre delete -y dev/us-west-2/threat-ui-tenet/fargate-service.yaml
-          npx dotenv -- cross-var sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-service.yaml
+          npm install --save-dev npx dotenv dotenv-cli cross-var
+          ./node_modules/.bin/npx dotenv -- cross-var sceptre launch -y dev/us-west-2/threat-ui-tenet/ecr.yaml
+          ./node_modules/.bin/npx dotenv -- cross-var sceptre launch -y dev/us-west-2/threat-ui-tenet/iam-role.yaml
+          ./node_modules/.bin/npx dotenv -- cross-var sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-cluster.yaml
+          ./node_modules/.bin/npx dotenv -- cross-var sceptre delete -y dev/us-west-2/threat-ui-tenet/fargate-service.yaml
+          ./node_modules/.bin/npx dotenv -- cross-var sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-service.yaml
