@@ -18,12 +18,14 @@ module.exports = {
         // when running on AWS Fargate, the connection from load balancer to the fargate endpoint
         // is using https using a self-signed cert that gets generated in the Dockerfile.
         if (config.env !== 'local') {
+          console.log('APPLYING SERVER.crt');
           newConfig.https = {
             root: config.root,
             port: 8443,
             cert: fs.readFileSync(`${process.cwd()}/cert/server.crt`, { encoding: 'utf8' }),
             key: fs.readFileSync(`${process.cwd()}/cert/server.key`, { encoding: 'utf8' })
           };
+          console.log(newConfig.https);
         }
 
         return newConfig;

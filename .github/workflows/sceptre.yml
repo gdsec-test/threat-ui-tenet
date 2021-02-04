@@ -61,7 +61,7 @@ jobs:
       - name: Deploy / Update ECR sceptre deployment
         working-directory: ./sceptre
         run: |
-          export $(grep -v '^#' ../.env | xargs)
+          export $(grep -v '^#' ../.varenv | xargs)
           sceptre launch -y dev/us-west-2/threat-ui-tenet/ecr.yaml
           sceptre launch -y dev/us-west-2/threat-ui-tenet/iam-role.yaml
           sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-cluster.yaml
