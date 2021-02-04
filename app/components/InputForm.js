@@ -4,6 +4,7 @@ import getModulesListByIOCType from '../api/getModulesListByIOCType';
 import createJob from '../api/createJob';
 import { IOC_TYPE } from '../utils/const';
 import Loader from './common/Loader';
+import { HighlightWithinTextarea } from 'react-highlight-within-textarea';
 import FileUpload from '@ux/file-upload';
 import { withRouter } from 'next/router';
 import { FormElement, Form, Dropdown, Tooltip, Button } from '@ux/uxcore2';
@@ -37,6 +38,9 @@ class InputForm extends React.Component {
   }
 
   async detectIOCType(value) {
+    this.setState({
+      textAreaValue: value
+    });
     const { allIOCModules } = this.state;
     const IOCValues = this.getIOCValues(value);
     const detectedIOCTypes = await getIOCTypesByInput(IOCValues);
@@ -57,6 +61,7 @@ class InputForm extends React.Component {
       }
     });
     this.setState({
+      detectedIOCTypes,
       detectedIOCModules,
       selectedIOCModules: getKeys(detectedIOCModules).map((_, i) => i),
       isNoIOCTypesDetected: !IOCTypeNames.find((type) => type !== 'unknown')
@@ -77,13 +82,10 @@ class InputForm extends React.Component {
   }
 
   readFromFile(fileList) {
-    let fullText = '';
     fileList.forEach((file) => {
       const reader = new FileReader();
       reader.onload = () => {
         const text = reader.result;
-        fullText += text + '\n';
-        this.setState({ IOCValueFromFile: fullText });
         this.detectIOCType(text);
       };
       reader.readAsText(file);
@@ -92,6 +94,7 @@ class InputForm extends React.Component {
 
   resetForm() {
     return {
+      textAreaValue: '',
       detectedIOCModules: new Map(),
       selectedIOCModules: [IOC_TYPE.UNKNOWN],
       showSubmitPopup: false,
@@ -179,6 +182,7 @@ class InputForm extends React.Component {
 
   render() {
     const {
+      detectedIOCTypes,
       detectedIOCModules,
       showSubmitPopup,
       submittedJobs,
@@ -186,7 +190,8 @@ class InputForm extends React.Component {
       isLoading,
       isNoIOCTypesDetected,
       IOCValueFromFile,
-      tags
+      tags,
+      textAreaValue
     } = this.state;
     const { router } = this.props;
     if (isLoading) {
@@ -230,16 +235,22 @@ class InputForm extends React.Component {
         <div className='InputForm_FileUpload'>
           <FileUpload onChange={this.readFromFile} label='Parse file' buttonLabel='sasdf' showFiles={false} />
         </div>
-        <FormElement
-          key={`textIOCinput${IOCValueFromFile ? 'fromFile' : ''}`}
-          label='IOC (Indicator Of Compromise)'
+        <HighlightWithinTextarea
+          key={`textIOCinput`}
           name='IOC'
-          type='textarea'
-          className='InputForm_IOCType'
-          autoComplete='off'
+          value={textAreaValue}
+          containerClassName='InputForm_IOCValue'
           placeholder='Start typing IOC'
+          autoComplete='off'
+          highlight={() => {
+            return Object.keys(detectedIOCTypes || {}).map((type) => {
+              return {
+                highlight: new RegExp(detectedIOCTypes[type].join('|'), 'img'),
+                className: `InputForm_Hightlight_${type}`
+              };
+            });
+          }}
           onChange={({ target: { value } }) => this.detectIOCType(value)}
-          {...(IOCValueFromFile ? { defaultValue: IOCValueFromFile } : {})}
         />
 
         <p>
@@ -364,7 +375,6 @@ class InputForm extends React.Component {
             Submit
           </Button>
         </Form>
-      </Fragment>
     );
   }
 }

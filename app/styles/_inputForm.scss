@@ -6,6 +6,16 @@
     margin-top: 10px;
   }
 
+  .InputForm_IOCValue {
+    border-radius: 2px;
+    width: 100%;
+
+    textarea {
+      width: 100%;
+      min-height: 200px;
+    }
+  }
+
   .InputForm_Tags_List {
     margin: 1em;
 
@@ -49,6 +59,88 @@
           white-space: normal;
         }
       }
+    }
+  }
+
+  .InputForm_Hightlight_ {
+    &unknown {
+      background: #db1802cc;
+    }
+
+    &domain {
+      background: map-deep-get($palette-colors, 'natural', 'base', 'marker');
+    }
+
+    &email {
+      background: map-deep-get($palette-colors, 'nav', 'base', 'marker');
+    }
+
+    &cve {
+      background: map-deep-get($palette-colors, 'success', 'base', 'marker');
+    }
+
+    &cwe {
+      background: map-deep-get($palette-colors, 'product', 'base', 'marker');
+    }
+
+    &capec {
+      background: map-deep-get($palette-colors, 'success', 'base', 'marker');
+    }
+
+    &cpe {
+      background: map-deep-get($palette-colors, 'feature', 'base', 'marker');
+    }
+
+    &url {
+      background: map-deep-get($palette-colors, 'secondary', 'base', 'marker');
+    }
+
+    &md5 {
+      background: map-deep-get($palette-colors, 'success', 'base', 'marker');
+    }
+
+    &sha1 {
+      background: map-deep-get($palette-colors, 'success', 'base', 'marker');
+    }
+
+    &sha256 {
+      background: map-deep-get($palette-colors, 'primary', 'base', 'marker');
+    }
+
+    &sha512 {
+      background: map-deep-get($palette-colors, 'success', 'base', 'marker');
+    }
+
+    &ip {
+      background: map-deep-get($palette-colors, 'danger', 'base', 'marker');
+    }
+
+    &hostname {
+      background: map-deep-get($palette-colors, 'success', 'base', 'marker');
+    }
+
+    &awshostname {
+      background: map-deep-get($palette-colors, 'info', 'base', 'marker');
+    }
+
+    &godaddy_username {
+      background: map-deep-get($palette-colors, 'success', 'base', 'marker');
+    }
+
+    &mitre_tactic {
+      background: map-deep-get($palette-colors, 'success', 'base', 'marker');
+    }
+
+    &mitre_technique {
+      background: map-deep-get($palette-colors, 'warning', 'base', 'marker');
+    }
+
+    &mitre_subtechnique {
+      background: map-deep-get($palette-colors, 'success', 'base', 'marker');
+    }
+
+    &mitre_mitigation {
+      background: map-deep-get($palette-colors, 'gray', 'base', 'marker');
     }
   }
 }
