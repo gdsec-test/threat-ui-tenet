@@ -15,11 +15,7 @@ export default async ({ url, params = {}, method = 'GET' }) => {
   const resp = await fetch(url, payload);
   if (resp.status === 401) {
     const { ssoLogin } = await resp.json();
-    /* eslint-disable-next-line */
-    const redirectToLogin = window.confirm('You were logged out. Do you want to re-login?');
-    if (redirectToLogin) {
-      location.assign(ssoLogin);
-    }
+    location.assign(ssoLogin);
     return {};
   } else if (!resp.ok) {
     return resp;

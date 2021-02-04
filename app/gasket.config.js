@@ -8,19 +8,24 @@ module.exports = {
   },
   environments: {
     local: {
-      hostname: 'ui.threat.int.dev-gdcorp.tools',
-      rootDomain: 'gdcorp.tools',
+      hostname: 'local.ui.threat.int.dev-gdcorp.tools',
+      rootDomain: 'dev-gdcorp.tools',
       https: {
         root: './cert',
-        key: 'ui.threat.int.dev-gdcorp.tools.key',
-        cert: ['ui.threat.int.dev-gdcorp.tools.crt']
+        key: 'local.ui.threat.int.dev-gdcorp.tools.key',
+        cert: ['local.ui.threat.int.dev-gdcorp.tools.crt']
       },
+      apiBaseUrl: 'https://api-private.threat.int.dev-gdcorp.tools'
+    },
+    development: {
+      hostname: 'ui.threat.int.dev-gdcorp.tools',
+      rootDomain: 'dev-gdcorp.tools',
       apiBaseUrl: 'https://api-private.threat.int.dev-gdcorp.tools'
     },
     production: {
       hostname: 'ui.threat.int.gdcorp.tools',
       rootDomain: 'gdcorp.tools',
-      apiBaseUrl: 'https://api-private.threat.int.gdcorp.tools'
+      apiBaseUrl: 'https://api.threat.int.gdcorp.tools'
     }
   },
   presentationCentral: {

@@ -23,6 +23,10 @@ jobs:
       - name: Checkout this repo on to a job runner.
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # Checkout this repository.
 
+      - name: Install node modules for root folder
+        run: |
+          npm i
+
       - name: Configure AWS credentials using Cloud Key Based Service Accounts
         uses: aws-actions/configure-aws-credentials@9ea63e0c1c3b71af4bf6de1d7e251d3756673ed2
         with:
@@ -41,13 +45,13 @@ jobs:
         working-directory: app
         run: |
           npm i
-          npm prune --production
+          export $(grep -v '^#' ../.varenv | xargs) && npm prune
 
       - name: Build application code (also generate self-signed SSL certs)
         working-directory: app
         run: |
           npm run createcert
-          npm run build --env=production
+          npm run build
 
       - name: Log into golden image ECR
         run: |
@@ -56,7 +60,7 @@ jobs:
       - name: Build docker container
         id: container
         run: |
-          docker build . -t tmp
+          export $(grep -v '^#' .varenv | xargs) && docker build --build-arg NODE_ENV=$NODE_ENV -t tmp .
           echo "::set-output name=id::$(docker images -q tmp)"
 
       - name: Login to Amazon ECR

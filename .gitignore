@@ -6,13 +6,12 @@ node_modules
 # testing
 reports
 
-# production
+# build folders
 build
 cert
 .next
 
 # misc
-.env
 *.log
 .DS_Store
 
