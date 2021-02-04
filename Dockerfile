@@ -12,6 +12,8 @@ RUN apk add --no-cache \
     git \
     openssl
 
+# Generate self-signed cert thats used by the gasket service (check plugins/deploy-plugin.js)
+RUN npm run createcert
 
 RUN mkdir /.cache && chown nobody /.cache
 RUN chown nobody /app
@@ -19,8 +21,6 @@ RUN chown -R nobody /app/.next
 RUN chown -R nobody /app/build
 RUN npm rebuild node-sass
 
-# Generate self-signed cert thats used by the gasket service (check plugins/deploy-plugin.js)
-RUN npm run createcert
 
 CMD npx gasket build --env=${NODE_ENV}} && npx gasket start --env=${NODE_ENV}
 
