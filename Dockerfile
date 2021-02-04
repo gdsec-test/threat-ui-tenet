@@ -1,4 +1,5 @@
 FROM 764525110978.dkr.ecr.us-west-2.amazonaws.com/alpine-node:14.15.4-alpine-3.12
+
 ARG NODE_ENV
 ENV NODE_ENV=$NODE_ENV
 
@@ -16,7 +17,7 @@ RUN apk add --no-cache \
 RUN npm run createcert
 
 RUN mkdir /.cache && chown nobody /.cache
-RUN chown nobody /app
+RUN chown -R nobody /app
 RUN chown -R nobody /app/.next
 RUN chown -R nobody /app/build
 RUN npm rebuild node-sass
