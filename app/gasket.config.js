@@ -9,7 +9,7 @@ module.exports = {
   environments: {
     local: {
       hostname: 'ui.threat.int.dev-gdcorp.tools',
-      rootDomain: 'gdcorp.tools',
+      rootDomain: 'dev-gdcorp.tools',
       https: {
         root: './cert',
         key: 'ui.threat.int.dev-gdcorp.tools.key',
@@ -19,7 +19,7 @@ module.exports = {
     },
     development: {
       hostname: 'ui.threat.int.dev-gdcorp.tools',
-      rootDomain: 'gdcorp.tools',
+      rootDomain: 'dev-gdcorp.tools',
       apiBaseUrl: 'https://api-private.threat.int.dev-gdcorp.tools'
     },
     production: {
