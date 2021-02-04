@@ -23,6 +23,10 @@ jobs:
       - name: Checkout this repo on to a job runner.
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # Checkout this repository.
 
+      - name: Install node modules for root folder
+        run: |
+          npm i
+
       - name: Configure AWS credentials using Cloud Key Based Service Accounts
         uses: aws-actions/configure-aws-credentials@9ea63e0c1c3b71af4bf6de1d7e251d3756673ed2
         with:
