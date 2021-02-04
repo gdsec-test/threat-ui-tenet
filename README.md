@@ -9,7 +9,7 @@ Threat UI aka Tenet to work with GD Threat API and render human-friendly results
 next line into your **`/etc/hosts`** file
 
 ```
-127.0.0.1  ui.threat.int.dev-gdcorp.tools
+127.0.0.1  local.ui.threat.int.dev-gdcorp.tools
 ```
 
 ## 2) Add credentials to access GoDaddy local NPM artifactory\registry to install dependencies
@@ -51,7 +51,7 @@ cd app && npm install
 npm run local
 ```
 
-Go to https://ui.threat.int.dev-gdcorp.tools:8443 in favorite browser.
+Go to https://local.ui.threat.int.dev-gdcorp.tools:8443 in favorite browser.
 It supports live reload and code update at least for client-side code (no need to restart server)
 
 For local debug of back-end side (NodeJS) run

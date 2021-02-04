@@ -8,12 +8,12 @@ module.exports = {
   },
   environments: {
     local: {
-      hostname: 'ui.threat.int.dev-gdcorp.tools',
+      hostname: 'local.ui.threat.int.dev-gdcorp.tools',
       rootDomain: 'dev-gdcorp.tools',
       https: {
         root: './cert',
-        key: 'ui.threat.int.dev-gdcorp.tools.key',
-        cert: ['ui.threat.int.dev-gdcorp.tools.crt']
+        key: 'local.ui.threat.int.dev-gdcorp.tools.key',
+        cert: ['local.ui.threat.int.dev-gdcorp.tools.crt']
       },
       apiBaseUrl: 'https://api-private.threat.int.dev-gdcorp.tools'
     },
