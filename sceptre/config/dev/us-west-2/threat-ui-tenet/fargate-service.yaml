@@ -1,7 +1,7 @@
 template_path: sc-fargate-service.yaml
 stack_name: {{project_code}}-fargate-service
 parameters:
-  ClusterName: {{project_code}}-cluster
+  ClusterName: {{cluster_name}}
   ECRRepoSuffix: dkr.ecr.{{region}}.amazonaws.com/com.godaddy.{{project_code}}
   ServiceName: {{project_code}}-fargate
   CertificateId: {{certificate_id}}
