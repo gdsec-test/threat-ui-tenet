@@ -15,12 +15,12 @@ module.exports = {
         key: 'local.ui.threat.int.dev-gdcorp.tools.key',
         cert: ['local.ui.threat.int.dev-gdcorp.tools.crt']
       },
-      apiBaseUrl: 'https://api-private.threat.int.dev-gdcorp.tools'
+      apiBaseUrl: 'https://api.threat.int.dev-gdcorp.tools'
     },
     development: {
       hostname: 'ui.threat.int.dev-gdcorp.tools',
       rootDomain: 'dev-gdcorp.tools',
-      apiBaseUrl: 'https://api-private.threat.int.dev-gdcorp.tools'
+      apiBaseUrl: 'https://api.threat.int.dev-gdcorp.tools'
     },
     production: {
       hostname: 'ui.threat.int.gdcorp.tools',
