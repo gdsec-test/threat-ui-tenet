@@ -2,20 +2,15 @@ template_path: sc-cloud-watch-alarm.yaml
 stack_name: {{project_code}}-cloudwatch-alarm
 parameters:
   ProductVersion: {{cloudwatch_version}}
-  AlarmActions:
-    - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}::warning-moog-${development_team}-${development_environment}
-  OKActions:
-    - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}::warning-moog-${development_team}-${development_environment}
-  AlarmName:
-    - !Sub CPU Utilization for ${development_environment} ${cluster_name}
-  AlarmDescription:
-    - !Sub fires when any container in the ${cluster_name} cluster has CPU Utilization over the threshold of 50 percent
+  AlarmActions: !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}::warning-moog-${development_team}-${development_environment}
+  OKActions: !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}::warning-moog-${development_team}-${development_environment}
+  AlarmName: !Sub CPU Utilization for ${development_environment} ${cluster_name}
+  AlarmDescription: !Sub fires when any container in the ${cluster_name} cluster has CPU Utilization over the threshold of 50 percent
   ComparisonOperator: GreaterThanThreshold
   DatapointsToAlarm: 3
   Dimensions:
     - Name: ClusterName
-      Value:
-      - !Sub ${cluster_name}
+      Value: !Sub ${cluster_name}
   EvaluationPeriods: 10
   MetricName: CPUUtilization
   Unit: Percent
