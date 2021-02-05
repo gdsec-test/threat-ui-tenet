@@ -20,10 +20,12 @@ module.exports = {
         if (config.env !== 'local') {
           console.log('APPLYING SERVER.crt');
           newConfig.https = {
-            root: config.root,
             port: 8443,
+            // root: process.cwd(),
             cert: fs.readFileSync(`${process.cwd()}/cert/server.crt`, { encoding: 'utf8' }),
             key: fs.readFileSync(`${process.cwd()}/cert/server.key`, { encoding: 'utf8' })
+            // cert: './cert/server.crt',
+            // key: './cert/server.key'
           };
           console.log(newConfig.https);
         }
