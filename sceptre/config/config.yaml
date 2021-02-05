@@ -7,4 +7,3 @@ iam_role_version: '1.0.7'
 cloudwatch_version: '1.0.7'
 development_team: threatresearch
 development_environment: dev
-cluster_name: {{project_code}}-cluster

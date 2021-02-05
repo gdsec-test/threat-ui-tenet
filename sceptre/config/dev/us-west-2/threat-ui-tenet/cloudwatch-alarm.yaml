@@ -12,7 +12,7 @@ parameters:
   DatapointsToAlarm: 3
   Dimensions:
     - Name: ClusterName
-      Value: !Sub ${cluster_name}
+      Value: !Sub threat-ui-tenet-cluster
   EvaluationPeriods: 10
   MetricName: CPUUtilization
   Unit: Percent
