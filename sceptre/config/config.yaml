@@ -4,3 +4,7 @@ ecr_version: '1.1.0'
 fargate_cluster_version: '1.0.0'
 fargate_service_version: '1.6.3'
 iam_role_version: '1.0.7'
+cloudwatch_version: '1.0.7'
+development_team: threatresearch
+development_environment: dev
+cluster_name: {{project_code}}-cluster

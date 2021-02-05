@@ -1,0 +1,205 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: CloudWatch Alarm
+Parameters:
+  AlarmAction:
+    Type: String
+    Description: (optional) The action to execute when this alarm transitions into an ALARM state from any other state. Specify as an Amazon Resource Name (ARN). Multiple Actions not supported.
+    Default: ""
+    AllowedPattern: (^$|^arn:aws:(automate|sns|autoscaling):\w+-\w+-[0-9]:(ec2|[0-9]{12}):\S+$)
+  AlarmDescription:
+    Type: String
+    Description: (optional) The description of the alarm.
+    Default: ""
+  AlarmName:
+    Type: String
+    Description: (optional) A name for the alarm.
+    Default: ""
+  ComparisonOperator:
+    Type: String
+    Description: The arithmetic operation to use when comparing the specified Statistic to Threshold.
+    AllowedValues:
+      - GreaterThanOrEqualToThreshold
+      - GreaterThanThreshold
+      - LessThanThreshold
+      - LessThanOrEqualToThreshold
+  DatapointsToAlarm:
+    Type: Number
+    Description: (optional) The number of datapoints that must be breaching to trigger the alarm. This is used only if you are setting an "M out of N" alarm. In that case, this value is the M.
+    Default: -1
+  DimensionsJSON:
+    Type: String
+    Description: (optional) JSON string defining a list of Dimensions.  See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cw-dimension.html for more information.
+    Default: "[]"
+  EvaluateLowSampleCountPercentile:
+    Type: String
+    Description: (optional, only valid for ExtendedStatistic) Specifies whether to evaluate the data and potentially change the alarm state if there are too few data points to be statistically significant.
+    Default: ""
+    AllowedValues:
+      - ""
+      - evaluate
+      - ignore
+  EvaluationPeriods:
+    Type: String
+    Description: The number of periods over which data is compared to the specified threshold.
+    Default: "1"
+    AllowedPattern: ^[0-9]+$
+  ExtendedStatistic:
+    Type: String
+    Description: (either ExtendedStatistic or Statistic is required) The percentile statistic for the metric. Specify a value between p0.0 and p100. https://aws.amazon.com/blogs/aws/amazon-cloudwatch-update-percentile-statistics-and-new-dashboard-widgets/
+    Default: ""
+    AllowedPattern: (^$|^p100$|^p[0-9]{1,2}(\.[0-9])?$)
+  InsufficientDataAction:
+    Type: String
+    Description: (optional) The action to execute when this alarm transitions into an INSUFFICIENT_DATA state. Specify as an Amazon Resource Name (ARN). Multiple Actions not supported.
+    Default: ""
+    AllowedPattern: (^$|^arn:aws:(sns|autoscaling):\w+-\w+-[0-9]:[0-9]{12}:\S+$)
+  LambdaS3Bucket:
+    Type: AWS::SSM::Parameter::Value<String>
+    Description: SSM parameter referencing the S3 Bucket which contains the Lambda code
+    Default: /AdminParams/Team/GlobalBucket
+    AllowedValues:
+      - /AdminParams/Team/GlobalBucket
+  MetricName:
+    Type: String
+    Description: The name of the metric associated with the alarm.
+    Default: ""
+  MetricsJSON:
+    Type: String
+    Description: (optional) JSON string defining a list of Metrics or math expressions. See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudwatch-alarm-metricdataquery.html for more information.
+    Default: "[]"
+  Namespace:
+    Type: String
+    Description: The namespace of the metric associated with the alarm.
+    MaxLength: 256
+    Default: ""
+    AllowedPattern: (?![\S\s])|^[^:].*$
+  OKAction:
+    Type: String
+    Description: (optional) The action to execute when this alarm transitions into an OK state. Specify as an Amazon Resource Name (ARN). Multiple Actions not supported.
+    Default: ""
+    AllowedPattern: (^$|^arn:aws:(sns|autoscaling):\w+-\w+-[0-9]:[0-9]{12}:\S+$)
+  Period:
+    Type: String
+    Description: The time over which the specified statistic is applied. Specify time in seconds as 10, 30, 60, or in multiples of 60.
+    Default: ""
+    AllowedPattern: ^$|^10$|^30$|^60$|^[0-9]+[24680]0$
+  Statistic:
+    Type: String
+    Description: (either ExtendedStatistic or Statistic is required) The statistic to apply to the alarm's associated metric.
+    Default: ""
+    AllowedValues:
+      - ""
+      - SampleCount
+      - Average
+      - Sum
+      - Minimum
+      - Maximum
+  Threshold:
+    Type: String
+    Description: The value against which the specified statistic is compared.
+    AllowedPattern: ^-?[0-9]+(\.[0-9]*)?$
+  ThresholdMetricId:
+    Type: String
+    Description: Is an alarm based on an anomaly detection model, this is the ID of the ANOMALY_DETECTION_BAND function used as the threshold for the alarm.
+    Default: ""
+  TreatMissingData:
+    Type: String
+    Description: Sets how this alarm is to handle missing data points.
+    Default: missing
+    AllowedValues:
+      - breaching
+      - notBreaching
+      - ignore
+      - missing
+  Unit:
+    Type: String
+    Description: (optional) The unit for the metric that is associated with the alarm.
+    Default: ""
+Conditions:
+  HasAlarmAction: !Not [!Equals [!Ref AlarmAction, ""]]
+  HasAlarmDescription: !Not [!Equals [!Ref AlarmDescription, ""]]
+  HasAlarmName: !Not [!Equals [!Ref AlarmName, ""]]
+  HasDatapointsToAlarm: !Not [!Equals [!Ref DatapointsToAlarm, -1]]
+  HasDimensions: !Not [ !Equals [ !Ref DimensionsJSON, "[]" ]]
+  HasEvaluateLowSampleCountPercentile: !Not [!Equals [!Ref EvaluateLowSampleCountPercentile, ""]]
+  HasExtendedStatistic: !Not [!Equals [!Ref ExtendedStatistic, ""]]
+  HasInsufficientDataAction: !Not [!Equals [!Ref InsufficientDataAction, ""]]
+  HasMetricName: !Not [ !Equals [ !Ref MetricName, "" ]]
+  HasMetrics: !Not [ !Equals [ !Ref MetricsJSON, "[]" ]]
+  HasNamespace: !Not [ !Equals [ !Ref Namespace, "" ]]
+  HasOKAction: !Not [!Equals [!Ref OKAction, ""]]
+  HasPeriod: !Not [ !Equals [ !Ref Period, "" ]]
+  HasStatistic: !Not [!Equals [!Ref Statistic, ""]]
+  HasThresholdMetricId: !Not [!Equals [!Ref ThresholdMetricId, ""]]
+  HasAnyAction: !Or
+    - !Condition HasAlarmAction
+    - !Condition HasInsufficientDataAction
+    - !Condition HasOKAction
+  HasJson: !Or
+    - !Condition HasDimensions
+    - !Condition HasMetrics
+  HasUnit: !Not [ !Equals [ !Ref Unit, "" ] ]
+Resources:
+  ConvertToJson:
+    Type: AWS::Lambda::Function
+    Condition: HasJson
+    Properties:
+      Handler: string_to_json.index.convert_to_json
+      Role: !Sub arn:aws:iam::${AWS::AccountId}:role/GD-APPSVCS-LambdaExecutionRole
+      Code:
+        S3Bucket: !Ref LambdaS3Bucket
+        S3Key: json/string_to_json/string_to_json-1.0.3.zip
+      Runtime: python3.6
+      Timeout: 30
+      TracingConfig:
+        Mode: Active
+  ConvertDimensions:
+    Type: Custom::ConvertDimensions
+    Condition: HasDimensions
+    Properties:
+      ServiceToken: !GetAtt ConvertToJson.Arn
+      Input: !Ref DimensionsJSON
+    DependsOn:
+      - ConvertToJson
+  ConvertMetrics:
+    Type: Custom::ConvertMetrics
+    Condition: HasMetrics
+    Properties:
+      ServiceToken: !GetAtt ConvertToJson.Arn
+      Input: !Ref MetricsJSON
+    DependsOn:
+      - ConvertToJson
+  Alarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      ActionsEnabled: !If [ HasAnyAction, true, false ]
+      AlarmActions:
+        - !If [HasAlarmAction, !Ref AlarmAction, !Ref "AWS::NoValue"]
+      AlarmDescription: !If [HasAlarmDescription, !Ref AlarmDescription, !Ref "AWS::NoValue"]
+      AlarmName: !If [HasAlarmName, !Ref AlarmName, !Ref "AWS::NoValue"]
+      ComparisonOperator: !Ref ComparisonOperator
+      DatapointsToAlarm: !If [HasDatapointsToAlarm, !Ref DatapointsToAlarm, !Ref "AWS::NoValue"]
+      Dimensions: !If [HasDimensions, !GetAtt ConvertDimensions.JsonValue, !Ref "AWS::NoValue"]
+      EvaluateLowSampleCountPercentile: !If [HasEvaluateLowSampleCountPercentile, !Ref EvaluateLowSampleCountPercentile, !Ref "AWS::NoValue"]
+      EvaluationPeriods: !Ref EvaluationPeriods
+      ExtendedStatistic: !If [HasExtendedStatistic, !Ref ExtendedStatistic, !Ref "AWS::NoValue"]
+      InsufficientDataActions:
+        - !If [HasInsufficientDataAction, !Ref InsufficientDataAction, !Ref "AWS::NoValue"]
+      MetricName: !If [HasMetricName, !Ref MetricName, !Ref "AWS::NoValue"]
+      Metrics: !If [HasMetrics, !GetAtt ConvertMetrics.JsonValue, !Ref "AWS::NoValue"]
+      Namespace: !If [HasNamespace, !Ref Namespace, !Ref "AWS::NoValue"]
+      OKActions:
+        - !If [HasOKAction, !Ref OKAction, !Ref "AWS::NoValue"]
+      Period: !If [HasPeriod, !Ref Period, !Ref "AWS::NoValue"]
+      Statistic: !If [HasStatistic, !Ref Statistic, !Ref "AWS::NoValue"]
+      Threshold: !Ref Threshold
+      ThresholdMetricId: !If [HasThresholdMetricId, !Ref ThresholdMetricId, !Ref "AWS::NoValue"]
+      TreatMissingData: !Ref TreatMissingData
+      Unit: !If [ HasUnit, !Ref Unit, !Ref "AWS::NoValue" ]
+Outputs:
+  AlarmName:
+    Description: The name of the alarm.
+    Value: !Ref Alarm
+  AlarmArn:
+    Description: The arn of the alarm.
+    Value: !GetAtt Alarm.Arn
