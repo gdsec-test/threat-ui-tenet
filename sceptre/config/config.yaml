@@ -8,8 +8,4 @@ cloudwatch_version: '1.0.7'
 development_team: threatresearch
 development_environment: dev
 cluster_name: threat-ui-tenet-cluster
-{% if environment_variable.NODE_ENV == 'development' %}
 accountId: 345790377847
-{% else %}
-accountId: 338932590174
-{% endif %}
