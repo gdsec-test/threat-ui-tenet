@@ -2,14 +2,32 @@ const fetch = require('@gasket/fetch');
 const { getLoginUrlFromRequest } = require('@gasket/auth/lib/utils');
 const express = require('express');
 
+const PROXY_ENDPOINTS = [
+  {
+    url: 'jobs'
+  },
+  {
+    url: 'job/:jobId'
+  },
+  {
+    url: 'job',
+    method: 'post'
+  },
+  {
+    url: 'classify',
+    method: 'post'
+  },
+  {
+    url: 'modules'
+  }
+];
+
 function getApiProxy(apiBaseUrl) {
   return async function (req, originalResponse) {
     const url = apiBaseUrl + req.path.replace('/api', '');
     const payload = {
       method: req.method,
       headers: {
-        // 'Accept': 'application/json',
-        // 'Content-Type': 'application/json',
         cookie: req.get('cookie')
       }
     };
@@ -24,7 +42,12 @@ function getApiProxy(apiBaseUrl) {
         originalResponse.status(401).send({ error: 'Unauthorized', ssoLogin });
       }
     } else {
-      return response.json();
+      // we proxy all parts of original response
+      originalResponse.status(response.status);
+      const headers = Object.fromEntries(response.headers);
+      originalResponse.set({ ...headers });
+      const body = await response.buffer();
+      originalResponse.send(body);
     }
   };
 }
@@ -43,25 +66,11 @@ module.exports = {
     express: function (gasket, app) {
       app.use(express.json()); // for parsing application/json
       app.use(express.urlencoded({ extended: true }));
-      app.get('/api/jobs', async function (req, res) {
-        const data = await req.getApiProxy(req, res);
-        res.json(data);
-      });
-      app.get('/api/job/:jobId', async function (req, res) {
-        const data = await req.getApiProxy(req, res);
-        res.json(data);
-      });
-      app.post('/api/job', async function (req, res) {
-        const data = await req.getApiProxy(req, res);
-        res.json(data);
-      });
-      app.post('/api/classify', async function (req, res) {
-        const data = await req.getApiProxy(req, res);
-        res.json(data);
-      });
-      app.get('/api/modules', async function (req, res) {
-        const data = await req.getApiProxy(req, res);
-        res.json(data);
+      PROXY_ENDPOINTS.forEach(({ url, method }) => {
+        const func = method || 'get';
+        app[func](`/api/${url}`, async function (req, res) {
+          await req.getApiProxy(req, res);
+        });
       });
     }
   }

@@ -5,7 +5,7 @@ import generate from 'project-name-generator';
 export default async () => {
   let jobs = await fetch({ url: '/api/jobs' });
   // mock-start
-  jobs = jobs.map((id) => {
+  jobs = jobs.map(({ JobID, StartTime }) => {
     const status = Math.random() > 0.5 ? JOB_STATUS.PENDING : JOB_STATUS.DONE;
     const modules = Object.values(MODULES).reduce((acc, name) => {
       if (Math.random() > 0.5) {
@@ -21,11 +21,11 @@ export default async () => {
     const timestamp = new Date();
     timestamp.setHours(Math.round(Math.random() * 24), Math.round(Math.random() * 60), Math.round(Math.random() * 60));
     return {
-      id,
+      id: JobID,
       tags: generate({ words: 3 }).raw,
       status,
       modules,
-      timestamp: timestamp.valueOf()
+      timestamp: StartTime
     };
   });
   // mock-end
