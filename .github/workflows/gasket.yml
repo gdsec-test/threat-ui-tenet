@@ -50,7 +50,7 @@ jobs:
       - name: Build application code (also generate self-signed SSL certs)
         working-directory: app
         run: |
-          npm run createcert
+          export $(grep -v '^#' ../.varenv | xargs) && npm run createcert
           npm run build
 
       - name: Log into golden image ECR

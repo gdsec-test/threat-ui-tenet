@@ -1,11 +1,13 @@
-# FROM 764525110978.dkr.ecr.us-west-2.amazonaws.com/alpine-node:14.15.4-alpine-3.12
-FROM node:14.15.4-alpine
+FROM 764525110978.dkr.ecr.us-west-2.amazonaws.com/alpine-node:14.15.4-alpine-3.12
+# FROM node:14.15.4-alpine
 
 ARG NODE_ENV
 ENV NODE_ENV=$NODE_ENV
 
 USER root
 COPY app /app
+COPY .varenv .varenv
+
 WORKDIR /app
 
 RUN apk add openssl
