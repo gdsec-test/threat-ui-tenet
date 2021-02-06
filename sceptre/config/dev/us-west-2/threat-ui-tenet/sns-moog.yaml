@@ -1,4 +1,4 @@
-template_path: sc-cloud-watch-alarm.yaml
+template_path: sc-sns-moog.yaml
 stack_name: {{project_code}}-sns-moog
 parameters:
   #ProvisionedProductName: "sns-alerting-dev-private"
