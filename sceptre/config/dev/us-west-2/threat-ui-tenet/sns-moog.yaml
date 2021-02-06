@@ -1,0 +1,6 @@
+template_path: sc-cloud-watch-alarm.yaml
+stack_name: {{project_code}}-sns-moog
+parameters:
+  #ProvisionedProductName: "sns-alerting-dev-private"
+  #SnsMoogLambdaDocId: '{{ moog_doc_id }}'
+  SnsMoogTopicNameSuffix: {{ region }}-Threat-Research-{{ environment }}
