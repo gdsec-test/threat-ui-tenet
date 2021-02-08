@@ -23,7 +23,7 @@ Resources:
         - Key: ClusterName
           Value: !Ref ClusterName
         - Key: ContainerInsights
-          Value: !Ref ContainerInsights
+          Value: "enabled"
       Tags:
         - Key: doNotShutDown
-          Value: "true"
+          Value: true
