@@ -3,3 +3,4 @@ stack_name: {{project_code}}-fargate-cluster
 parameters:
   ClusterName: {{cluster_name}}
   ProductVersion: {{fargate_cluster_version}}
+  ContainerInsights: "enabled"

@@ -1,6 +1,5 @@
 template_path: sc-sns-moog.yaml
 stack_name: {{project_code}}-sns-moog
 parameters:
-  #ProvisionedProductName: "sns-alerting-dev-private"
   SnsMoogLambdaDocId: "1001813"
   SnsMoogTopicNameSuffix: "{{cluster_name}}"
