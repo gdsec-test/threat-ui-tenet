@@ -22,8 +22,6 @@ Resources:
       ProvisioningParameters:
         - Key: ClusterName
           Value: !Ref ClusterName
-        - Key: ContainerInsights
-          Value: !Ref ContainerInsights
       Tags:
         - Key: doNotShutDown
           Value: true
