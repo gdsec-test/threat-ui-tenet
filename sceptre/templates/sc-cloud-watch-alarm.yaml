@@ -3,6 +3,8 @@ Description: CloudWatch Alarm
 Parameters:
   ClusterName:
     Type: String
+  ServiceName:
+    Type: String
   DevelopmentTeam:
     Type: String
   DevelopmentEnvironment:
