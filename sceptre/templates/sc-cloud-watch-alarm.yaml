@@ -22,6 +22,8 @@ Resources:
       Dimensions:
         - Name: "ClusterName"
           Value: !Sub ${ClusterName}
+        - Name: "ServiceName"
+          Value: !Sub ${ServiceName}
       EvaluationPeriods: 10
       MetricName: CPUUtilization
       Namespace: 'AWS/ECS'
