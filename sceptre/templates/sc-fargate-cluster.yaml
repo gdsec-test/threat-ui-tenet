@@ -4,7 +4,7 @@ Parameters:
     Description: Required. The name of the Fargate Cluster
   ProductVersion:
     Type: String
-    Default: '1.0.0'
+    Default: '1.1.0'
   ContainerInsights:
     Type: String
     Description: (Optional) Whether Container Insights will be enabled for the cluster.
@@ -23,7 +23,7 @@ Resources:
         - Key: ClusterName
           Value: !Ref ClusterName
         - Key: ContainerInsights
-          Value: "enabled"
+          Value: !Ref ContainerInsights
       Tags:
         - Key: doNotShutDown
           Value: true
