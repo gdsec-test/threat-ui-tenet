@@ -1,10 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Deploy the SNS Moog Service Catalog Product
 Parameters:
-  DevelopmentTeam:
-    Type: String
-  DevelopmentEnvironment:
-    Type: String
   # Must be provided by env/region specific config
   SnsMoogLambdaDocId:
     Type: String
@@ -51,10 +47,6 @@ Resources:
           Value: !Ref SnsMoogLambdaDocIdCritical
         - Key: SnsMoogTopicNameSuffix
           Value: !Ref SnsMoogTopicNameSuffix
-        - Key: DevelopmentTeam
-          Value: !Ref DevelopmentTeam
-        - Key: DevelopmentEnvironment
-          Value: !Ref DevelopmentEnvironment
       Tags:
         - Key: doNotShutDown
           # change to false if it can be turned off outside of business hours
