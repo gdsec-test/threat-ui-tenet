@@ -1,10 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Deploy the SNS Moog Service Catalog Product
 Parameters:
-  DevelopmentTeam:
-    Type: String
-  DevelopmentEnvironment:
-    Type: String
   # Must be provided by env/region specific config
   SnsMoogLambdaDocId:
     Type: String

@@ -5,8 +5,8 @@ fargate_cluster_version: '1.0.0'
 fargate_service_version: '1.6.3'
 iam_role_version: '1.0.7'
 cloudwatch_version: '1.0.7'
-development_team: threatresearch
-development_environment: dev
+development_team: threattools
+development_environment: dev-private
 cluster_name: threat-ui-tenet-cluster
 accountId: 345790377847
 service_name: threat-ui-tenet-fargate

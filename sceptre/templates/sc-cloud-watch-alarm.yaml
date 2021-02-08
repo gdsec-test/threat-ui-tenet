@@ -14,9 +14,9 @@ Resources:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}threat-ui
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}{ClusterName}
       OKActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}threat-ui
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}{ClusterName}
       AlarmDescription: !Sub fires when any container in the ${ClusterName} cluster has CPU Utilization over the threshold of 50 percent
       AlarmName: !Sub CPU Utilization for ${DevelopmentEnvironment} ${ClusterName}
       ComparisonOperator: GreaterThanThreshold

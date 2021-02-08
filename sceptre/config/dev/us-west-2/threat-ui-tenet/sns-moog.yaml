@@ -3,6 +3,4 @@ stack_name: {{project_code}}-sns-moog
 parameters:
   #ProvisionedProductName: "sns-alerting-dev-private"
   SnsMoogLambdaDocId: "1001813"
-  SnsMoogTopicNameSuffix: "threat-ui"
-  DevelopmentTeam: {{development_team}}
-  DevelopmentEnvironment: {{development_environment}}
+  SnsMoogTopicNameSuffix: "{{cluster_name}}"
