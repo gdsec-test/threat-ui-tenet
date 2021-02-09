@@ -9,8 +9,6 @@ Parameters:
     Type: String
   DevelopmentEnvironment:
     Type: String
-  MinContainers:
-    Type: String
 Resources:
   CPUWarning:
     Type: AWS::CloudWatch::Alarm
@@ -28,10 +26,99 @@ Resources:
           Value: !Sub ${ClusterName}
         - Name: "ServiceName"
           Value: !Sub ${ServiceName}
-      EvaluationPeriods: 3
+      EvaluationPeriods: 10
       MetricName: CPUUtilization
       Namespace: 'AWS/ECS'
       Period: 60
       Statistic: Average
       Threshold: 90
       Unit: Percent
+  MemoryWarning:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      OKActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      AlarmDescription: !Sub fires when any container in the ${ClusterName} cluster has Memory Utilization over the threshold
+      AlarmName: !Sub Memory Utilization for ${DevelopmentEnvironment} ${ClusterName}
+      ComparisonOperator: GreaterThanThreshold
+      DatapointsToAlarm: 3
+      Dimensions:
+        - Name: "ClusterName"
+          Value: !Sub ${ClusterName}
+        - Name: "ServiceName"
+          Value: !Sub ${ServiceName}
+      EvaluationPeriods: 3
+      MetricName: MemoryUtilization
+      Namespace: 'AWS/ECS'
+      Period: 60
+      Statistic: Average
+      Threshold: 90
+      Unit: Percent
+  ContainersError:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      OKActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      AlarmDescription: !Sub fires when less than 1 containers are running in the ${ClusterName} cluster
+      AlarmName: !Sub Containers Count for ${DevelopmentEnvironment} ${ClusterName}
+      ComparisonOperator: LessThanThreshold
+      DatapointsToAlarm: 1
+      Dimensions:
+        - Name: "ClusterName"
+          Value: !Sub ${ClusterName}
+        - Name: "ServiceName"
+          Value: !Sub ${ServiceName}
+      EvaluationPeriods: 1
+      MetricName: ContainerInstanceCount
+      Namespace: 'ECS/ContainerInsights'
+      Period: 60
+      Statistic: Minimum
+      Threshold: 1
+  TasksError:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      OKActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      AlarmDescription: !Sub fires when less than 1 Task for deployment is running in the ${ClusterName} cluster
+      AlarmName: !Sub Running Tasks for ${DevelopmentEnvironment} ${ClusterName}
+      ComparisonOperator: LessThanThreshold
+      DatapointsToAlarm: 1
+      Dimensions:
+        - Name: "ClusterName"
+          Value: !Sub ${ClusterName}
+        - Name: "ServiceName"
+          Value: !Sub ${ServiceName}
+      EvaluationPeriods: 1
+      MetricName: RunningTaskCount
+      Namespace: 'ECS/ContainerInsights'
+      Period: 60
+      Statistic: Minimum
+      Threshold: 1
+  ServiceError:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      OKActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      AlarmDescription: !Sub fires when no Service is running in the ${ClusterName} cluster
+      AlarmName: !Sub Service for ${DevelopmentEnvironment} ${ClusterName}
+      ComparisonOperator: LessThanThreshold
+      DatapointsToAlarm: 1
+      Dimensions:
+        - Name: "ClusterName"
+          Value: !Sub ${ClusterName}
+        - Name: "ServiceName"
+          Value: !Sub ${ServiceName}
+      EvaluationPeriods: 1
+      MetricName: ServiceCount
+      Namespace: 'ECS/ContainerInsights'
+      Period: 60
+      Statistic: Minimum
+      Threshold: 1
