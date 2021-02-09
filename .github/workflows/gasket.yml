@@ -6,11 +6,13 @@ on:
     paths:
       - "app/**"
       - "Dockerfile"
+      - ".github/workflows/gasket.yml"
   push:
     branches: [main]
     paths:
       - "app/**"
       - "Dockerfile"
+      - ".github/workflows/gasket.yml"
 
 jobs:
   deploy:

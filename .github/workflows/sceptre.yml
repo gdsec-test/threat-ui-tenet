@@ -22,6 +22,7 @@ on:
     branches: [main]
     paths:
       - "sceptre/**"
+      - ".github/workflows/sceptre.yml"
 
 jobs:
   tartufo-code-secrets-scan:
@@ -68,5 +69,4 @@ jobs:
           sceptre delete -y dev/us-west-2/threat-ui-tenet/fargate-service.yaml
           sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-service.yaml
           sceptre launch -y dev/us-west-2/threat-ui-tenet/sns-moog.yaml
-          sceptre --debug delete -y dev/us-west-2/threat-ui-tenet/cloudwatch-alarm.yaml
-          sceptre --debug launch -y dev/us-west-2/threat-ui-tenet/cloudwatch-alarm.yaml
+          sceptre launch -y dev/us-west-2/threat-ui-tenet/cloudwatch-alarm.yaml
