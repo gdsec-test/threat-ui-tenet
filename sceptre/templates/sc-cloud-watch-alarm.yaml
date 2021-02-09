@@ -60,9 +60,9 @@ Resources:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       OKActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       AlarmDescription: !Sub fires when less than 1 containers are running in the ${ClusterName} cluster
       AlarmName: !Sub Containers Count for ${DevelopmentEnvironment} ${ClusterName}
       ComparisonOperator: LessThanThreshold
@@ -82,9 +82,9 @@ Resources:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       OKActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       AlarmDescription: !Sub fires when less than 1 Task for deployment is running in ${ClusterName} cluster
       AlarmName: !Sub Running Tasks for ${DevelopmentEnvironment} ${ClusterName}
       ComparisonOperator: LessThanThreshold
@@ -104,9 +104,9 @@ Resources:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       OKActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       AlarmDescription: !Sub fires when no Service is running in ${ClusterName} cluster
       AlarmName: !Sub Service for ${DevelopmentEnvironment} ${ClusterName}
       ComparisonOperator: LessThanThreshold
