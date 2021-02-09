@@ -17,11 +17,13 @@ Resources:
     Type: AWS::ServiceCatalog::CloudFormationProvisionedProduct
     Properties:
       ProductName: FargateCluster
-      ProvisioningArtifactName: !Ref ProductVersion
+      ProvisioningArtifactName: latest
       ProvisionedProductName: !Sub ${ClusterName}-cluster
       ProvisioningParameters:
         - Key: ClusterName
           Value: !Ref ClusterName
+        - Key: ContainerInsights
+          Value: !Ref ContainerInsights
       Tags:
         - Key: doNotShutDown
           Value: true
