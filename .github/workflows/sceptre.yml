@@ -64,9 +64,8 @@ jobs:
           export $(grep -v '^#' ../.varenv | xargs)
           sceptre launch -y dev/us-west-2/threat-ui-tenet/ecr.yaml
           sceptre launch -y dev/us-west-2/threat-ui-tenet/iam-role.yaml
-          sceptre delete -y dev/us-west-2/threat-ui-tenet/fargate-cluster.yaml
-          sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-cluster.yaml
+          sceptre --debug launch -y dev/us-west-2/threat-ui-tenet/fargate-cluster.yaml
           sceptre delete -y dev/us-west-2/threat-ui-tenet/fargate-service.yaml
           sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-service.yaml
-          sceptre launch -y dev/us-west-2/threat-ui-tenet/sns-moog.yaml
-          sceptre launch -y dev/us-west-2/threat-ui-tenet/cloudwatch-alarm.yaml
+          sceptre --debug launch -y dev/us-west-2/threat-ui-tenet/sns-moog.yaml
+          sceptre --debug launch -y dev/us-west-2/threat-ui-tenet/cloudwatch-alarm.yaml
