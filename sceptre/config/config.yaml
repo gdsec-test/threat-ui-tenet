@@ -8,7 +8,6 @@ cloudwatch_version: '1.0.7'
 development_team: threattools
 development_environment: dev-private
 cluster_name: threat-ui-tenet-cluster
-accountId: 345790377847
 service_name: threat-ui-tenet-fargate
 min_containers_count: "1"
 max_containers_count: "3"
