@@ -17,7 +17,7 @@ Resources:
     Type: AWS::ServiceCatalog::CloudFormationProvisionedProduct
     Properties:
       ProductName: FargateCluster
-      ProvisioningArtifactName: latest
+      ProvisioningArtifactName: 1.1.0
       ProvisionedProductName: !Sub ${ClusterName}-cluster
       ProvisioningParameters:
         - Key: ClusterName
