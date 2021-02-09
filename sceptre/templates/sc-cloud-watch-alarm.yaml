@@ -121,6 +121,6 @@ Resources:
       EvaluationPeriods: 1
       MetricName: ServiceCount
       Namespace: 'ECS/ContainerInsights'
-      Period: 60
+      Period: 59
       Statistic: Minimum
       Threshold: 1
