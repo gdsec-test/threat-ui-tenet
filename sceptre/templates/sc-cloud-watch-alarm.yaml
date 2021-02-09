@@ -58,3 +58,69 @@ Resources:
       Statistic: Average
       Threshold: 90
       Unit: Percent
+  ContainersError:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      OKActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      AlarmDescription: !Sub fires when less than ${MinContainers} containers are running in the ${ClusterName} cluster
+      AlarmName: !Sub Containers Count for ${DevelopmentEnvironment} ${ClusterName}
+      ComparisonOperator: LessThanThreshold
+      DatapointsToAlarm: 1
+      Dimensions:
+        - Name: "ClusterName"
+          Value: !Sub ${ClusterName}
+        - Name: "ServiceName"
+          Value: !Sub ${ServiceName}
+      EvaluationPeriods: 1
+      MetricName: ContainerInstanceCount
+      Namespace: 'ECS/ContainerInsights'
+      Period: 60
+      Statistic: Minimum
+      Threshold: !Sub ${MinContainers}
+  TasksError:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      OKActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      AlarmDescription: !Sub fires when less than 1 Task for deployment is running in the ${ClusterName} cluster
+      AlarmName: !Sub Running Tasks for ${DevelopmentEnvironment} ${ClusterName}
+      ComparisonOperator: LessThanThreshold
+      DatapointsToAlarm: 1
+      Dimensions:
+        - Name: "ClusterName"
+          Value: !Sub ${ClusterName}
+        - Name: "ServiceName"
+          Value: !Sub ${ServiceName}
+      EvaluationPeriods: 1
+      MetricName: RunningTaskCount
+      Namespace: 'ECS/ContainerInsights'
+      Period: 60
+      Statistic: Minimum
+      Threshold: 1
+  ServiceError:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      OKActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:error-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      AlarmDescription: !Sub fires when no Service is running in the ${ClusterName} cluster
+      AlarmName: !Sub Service for ${DevelopmentEnvironment} ${ClusterName}
+      ComparisonOperator: LessThanThreshold
+      DatapointsToAlarm: 1
+      Dimensions:
+        - Name: "ClusterName"
+          Value: !Sub ${ClusterName}
+        - Name: "ServiceName"
+          Value: !Sub ${ServiceName}
+      EvaluationPeriods: 1
+      MetricName: ServiceCount
+      Namespace: 'ECS/ContainerInsights'
+      Period: 59
+      Statistic: Minimum
+      Threshold: 1
