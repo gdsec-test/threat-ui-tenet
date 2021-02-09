@@ -11,6 +11,9 @@ Parameters:
     Type: String
   LoadBalancerName:
     Type: String
+  ProjectCode:
+    Type: String
+    Default: "THREAT-UI-TENET"
 Resources:
   CPUWarning:
     Type: AWS::CloudWatch::Alarm
@@ -20,7 +23,7 @@ Resources:
       OKActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       AlarmDescription: !Sub fires when any container in the ${ClusterName} cluster has CPU Utilization over the threshold
-      AlarmName: !Sub CPU Utilization for ${DevelopmentEnvironment} ${ClusterName}
+      AlarmName: !Sub "${ProjectCode}: CPU Utilization for ${DevelopmentEnvironment} ${ClusterName}"
       ComparisonOperator: GreaterThanThreshold
       DatapointsToAlarm: 3
       Dimensions:
@@ -43,7 +46,7 @@ Resources:
       OKActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       AlarmDescription: !Sub fires when any container in the ${ClusterName} cluster has Memory Utilization over the threshold
-      AlarmName: !Sub Memory Utilization for ${DevelopmentEnvironment} ${ClusterName}
+      AlarmName: !Sub "${ProjectCode}: Memory Utilization for ${DevelopmentEnvironment} ${ClusterName}"
       ComparisonOperator: GreaterThanThreshold
       DatapointsToAlarm: 3
       Dimensions:
@@ -56,7 +59,7 @@ Resources:
       Namespace: 'AWS/ECS'
       Period: 60
       Statistic: Average
-      Threshold: 90
+      Threshold: 10
       Unit: Percent
   ContainersError:
     Type: AWS::CloudWatch::Alarm
@@ -66,7 +69,7 @@ Resources:
       OKActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       AlarmDescription: !Sub fires when less than 1 containers are running in the ${ClusterName} cluster
-      AlarmName: !Sub Containers Count for ${DevelopmentEnvironment} ${ClusterName}
+      AlarmName: !Sub "${ProjectCode}: Containers Count for ${DevelopmentEnvironment} ${ClusterName}""
       ComparisonOperator: LessThanThreshold
       DatapointsToAlarm: 1
       Dimensions:
@@ -88,7 +91,7 @@ Resources:
       OKActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       AlarmDescription: !Sub fires when less than 1 Task for deployment is running in ${ClusterName} cluster
-      AlarmName: !Sub Running Tasks for ${DevelopmentEnvironment} ${ClusterName}
+      AlarmName: !Sub "${ProjectCode}: Running Tasks for ${DevelopmentEnvironment} ${ClusterName}"
       ComparisonOperator: LessThanThreshold
       DatapointsToAlarm: 1
       Dimensions:
@@ -110,7 +113,7 @@ Resources:
       OKActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       AlarmDescription: !Sub fires when no Service is running in ${ClusterName} cluster
-      AlarmName: !Sub Service for ${DevelopmentEnvironment} ${ClusterName}
+      AlarmName: !Sub "${ProjectCode}: Service for ${DevelopmentEnvironment} ${ClusterName}"
       ComparisonOperator: LessThanThreshold
       DatapointsToAlarm: 1
       Dimensions:
@@ -132,7 +135,7 @@ Resources:
       OKActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       AlarmDescription: !Sub fires when too many 4xx errors in ${LoadBalancerName} load balancer
-      AlarmName: !Sub 4xx Errors for ${DevelopmentEnvironment} ${LoadBalancerName} load balancer
+      AlarmName: !Sub "${ProjectCode}: 4xx Errors for ${DevelopmentEnvironment} ${LoadBalancerName} load balancer"
       ComparisonOperator: GreaterThanThreshold
       DatapointsToAlarm: 1
       Dimensions:
@@ -152,7 +155,7 @@ Resources:
       OKActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       AlarmDescription: !Sub fires when too many 5xx errors in ${LoadBalancerName} load balancer
-      AlarmName: !Sub 5xx Errors for ${DevelopmentEnvironment} ${LoadBalancerName} load balancer
+      AlarmName: !Sub "${ProjectCode}: 5xx Errors for ${DevelopmentEnvironment} ${LoadBalancerName} load balancer"
       ComparisonOperator: GreaterThanThreshold
       DatapointsToAlarm: 1
       Dimensions:
@@ -172,7 +175,7 @@ Resources:
       OKActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       AlarmDescription: !Sub fires when too many rejected connection in ${LoadBalancerName} load balancer
-      AlarmName: !Sub Rejected Connection for ${DevelopmentEnvironment} ${LoadBalancerName} load balancer
+      AlarmName: !Sub "${ProjectCode}: Rejected Connection for ${DevelopmentEnvironment} ${LoadBalancerName} load balancer"
       ComparisonOperator: GreaterThanThreshold
       DatapointsToAlarm: 1
       Dimensions:
@@ -192,7 +195,7 @@ Resources:
       OKActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       AlarmDescription: !Sub fires when no healthy targets instances registered in ${LoadBalancerName} load balancer
-      AlarmName: !Sub Healthy targets instances registered in ${DevelopmentEnvironment} ${LoadBalancerName} load balancer
+      AlarmName: !Sub "${ProjectCode}: Healthy targets instances registered in ${DevelopmentEnvironment} ${LoadBalancerName} load balancer"
       ComparisonOperator: LessThanThreshold
       DatapointsToAlarm: 1
       Dimensions:
@@ -214,7 +217,7 @@ Resources:
       OKActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       AlarmDescription: !Sub fires when too many 4xx errors coming from targets in ${LoadBalancerName} load balancer
-      AlarmName: !Sub 4xx Errors in targets for ${DevelopmentEnvironment} ${LoadBalancerName} load balancer
+      AlarmName: !Sub "${ProjectCode}: 4xx Errors in targets for ${DevelopmentEnvironment} ${LoadBalancerName} load balancer"
       ComparisonOperator: GreaterThanThreshold
       DatapointsToAlarm: 1
       Dimensions:
@@ -236,7 +239,7 @@ Resources:
       OKActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
       AlarmDescription: !Sub fires when too many 5xx errors coming from targets in ${LoadBalancerName} load balancer
-      AlarmName: !Sub 5xx Errors in targets for ${DevelopmentEnvironment} ${LoadBalancerName} load balancer
+      AlarmName: !Sub "${ProjectCode}: 5xx Errors in targets for ${DevelopmentEnvironment} ${LoadBalancerName} load balancer"
       ComparisonOperator: GreaterThanThreshold
       DatapointsToAlarm: 1
       Dimensions:
