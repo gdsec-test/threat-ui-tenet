@@ -9,6 +9,8 @@ Parameters:
     Type: String
   DevelopmentEnvironment:
     Type: String
+  LoadBalancerName:
+    Type: String
 Resources:
   CPUWarning:
     Type: AWS::CloudWatch::Alarm
@@ -122,3 +124,129 @@ Resources:
       Period: 60
       Statistic: Minimum
       Threshold: 1
+  ALB400CountError:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      OKActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      AlarmDescription: !Sub fires when too many 4xx errors in ${LoadBalancerName} load balancer
+      AlarmName: !Sub 4xx Errors for ${DevelopmentEnvironment} ${LoadBalancerName} load balancer
+      ComparisonOperator: GreaterThanThreshold
+      DatapointsToAlarm: 1
+      Dimensions:
+        - Name: "LoadBalancer"
+          Value: !Sub ${LoadBalancerName}
+      EvaluationPeriods: 1
+      MetricName: HTTPCode_ELB_4XX_Count
+      Namespace: 'AWS/ApplicationELB'
+      Period: 60
+      Statistic: Sum
+      Threshold: 10
+  ALB500CountError:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      OKActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      AlarmDescription: !Sub fires when too many 5xx errors in ${LoadBalancerName} load balancer
+      AlarmName: !Sub 5xx Errors for ${DevelopmentEnvironment} ${LoadBalancerName} load balancer
+      ComparisonOperator: GreaterThanThreshold
+      DatapointsToAlarm: 1
+      Dimensions:
+        - Name: "LoadBalancer"
+          Value: !Sub ${LoadBalancerName}
+      EvaluationPeriods: 1
+      MetricName: HTTPCode_ELB_5XX_Count
+      Namespace: 'AWS/ApplicationELB'
+      Period: 60
+      Statistic: Sum
+      Threshold: 10
+  ALBRejectedConnectionError:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      OKActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      AlarmDescription: !Sub fires when too many rejected connection in ${LoadBalancerName} load balancer
+      AlarmName: !Sub Rejected Connection for ${DevelopmentEnvironment} ${LoadBalancerName} load balancer
+      ComparisonOperator: GreaterThanThreshold
+      DatapointsToAlarm: 1
+      Dimensions:
+        - Name: "LoadBalancer"
+          Value: !Sub ${LoadBalancerName}
+      EvaluationPeriods: 1
+      MetricName: RejectedConnectionCount
+      Namespace: 'AWS/ApplicationELB'
+      Period: 60
+      Statistic: Sum
+      Threshold: 10
+  ALBHealthyTargetsError:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      OKActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      AlarmDescription: !Sub fires when no healthy targets instances registered in ${LoadBalancerName} load balancer
+      AlarmName: !Sub Healthy targets instances registered in ${DevelopmentEnvironment} ${LoadBalancerName} load balancer
+      ComparisonOperator: LessThanThreshold
+      DatapointsToAlarm: 1
+      Dimensions:
+        - Name: "LoadBalancer"
+          Value: !Sub ${LoadBalancerName}
+        - Name: "TargetGroup"
+          Value: !Sub ${LoadBalancerName}
+      EvaluationPeriods: 1
+      MetricName: HealthyHostCount
+      Namespace: 'AWS/ApplicationELB'
+      Period: 60
+      Statistic: Sum
+      Threshold: 1
+  ALBTargets400CountWarning:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      OKActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      AlarmDescription: !Sub fires when too many 4xx errors coming from targets in ${LoadBalancerName} load balancer
+      AlarmName: !Sub 4xx Errors in targets for ${DevelopmentEnvironment} ${LoadBalancerName} load balancer
+      ComparisonOperator: GreaterThanThreshold
+      DatapointsToAlarm: 1
+      Dimensions:
+        - Name: "LoadBalancer"
+          Value: !Sub ${LoadBalancerName}
+        - Name: "TargetGroup"
+          Value: !Sub ${LoadBalancerName}
+      EvaluationPeriods: 1
+      MetricName: HTTPCode_Target_4XX_Count
+      Namespace: 'AWS/ApplicationELB'
+      Period: 60
+      Statistic: Sum
+      Threshold: 10
+  ALBTargets500CountError:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      OKActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:critical-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+      AlarmDescription: !Sub fires when too many 5xx errors coming from targets in ${LoadBalancerName} load balancer
+      AlarmName: !Sub 5xx Errors in targets for ${DevelopmentEnvironment} ${LoadBalancerName} load balancer
+      ComparisonOperator: GreaterThanThreshold
+      DatapointsToAlarm: 1
+      Dimensions:
+        - Name: "LoadBalancer"
+          Value: !Sub ${LoadBalancerName}
+        - Name: "TargetGroup"
+          Value: !Sub ${LoadBalancerName}
+      EvaluationPeriods: 1
+      MetricName: HTTPCode_Target_5XX_Count
+      Namespace: 'AWS/ApplicationELB'
+      Period: 60
+      Statistic: Sum
+      Threshold: 10
