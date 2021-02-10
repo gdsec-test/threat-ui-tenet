@@ -12,7 +12,6 @@ module.exports = {
         const newConfig = {
           ...config
         };
-
         // If running locally with or without docker with "npm run local"
         // The default gasket certs are good enough and no need to change them.
         // when running on AWS Fargate, the connection from load balancer to the fargate endpoint
