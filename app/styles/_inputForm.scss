@@ -6,26 +6,48 @@
     margin-top: 10px;
   }
 
-  .InputForm_IOCType {
-    border-radius: 2px;
-    min-height: 200px;
-  }
+  .InputForm_Tags_List {
+    margin: 1em;
 
-  .InputForm_FileUpload {
-    width: 60px;
-    position: absolute;
-    top: 70px;
-    right: 50px;
-    z-index: 1;
+    .InputForm_Tag {
+      margin: 5px;
+      padding: 5px;
+      background: map-deep-get($palette-colors, 'primary', 'pastel', 'color');
 
-    .ux-file-upload-dropzone {
-      > * {
-        display: none;
+      &:hover {
+        background: map-deep-get($palette-colors, 'primary', 'highlight', 'color');
       }
 
-      .ux-button {
-        display: initial;
-        white-space: normal;
+      svg {
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .InputForm_IOCValue_Group {
+    position: relative;
+
+    .InputForm_IOCType {
+      border-radius: 2px;
+      min-height: 200px;
+    }
+
+    .InputForm_FileUpload {
+      width: 60px;
+      position: absolute;
+      top: 40px;
+      right: 15px;
+      z-index: 1;
+
+      .ux-file-upload-dropzone {
+        > * {
+          display: none;
+        }
+
+        .ux-button {
+          display: initial;
+          white-space: normal;
+        }
       }
     }
   }

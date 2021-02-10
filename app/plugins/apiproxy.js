@@ -7,14 +7,14 @@ const PROXY_ENDPOINTS = [
     url: 'jobs'
   },
   {
-    url: 'job/:jobId'
+    url: 'jobs/:jobId'
   },
   {
-    url: 'job',
+    url: 'jobs',
     method: 'post'
   },
   {
-    url: 'classify',
+    url: 'classifications',
     method: 'post'
   },
   {
@@ -24,7 +24,7 @@ const PROXY_ENDPOINTS = [
 
 function getApiProxy(apiBaseUrl) {
   return async function (req, originalResponse) {
-    const url = apiBaseUrl + req.path.replace('/api', '');
+    const url = apiBaseUrl + req.path.replace('/api', '/v1');
     const payload = {
       method: req.method,
       headers: {

@@ -1,13 +1,14 @@
 import fetch from './fetch';
 
-export default async ({ inputType, inputs = [], modules = [] }) => {
+export default async ({ inputType, inputs = [], modules = [], metadata = {} }) => {
   return await fetch({
-    url: '/api/job',
+    url: '/api/jobs',
     method: 'POST',
     params: {
-      ioc_type: inputType,
+      iocType: inputType,
       iocs: inputs,
-      modules
+      modules,
+      metadata
     }
   });
 };

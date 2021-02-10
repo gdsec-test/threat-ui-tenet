@@ -7,7 +7,9 @@ import Loader from './common/Loader';
 import FileUpload from '@ux/file-upload';
 import { withRouter } from 'next/router';
 import { FormElement, Form, Dropdown, Tooltip, Button } from '@ux/uxcore2';
+import Cross from '@ux/icon/x';
 import '@ux/file-upload/dist/styles.css';
+import '@ux/icon/x/index.css';
 
 const { DropdownItem } = Dropdown;
 
@@ -22,6 +24,7 @@ class InputForm extends React.Component {
     this.detectIOCType = this.detectIOCType.bind(this);
     this.createJob = this.createJob.bind(this);
     this.readFromFile = this.readFromFile.bind(this);
+    this.addTag = this.addTag.bind(this);
   }
 
   componentDidMount() {
@@ -40,8 +43,8 @@ class InputForm extends React.Component {
     const detectedIOCModules = new Map();
     const IOCTypeNames = Object.keys(detectedIOCTypes);
     /* eslint-disable-next-line */
-    Object.entries(allIOCModules).forEach(([module, { supported_ioc_types = [] }]) => {
-      const typesPerModule = supported_ioc_types.filter((type) => IOCTypeNames.indexOf(type) >= 0);
+    Object.entries(allIOCModules).forEach(([module, { supportedIOCTypes = [] }]) => {
+      const typesPerModule = supportedIOCTypes.filter((type) => IOCTypeNames.indexOf(type) >= 0);
       if (typesPerModule.length) {
         // only modules for IOC Types found in input values
         detectedIOCModules.set(
@@ -94,7 +97,8 @@ class InputForm extends React.Component {
       showSubmitPopup: false,
       submittedJobs: [],
       isLoading: false,
-      isNoIOCTypesDetected: true
+      isNoIOCTypesDetected: true.valueOf,
+      tags: []
     };
   }
 
@@ -113,13 +117,24 @@ class InputForm extends React.Component {
     this.setState({ selectedIOCModules });
   }
 
+  addTag(e) {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      e.stopPropagation();
+      e.preventDefault();
+      const newTags = this.state.tags.slice();
+      newTags.push(e.target.value);
+      e.target.value = '';
+      this.setState({ tags: newTags });
+    }
+  }
+
   async createJob() {
     this.setState({
       showSubmitPopup: true,
       submitIsInProgress: true,
       submittedJobs: []
     });
-    const { detectedIOCModules } = this.state;
+    const { detectedIOCModules, tags } = this.state;
     const jobs = new Map();
     [...detectedIOCModules.entries()].forEach(([module, IOCTypes = []]) => {
       IOCTypes.forEach(({ inputs = [], type }) => {
@@ -145,9 +160,16 @@ class InputForm extends React.Component {
     }, {});
     await Promise.all(
       [...jobs.entries()].map(([IOCType, item]) =>
-        createJob({ inputType: IOCType, inputs: item.inputs, modules: item.modules }).then((res) => {
+        createJob({
+          inputType: IOCType,
+          inputs: item.inputs,
+          modules: item.modules,
+          metadata: {
+            tags: [...tags, IOCType]
+          }
+        }).then((res) => {
           const { submittedJobs } = this.state;
-          this.setState({ submittedJobs: submittedJobs.slice().concat([res.job_id]) });
+          this.setState({ submittedJobs: submittedJobs.slice().concat([res.jobId]) });
           return res;
         })
       )
@@ -163,7 +185,8 @@ class InputForm extends React.Component {
       submitIsInProgress,
       isLoading,
       isNoIOCTypesDetected,
-      IOCValueFromFile
+      IOCValueFromFile,
+      tags
     } = this.state;
     const { router } = this.props;
     if (isLoading) {
@@ -188,77 +211,109 @@ class InputForm extends React.Component {
       );
     }
     return (
-      <Form
-        className={'InputForm'}
-        action=''
-        onSubmit={(e) => {
-          e.preventDefault();
-          this.createJob();
-        }}
-      >
-        <div className='InputForm_FileUpload'>
-          <FileUpload
-            accept='text/plain'
-            onChange={this.readFromFile}
-            label='Parse file'
-            buttonLabel='sasdf'
-            showFiles={false}
-          />
-        </div>
-        <FormElement
-          key={`textIOCinput${IOCValueFromFile ? 'fromFile' : ''}`}
-          label='IOC (Indicator Of Compromise)'
-          name='IOC'
-          type='textarea'
-          className='InputForm_IOCType'
-          autoComplete='off'
-          placeholder='Start typing IOC'
-          onChange={({ target: { value } }) => this.detectIOCType(value)}
-          {...(IOCValueFromFile ? { defaultValue: IOCValueFromFile } : {})}
-        />
-
-        <p>
-          Your detected IOC Types are:{' '}
-          {[...detectedIOCModules.entries()].map(([module, arrInputs = []]) => {
-            return (
-              <Fragment key={module}>
-                <h5>{`For module: ${module}`}</h5>
-                {arrInputs.map(({ inputs, type }) => (
-                  <Fragment key={inputs.join(',')}>
-                    <b>{inputs.join(', ')}</b>:<span style={{ color: 'red' }}>{type.toUpperCase()}</span>
-                    <br />
-                  </Fragment>
-                ))}
-              </Fragment>
-            );
-          })}
-        </p>
-        <Dropdown
-          type='multiselect'
-          label={
-            <span style={{ fontWeight: 'bold' }}>
-              <Tooltip title='Modules List' message='Choose Modules supported for current IOC'>
-                IOC Modules
-              </Tooltip>
-            </span>
-          }
-          name='IOC Types'
-          onChange={this.onIOCModuleChange}
-          selected={this.state.selectedIOCModules}
+      <Fragment>
+        <Form
+          className={'InputForm'}
+          action=''
+          onSubmit={(e) => {
+            e.preventDefault();
+            this.createJob();
+          }}
         >
-          {[...detectedIOCModules.entries()].map(([module]) => {
-            return <DropdownItem key={module} value={module}>{`${module}`}</DropdownItem>;
-          })}
-        </Dropdown>
-        {isNoIOCTypesDetected && (
-          <div style={{ color: 'red' }} className='m-3'>
-            No IOC Types recognized. Cannot submit jobs
+          <div>
+            <label htmlFor='addtag' className='form-control-label'>
+              Add Tag{' '}
+            </label>
           </div>
-        )}
-        <Button disabled={isNoIOCTypesDetected} design='primary' title='Submit' type='submit'>
-          Submit
-        </Button>
-      </Form>
+          <input type='text' label='Add Tag' onKeyDown={this.addTag} name='addtag' />
+          {tags.length ? (
+            <div className='InputForm_Tags_List'>
+              <div>Tags:</div>
+              <div>
+                {tags.map((tag) => {
+                  return (
+                    <span className='InputForm_Tag' key={tag}>
+                      {`${tag}`}
+                      <Cross
+                        onClick={() => {
+                          const newTags = this.state.tags.slice();
+                          newTags.splice(newTags.indexOf(tag), 1);
+                          this.setState({ tags: newTags });
+                        }}
+                        width={'1em'}
+                        height={'1em'}
+                      />
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
+          <div className='InputForm_IOCValue_Group'>
+            <div className='InputForm_FileUpload'>
+              <FileUpload
+                accept='text/plain'
+                onChange={this.readFromFile}
+                label='Parse file'
+                buttonLabel='sasdf'
+                showFiles={false}
+              />
+            </div>
+            <FormElement
+              key={`textIOCinput${IOCValueFromFile ? 'fromFile' : ''}`}
+              label='IOC (Indicator Of Compromise)'
+              name='IOC'
+              type='textarea'
+              className='InputForm_IOCType'
+              autoComplete='off'
+              placeholder='Start typing IOC'
+              onChange={({ target: { value } }) => this.detectIOCType(value)}
+              {...(IOCValueFromFile ? { defaultValue: IOCValueFromFile } : {})}
+            />
+          </div>
+          <p>
+            Your detected IOC Types are:{' '}
+            {[...detectedIOCModules.entries()].map(([module, arrInputs = []]) => {
+              return (
+                <Fragment key={module}>
+                  <h5>{`For module: ${module}`}</h5>
+                  {arrInputs.map(({ inputs, type }) => (
+                    <Fragment key={inputs.join(',')}>
+                      <b>{inputs.join(', ')}</b>:<span style={{ color: 'red' }}>{type.toUpperCase()}</span>
+                      <br />
+                    </Fragment>
+                  ))}
+                </Fragment>
+              );
+            })}
+          </p>
+          <Dropdown
+            type='multiselect'
+            label={
+              <span style={{ fontWeight: 'bold' }}>
+                <Tooltip title='Modules List' message='Choose Modules supported for current IOC'>
+                  IOC Modules
+                </Tooltip>
+              </span>
+            }
+            name='IOC Types'
+            onChange={this.onIOCModuleChange}
+            selected={this.state.selectedIOCModules}
+          >
+            {[...detectedIOCModules.entries()].map(([module]) => {
+              return <DropdownItem key={module} value={module}>{`${module}`}</DropdownItem>;
+            })}
+          </Dropdown>
+          {isNoIOCTypesDetected && (
+            <div style={{ color: 'red' }} className='m-3'>
+              No IOC Types recognized. Cannot submit jobs
+            </div>
+          )}
+          <Button disabled={isNoIOCTypesDetected} design='primary' title='Submit' type='submit'>
+            Submit
+          </Button>
+        </Form>
+      </Fragment>
     );
   }
 }

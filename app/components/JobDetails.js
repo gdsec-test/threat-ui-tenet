@@ -72,17 +72,17 @@ export default class JobDetails extends React.Component {
       return <Loader inline size='lg' />;
     }
     /* eslint-disable */
-    const { responses, start_time, job_status, job_percentage, request } = jobDetails;
-    let dateTime = new Date(start_time * 1000);
+    const { responses, StartTime, jobStatus, jobPercentage, submission } = jobDetails;
+    let dateTime = new Date(StartTime * 1000);
     return (
       <div className='JobDetails'>
         <Table
           className='table table-hover'
           data={[
-            { name: 'Status', value: job_status },
-            { name: 'Progress', value: job_percentage },
+            { name: 'Status', value: jobStatus },
+            { name: 'Progress', value: jobPercentage },
             { name: 'Started on', value: dateTime.toString() },
-            { name: 'Input', value: request }
+            { name: 'Input', value: JSON.stringify(submission) }
           ]}
         ></Table>
         <div className='JobDetails_controls'>
