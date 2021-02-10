@@ -62,7 +62,7 @@ jobs:
       - name: Build docker container
         id: container
         run: |
-          export $(grep -v '^#' .varenv | xargs) && docker build --build-arg NODE_ENV=$NODE_ENV -t tmp . | while read line ; do echo "$(date)| $line"; done;
+          export $(grep -v '^#' .varenv | xargs) && docker build --no-cache --build-arg NODE_ENV=$NODE_ENV -t tmp . | while read line ; do echo "$(date)| $line"; done;
           echo "::set-output name=id::$(docker images -q tmp)"
 
       - name: Login to Amazon ECR
