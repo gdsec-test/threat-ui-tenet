@@ -194,20 +194,28 @@ class InputForm extends React.Component {
     }
     if (showSubmitPopup) {
       return (
-        <div>
-          {submitIsInProgress && (
-            <Fragment>
-              <div>Jobs are submitting...</div>
-              <Loader inline size='lg' />
-            </Fragment>
-          )}
-          {submittedJobs.map((id) => (
-            <div key={id}>{`Job ${id} submitted successfully`}</div>
-          ))}
-          <Button design='secondary' onClick={() => router.push(`/jobs?jobIds=${submittedJobs.join(',')}`)}>
-            See created jobs
-          </Button>
-        </div>
+        <Form
+          className={'InputForm'}
+          action=''
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
+          <div>
+            {submitIsInProgress && (
+              <Fragment>
+                <div>Jobs are submitting...</div>
+                <Loader inline size='lg' />
+              </Fragment>
+            )}
+            {submittedJobs.map((id) => (
+              <div key={id}>{`Job ${id} submitted successfully`}</div>
+            ))}
+            <Button design='secondary' onClick={() => router.push(`/jobs?jobIds=${submittedJobs.join(',')}`)}>
+              See created jobs
+            </Button>
+          </div>
+        </Form>
       );
     }
     return (

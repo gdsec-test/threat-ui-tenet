@@ -6,7 +6,7 @@ fargate_service_version: '1.6.3'
 iam_role_version: '1.0.7'
 cloudwatch_version: '1.0.7'
 development_team: threattools
-development_environment: dev-private
+development_environment: dev
 cluster_name: threat-ui-tenet-cluster
 service_name: threat-ui-tenet-fargate
 min_containers_count: "1"
