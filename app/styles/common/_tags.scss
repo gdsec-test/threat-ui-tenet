@@ -1,0 +1,13 @@
+.Tag {
+  margin: 5px;
+  padding: 5px;
+  background: map-deep-get($palette-colors, 'primary', 'pastel', 'color');
+
+  &:hover {
+    background: map-deep-get($palette-colors, 'primary', 'highlight', 'color');
+  }
+
+  svg {
+    vertical-align: middle;
+  }
+}

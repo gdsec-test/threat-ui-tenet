@@ -7,12 +7,14 @@ $palette-colors: (
   'white': (
     base: (
       color: #fff,
+      marker: #ffffff44,
       contrast: #111
     )
   ),
   'black': (
     base: (
       color: #111,
+      marker: #11111144,
       contrast: #fff
     ),
     dark: (
@@ -31,6 +33,7 @@ $palette-colors: (
     ),
     base: (
       color: #767676,
+      marker: #76767644,
       contrast: #fff
     ),
     midrange: (
@@ -53,6 +56,7 @@ $palette-colors: (
     ),
     base: (
       color: #d4dbe0,
+      marker: #9a9ea044,
       contrast: #111
     ),
     midrange: (
@@ -69,6 +73,7 @@ $palette-colors: (
     (
       pastel: (
         color: #d9f2e2,
+        marker: #d9f2e299,
         contrast: #111
       ),
       highlight: (
@@ -77,6 +82,7 @@ $palette-colors: (
       ),
       base: (
         color: #00a63f,
+        marker: #00a63f44,
         contrast: #fff
       ),
       midrange: (
@@ -101,6 +107,7 @@ $palette-colors: (
       ),
       base: (
         color: #00a4a6,
+        marker: #00a4a644,
         contrast: #fff
       ),
       midrange: (
@@ -123,6 +130,7 @@ $palette-colors: (
     ),
     base: (
       color: #00a4a6,
+      marker: #00a4a644,
       contrast: #fff
     ),
     midrange: (
@@ -147,6 +155,7 @@ $palette-colors: (
       ),
       base: (
         color: #1976d2,
+        marker: #1976d244,
         contrast: #fff
       ),
       midrange: (
@@ -169,6 +178,7 @@ $palette-colors: (
     ),
     base: (
       color: #1976d2,
+      marker: #1976d244,
       contrast: #111
     ),
     midrange: (
@@ -193,6 +203,7 @@ $palette-colors: (
       ),
       base: (
         color: #ef6c0f,
+        marker: #ef6c0f44,
         contrast: #111
       ),
       midrange: (
@@ -217,6 +228,7 @@ $palette-colors: (
       ),
       base: (
         color: #744bc4,
+        marker: #744bc444,
         contrast: #fff
       ),
       midrange: (
@@ -241,6 +253,7 @@ $palette-colors: (
       ),
       base: (
         color: #fed317,
+        marker: #fed31744,
         contrast: #111
       ),
       midrange: (
@@ -265,6 +278,7 @@ $palette-colors: (
       ),
       base: (
         color: #db1802,
+        marker: #db180244,
         contrast: #fff
       ),
       midrange: (
@@ -289,6 +303,7 @@ $palette-colors: (
       ),
       base: (
         color: #e20087,
+        marker: #e2008744,
         contrast: #fff
       ),
       midrange: (
@@ -313,6 +328,7 @@ $palette-colors: (
       ),
       base: (
         color: #bd8150,
+        marker: #bd815044,
         contrast: #111
       ),
       midrange: (

@@ -11,19 +11,13 @@ export const Layout = ({ children, links = [], router }) => (
   <div className='Layout container m-t-3'>
     <Head title='Home' />
     <div className='row'>
-      <div className='Layout_Navigation card ux-card p-3'>
-        <Button
-          className='Layout_Navigation_Back Layout_Navigation_Button m-3'
-          onClick={() => router.back()}
-          design='secondary'
-        >
+      <div className='Layout_Navigation card ux-card'>
+        <Button className='Layout_Navigation_Back Layout_Navigation_Button' onClick={() => router.back()}>
           <Arrow />
         </Button>
         {links.map(({ url, caption }) => (
           <Link key={url} href={url}>
-            <Button design='secondary' className='Layout_Navigation_Button m-3'>
-              {caption}
-            </Button>
+            <Button className='Layout_Navigation_Button'>{caption}</Button>
           </Link>
         ))}
       </div>

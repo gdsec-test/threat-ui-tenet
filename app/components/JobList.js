@@ -202,7 +202,6 @@ class JobList extends React.Component {
       <div className='JobList'>
         {filterByNames.length ? (
           <div className='JobList_filter_list'>
-            <div>Filters:</div>
             <div>
               {filterByNames.map((filter) => {
                 let filterValue = filterBy[filter];
