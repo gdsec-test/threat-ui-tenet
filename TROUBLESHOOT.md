@@ -1,10 +1,23 @@
-# **`THREAT UI`**
+## **`THREAT UI`**
+
+This document describes playbook for troubleshooting problems if anything goes wrong
+
+If something goes wrong you are supposed to receive Incident in Service-NOW and\or Slack notification. Here is how it works:
+
+- AWS CloudWatch Alarm -> `fires alarm as topic` -> AWS SNS -> `calls special Lambda function` - AWS Lambda -> `creates ticket in Moogsoft` -> Moogsoft -> `creates incident in Service-NOW` -> Service-NOW
+- AWS CloudWatch Alarm -> `fires alarm as topic` -> AWS SNS -> `calls Slack web hook` - Slack -> `Bot creates message in your channel`
+
+See incidents
+
+- https://godaddy.service-now.com/incident_list.do with filter `Assignment Group = ENG-Threat Research`
+- https://aiops.monitoring.godaddy.com/#/situations/open
 
 Threat API is deployed and managed in AWS Fargate infrastructure.
-Current region: `us-west-2`, account `GD-AWS-USA-GD-ThreatTools-Dev-Private`
-Github repository is `https://github.com/gdcorp-infosec/threat-ui-tenet/`
 
-# `UNDERSTAND THREAT UI PARTS:`
+- Current region: `us-west-2`, account `GD-AWS-USA-GD-ThreatTools-Dev`
+- Github repository is `https://github.com/gdcorp-infosec/threat-ui-tenet/`
+
+## `UNDERSTAND THREAT UI PARTS:`
 
 Architecture contains of
 
@@ -13,11 +26,9 @@ Architecture contains of
 3. `CLUSTER`: AWS Fargate Cluster `threat-ui-tenet-cluster` which manages set of EC2 instances running Docker containers of application inside of them (see https://us-west-2.console.aws.amazon.com/ecs/home?region=us-west-2#/clusters)
 4. `ECR`: Container respository `com.godaddy.threat-ui-tenet`. It provides container images for AWS Fargate. So far Fargate picks up whatever latest image is uploaded to reposiory (see https://us-west-2.console.aws.amazon.com/ecr/repositories?region=us-west-2#)
 
-This document describes playbook for troubleshooting problems if anything goes wrong
+## `IDENTIFY ISSUE:`
 
-# `IDENTIFY ISSUE:`
-
-## 1. `Site 24/7` service alarms for health check
+### 1. `SITE 24/7` service alarms for health check
 
 `Site 24/7` service is set to visit `https://ui.threat.int.gdcorp.tools/healthcheck` page in browser. If page doesn't respond (usually 200 Status), alarm is raised and notifies in email\slack channels. Steps to troubleshoot:
 
@@ -28,7 +39,7 @@ This document describes playbook for troubleshooting problems if anything goes w
 - `400s`: unathorized\forbidden\restricted access to page. It might be 401\403 Single Sign On (slack #sso-support), 404 (page is deleted\not accessed from URL, see other logs of Gasket application)
 - `500s`: failure inside actual Front-end Gasket Application(cannot compile\build\etc) or Application Load Balancer (see other issue)
 
-## 2. `CloudWatch` alarms about Application Load Balancer failures
+### 2. `CLOUDWATCH` alarms about Application Load Balancer failures
 
 Check error codes for Application Load Balancer https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-troubleshooting.html for reference
 
@@ -40,7 +51,7 @@ Check error codes for Application Load Balancer https://docs.aws.amazon.com/elas
 
 Logs show console output of EC2 instance and other resources
 
-## 3. `CloudWatch` alarms about Elastic Containers failures
+## 3. `CLOUDWATCH` alarms about Elastic Containers cluster failures
 
 1. Go to CloudWatch to check alarms
    https://us-west-2.console.aws.amazon.com/cloudwatch/home?region=us-west-2#alarmsV2:?~(alarmStateFilter~'ALARM)
@@ -50,7 +61,7 @@ Logs show console output of EC2 instance and other resources
    Logs show exact console output of each Task in Fargate. Task is scheduled job to deploy container and run it inside Fargate
    (currently `/ecs/threat-ui-tenet-fargateTaskDefinition` log works at https://us-west-2.console.aws.amazon.com/cloudwatch/home?region=us-west-2#logsV2:log-groups/log-group/$252Fecs$252Fthreat-ui-tenet-fargateTaskDefinition)
 
-## After identifying possible root cause of issue go and check other logs:
+## `After identifying possible root cause of issue go and check other logs:`
 
 - CLUSTER has all parts active and running (Load Balancer attached, Tasks are running, Metrics are healthy)
   https://us-west-2.console.aws.amazon.com/ecs/home?region=us-west-2#/clusters/threat-ui-tenet-cluster/services/threat-ui-tenet-fargate/details
@@ -66,7 +77,7 @@ Logs show console output of EC2 instance and other resources
 - Task is STOPPED . Likely due to bad container build. https://us-west-2.console.aws.amazon.com/ecs/home?region=us-west-2#/clusters/threat-ui-tenet-cluster/services/threat-ui-tenet-fargate/tasks
 - CICD pipeline is broken. See https://github.com/gdcorp-infosec/threat-ui-tenet/actions for logs
 
-# `FIX ISSUE:`
+## `FIX ISSUE:`
 
 Above issues can have next types:
 
@@ -80,6 +91,6 @@ Above issues can have next types:
 
 3. Front-End Gasket Application - fix code in https://github.com/gdcorp-infosec/threat-ui-tenet/tree/main/app
 
-# `CONTACT US:`
+## `CONTACT US:`
 
 Slack: `#threatapi_frontend`, `#threat-research`, `#product-sec`

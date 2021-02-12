@@ -59,7 +59,7 @@ Resources:
       Namespace: 'AWS/ECS'
       Period: 60
       Statistic: Average
-      Threshold: 3
+      Threshold: 10
       Unit: Percent
   ContainersError:
     Type: AWS::CloudWatch::Alarm

@@ -1,12 +1,6 @@
 name: Deploy New Build
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - "app/**"
-      - "Dockerfile"
-      - ".github/workflows/gasket.yml"
   push:
     branches: [main]
     paths:
