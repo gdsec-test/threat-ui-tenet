@@ -10,6 +10,10 @@
     border-radius: 2px;
     width: 100%;
 
+    div:first-child {
+      pointer-events: none;
+    }
+
     textarea {
       width: 100%;
       min-height: 200px;

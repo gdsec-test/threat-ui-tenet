@@ -15,6 +15,12 @@ const { DropdownItem } = Dropdown;
 
 const getKeys = (map) => [...map.keys()];
 
+const getTooltip = (caption, message) => (
+  <Tooltip openOnHover={true} autoHideTimeout={300} message={message}>
+    {caption}
+  </Tooltip>
+);
+
 class InputForm extends React.Component {
   constructor() {
     super(...arguments);
@@ -212,7 +218,19 @@ class InputForm extends React.Component {
               </Fragment>
             )}
             {submittedJobs.map((id) => (
-              <div key={id}>{`Job ${id} submitted successfully`}</div>
+              <div key={id}>
+                Job{' '}
+                <a
+                  href={`/job/${id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    router.push(`/job/${id}`);
+                  }}
+                >
+                  {id}
+                </a>{' '}
+                submitted successfully
+              </div>
             ))}
             <Button design='secondary' onClick={() => router.push(`/jobs?jobIds=${submittedJobs.join(',')}`)}>
               See created jobs
@@ -230,11 +248,7 @@ class InputForm extends React.Component {
           this.createJob();
         }}
       >
-        <div>
-          <label htmlFor='addtag' className='form-control-label'>
-            Add Tag
-          </label>
-        </div>
+        {getTooltip('Add Tag', 'Tags are used to find job among others')}
         <p>
           <input type='text' label='Add Tag' onKeyDown={this.addTag} name='addtag' />
         </p>
@@ -256,7 +270,7 @@ class InputForm extends React.Component {
             <FileUpload
               accept='text/plain'
               onChange={this.readFromFile}
-              label='Parse file'
+              label={getTooltip('Parse file', 'You can upload file with IOC values to be checked')}
               buttonLabel='sasdf'
               showFiles={false}
             />
@@ -271,13 +285,23 @@ class InputForm extends React.Component {
             highlight={() => {
               return Object.keys(detectedIOCTypes || {}).map((type) => {
                 return {
-                  highlight: new RegExp(detectedIOCTypes[type].join('|'), 'img'),
+                  highlight: new RegExp(detectedIOCTypes[type].join('|').replaceAll('\\', '\\\\'), 'img'),
                   className: `InputForm_Hightlight_${type.toLowerCase()}`
                 };
               });
             }}
             onChange={({ target: { value } }) => this.detectIOCType(value)}
           />
+          <p>
+            Types found:{' '}
+            {Object.keys(detectedIOCTypes || {}).map((type) => {
+              return (
+                <span key={type} className={`mr-3 InputForm_Hightlight_${type.toLowerCase()}`}>
+                  {type}
+                </span>
+              );
+            })}
+          </p>
         </div>
         {/* <p>
         <h5>Your detected IOC Types are:{' '}</h5>
@@ -299,9 +323,7 @@ class InputForm extends React.Component {
           type='multiselect'
           label={
             <span style={{ fontWeight: 'bold' }}>
-              <Tooltip title='Modules List' message='Choose Modules supported for current IOC'>
-                IOC Modules
-              </Tooltip>
+              {getTooltip('IOC Modules', 'Choose Modules supported for current IOC')}
             </span>
           }
           name='IOC Types'
@@ -313,8 +335,8 @@ class InputForm extends React.Component {
           })}
         </Dropdown>
         {isNoIOCTypesDetected && (
-          <div style={{ color: 'red' }} className='m-3'>
-            No IOC Types recognized. Cannot submit jobs
+          <div style={{ color: 'red' }} className='mt-3'>
+            {getTooltip('No IOC Types recognized. Cannot submit jobs', 'All IOCs are Unkown to be analized')}
           </div>
         )}
         <Button disabled={isNoIOCTypesDetected} design='primary' title='Submit' type='submit'>
