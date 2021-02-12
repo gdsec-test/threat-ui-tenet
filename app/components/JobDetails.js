@@ -72,8 +72,8 @@ export default class JobDetails extends React.Component {
       return <Loader inline size='lg' />;
     }
     /* eslint-disable */
-    const { responses, StartTime, jobStatus, jobPercentage, submission } = jobDetails;
-    let dateTime = new Date(StartTime * 1000);
+    const { responses, startTime, jobStatus, jobPercentage, submission } = jobDetails;
+    let dateTime = new Date(startTime * 1000);
     return (
       <div className='JobDetails'>
         <Table

@@ -2,6 +2,7 @@
   .Layout_Navigation {
     color: red;
     flex-direction: row;
+    margin-bottom: 0.1em;
 
     .Layout_Navigation_Button {
       border-right: 1px solid map-deep-get($palette-colors, 'gray', 'light', 'color');
