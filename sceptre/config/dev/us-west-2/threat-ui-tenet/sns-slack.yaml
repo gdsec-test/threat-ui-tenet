@@ -1,3 +1,0 @@
-template_path: sc-sns-slack-notification.yaml
-parameters:
-  SnsTopicName: threattools-dev-sns-to-slack-topic

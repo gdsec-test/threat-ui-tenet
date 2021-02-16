@@ -14,10 +14,10 @@ Parameters:
   ProjectCode:
     Type: String
     Default: "THREAT-UI-TENET"
-  SnsTopicName:
-    Type: String
-    Description: SNS Topic Name. This value will be pushed from the configs.yaml pertaining to the region or the account based on the team's requirement
-    Default: threattools-dev-sns-to-slack-topic
+  SlackSnsTopicName:
+    Type: AWS::SSM::Parameter::Value<String>
+    Description: SNS Topic Name, which has Slack webhook to send messages
+    Default: /AdminParams/SNS/AlarmNotificationTopic
 Resources:
   CPUWarning:
     Type: AWS::CloudWatch::Alarm
@@ -47,10 +47,10 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${SnsTopicName}
+        - !Sub ${SlackSnsTopicName}
       OKActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${SnsTopicName}
+        - !Sub ${SlackSnsTopicName}
       AlarmDescription: !Sub fires when any container in the ${ClusterName} cluster has Memory Utilization over the threshold
       AlarmName: !Sub "${ProjectCode}: Memory Utilization for ${DevelopmentEnvironment} ${ClusterName}"
       ComparisonOperator: GreaterThanThreshold
