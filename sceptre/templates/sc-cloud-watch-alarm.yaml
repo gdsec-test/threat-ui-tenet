@@ -15,9 +15,9 @@ Parameters:
     Type: String
     Default: "THREAT-UI-TENET"
   SnsTopicName:
-    Type: AWS::SSM::Parameter::Value<String>
+    Type: String
     Description: SNS Topic Name. This value will be pushed from the configs.yaml pertaining to the region or the account based on the team's requirement
-    Default: /AdminParams/SNS/AlarmNotificationTopic
+    Default: threattools-dev-sns-to-slack-topic
 Resources:
   CPUWarning:
     Type: AWS::CloudWatch::Alarm
