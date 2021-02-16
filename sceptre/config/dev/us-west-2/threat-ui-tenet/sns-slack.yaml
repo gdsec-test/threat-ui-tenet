@@ -1,0 +1,4 @@
+template_path: sc-sns-slack-notification.yaml
+parameters:
+  SnsTopicName: slack-threattools-devthreat-ui-tenet-cluster
+  TeamSlackWebHook: https://hooks.slack.com/services/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

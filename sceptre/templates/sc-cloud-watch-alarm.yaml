@@ -43,8 +43,10 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:slack-threattools-devthreat-ui-tenet-cluster
       OKActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:warning-moog-${DevelopmentTeam}-${DevelopmentEnvironment}${ClusterName}
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:slack-threattools-devthreat-ui-tenet-cluster
       AlarmDescription: !Sub fires when any container in the ${ClusterName} cluster has Memory Utilization over the threshold
       AlarmName: !Sub "${ProjectCode}: Memory Utilization for ${DevelopmentEnvironment} ${ClusterName}"
       ComparisonOperator: GreaterThanThreshold
@@ -59,7 +61,7 @@ Resources:
       Namespace: 'AWS/ECS'
       Period: 60
       Statistic: Average
-      Threshold: 10
+      Threshold: 3
       Unit: Percent
   ContainersError:
     Type: AWS::CloudWatch::Alarm

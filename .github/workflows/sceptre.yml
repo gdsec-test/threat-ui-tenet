@@ -68,4 +68,5 @@ jobs:
           sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-cluster.yaml
           sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-service.yaml
           sceptre launch -y dev/us-west-2/threat-ui-tenet/sns-moog.yaml
+          sceptre launch -y dev/us-west-2/threat-ui-tenet/sns-slack.yaml
           sceptre launch -y dev/us-west-2/threat-ui-tenet/cloudwatch-alarm.yaml

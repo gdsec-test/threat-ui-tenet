@@ -1,3 +1,4 @@
 (.*)package-lock.json
 .github/workflows
 README.md
+(.*)sns-slack.yaml

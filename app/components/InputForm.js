@@ -248,10 +248,6 @@ class InputForm extends React.Component {
           this.createJob();
         }}
       >
-        {getTooltip('Add Tag', 'Tags are used to find job among others')}
-        <p>
-          <input type='text' label='Add Tag' onKeyDown={this.addTag} name='addtag' />
-        </p>
         {tags.length ? (
           <div className='InputForm_Tags_List'>
             <div>Tags:</div>
@@ -265,6 +261,10 @@ class InputForm extends React.Component {
             />
           </div>
         ) : null}
+        {getTooltip('Add Tag', 'Tags are used to find job among others')}
+        <p>
+          <input type='text' label='Add Tag' onKeyDown={this.addTag} name='addtag' />
+        </p>
         <div className='InputForm_IOCValue_Group'>
           <div className='InputForm_FileUpload'>
             <FileUpload
