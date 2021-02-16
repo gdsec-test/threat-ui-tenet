@@ -1,3 +1,1 @@
 template_path: sc-sns-slack-notification.yaml
-parameters:
-  KeyAlias: slack-threattools-devthreat-ui-tenet-cluster
