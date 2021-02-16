@@ -2,9 +2,8 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Deploy the SNS Service Catalog Product
 Parameters:
   SnsTopicName:
-    Type: AWS::SSM::Parameter::Value<String>
+    Type: String
     Description: SNS Topic Name. This value will be pushed from the configs.yaml pertaining to the region or the account based on the team's requirement
-    Default: /AdminParams/SNS/AlarmNotificationTopic
   TeamSlackWebHook:
     Type: AWS::SSM::Parameter::Value<String>
     Description: SSM Parameter for team slack webhook. Default value is in /AdminParams/SNS/AlarmNotificationTopic topic already
