@@ -9,27 +9,8 @@ Parameters:
     Type: AWS::SSM::Parameter::Value<String>
     Description: SSM Parameter for team slack webhook. Default value is in /AdminParams/SNS/AlarmNotificationTopic topic already
     Default: /AdminParams/Team/TeamSlackWebHook
-  KeyAlias:
-    Type: String
-    Description: The name of the key to be used for encryption.
 
 Resources:
-  CrossAccountKMSKey:
-    Type: AWS::ServiceCatalog::CloudFormationProvisionedProduct
-    Properties:
-      ProductName: CrossAccountKMSKey
-      ProvisioningArtifactName: latest
-      ProvisionedProductName: generate-kms-key
-      ProvisioningParameters:
-        - Key: ConsumerListAccounts
-          Value: !Sub ${AWS::AccountId}
-        - Key: KeyAlias
-          Value: !Ref KeyAlias
-      Tags:
-        - Key: doNotShutDown
-          # change to false if it can be turned off outside of business hours
-          Value: "true"
-
   SimpleNotificationService:
     Type: AWS::ServiceCatalog::CloudFormationProvisionedProduct
     Properties:
@@ -39,12 +20,7 @@ Resources:
       ProvisioningParameters:
         - Key: SnsTopicName
           Value: !Ref SnsTopicName
-        - Key: NeedEncryption
-          Value: "true"
-        - Key: KmsKeyId
-          Value: !Sub "/Team/KmsShared/${KeyAlias}/KeyAliasArn"
       Tags:
         - Key: doNotShutDown
           # change to false if it can be turned off outside of business hours
           Value: "true"
-    DependsOn: CrossAccountKMSKey
