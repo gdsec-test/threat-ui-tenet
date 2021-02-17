@@ -85,11 +85,11 @@ Resources:
       Dimensions:
         - Name: "ClusterName"
           Value: !Sub ${ClusterName}
-      EvaluationPeriods: 1
+      EvaluationPeriods: 3
       MetricName: ContainerInstanceCount
       Namespace: 'ECS/ContainerInsights'
-      Period: 60
-      Statistic: Minimum
+      Period: 300
+      Statistic: Average
       Threshold: 1
   TasksError:
     Type: AWS::CloudWatch::Alarm
@@ -218,8 +218,6 @@ Resources:
       DatapointsToAlarm: 1
       Dimensions:
         - Name: "LoadBalancer"
-          Value: !Sub ${LoadBalancerName}
-        - Name: "TargetGroup"
           Value: !Sub ${LoadBalancerName}
       EvaluationPeriods: 1
       MetricName: HealthyHostCount
