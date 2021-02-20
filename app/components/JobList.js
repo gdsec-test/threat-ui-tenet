@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Tooltip } from '@ux/uxcore2';
+import { Tooltip, ProgressBar } from '@ux/uxcore2';
 import ChevronDown from '@ux/icon/chevron-down-lt';
 import Cross from '@ux/icon/x';
 import { Table } from 'evergreen-ui';
@@ -7,8 +7,11 @@ import getJobs from '../api/getJobs';
 import { JOB_STATUS } from '../utils/const';
 import { withRouter } from 'next/router';
 import Loader from './common/Loader';
+import CopyToClipboard from './common/CopyToClipboard';
 import '@ux/icon/chevron-down-lt/index.css';
 import '@ux/icon/x/index.css';
+
+const updateInterval = 30000;
 
 const COLUMNS = {
   ID: { name: 'Id', id: 'id' },
@@ -25,6 +28,11 @@ const SORT = {
 class JobList extends React.Component {
   constructor() {
     super(...arguments);
+    const max = Math.round(updateInterval / 1000);
+    const ticks = [];
+    for (let i = 0; i <= max; i++) {
+      ticks.push(i);
+    }
     this.state = {
       isLoading: true,
       pageSelected: 1,
@@ -32,15 +40,25 @@ class JobList extends React.Component {
       jobsList: [],
       tableJobsList: [],
       sortBy: {},
-      filterBy: {}
+      filterBy: {},
+      jobsRefresh: {
+        max,
+        step: 1,
+        progress: 0,
+        ticks
+      }
     };
     this.renderHead = this.renderHead.bind(this);
     this.handleTagsFilterChange = this.handleTagsFilterChange.bind(this);
     this.renderRow = this.renderRow.bind(this);
     this.applyFilters = this.applyFilters.bind(this);
+    this.getJobs = this.getJobs.bind(this);
   }
 
-  componentDidMount() {
+  getJobs() {
+    this.setState({
+      isLoading: true
+    });
     getJobs().then((jobsListData) => {
       const jobsList = jobsListData instanceof Array ? jobsListData : [];
       const { jobIds } = this.getUrlQueryParams();
@@ -49,11 +67,26 @@ class JobList extends React.Component {
           isLoading: false,
           jobsList,
           tableJobsList: jobsList.slice(),
-          filterBy: { jobIds }
+          filterBy: { jobIds },
+          jobsRefresh: { ...this.state.jobsRefresh, progress: 0 }
         },
         () => this.applyFilters()
       );
     });
+  }
+
+  componentDidMount() {
+    const {
+      jobsRefresh: { step }
+    } = this.state;
+    this.getJobs();
+    setInterval(this.getJobs, updateInterval);
+    setInterval(() => {
+      const {
+        jobsRefresh: { progress }
+      } = this.state;
+      this.setState({ jobsRefresh: { ...this.state.jobsRefresh, progress: progress + 1 } });
+    }, step * 1000);
   }
 
   renderHead() {
@@ -112,6 +145,7 @@ class JobList extends React.Component {
     return (
       <Table.Row key={id} className='JobList_row' isSelectable onSelect={() => router.push(`/job/${id}`)}>
         <Table.Cell className='JobList_id' width={100} flex='none'>
+          <CopyToClipboard value={`${location.origin}/job/${id}`} />
           {id}
         </Table.Cell>
         <Table.Cell display='flex' alignItems='center'>
@@ -193,9 +227,14 @@ class JobList extends React.Component {
   }
 
   render() {
-    const { tableJobsList, isLoading, filterBy } = this.state;
+    const {
+      tableJobsList,
+      isLoading,
+      filterBy,
+      jobsRefresh: { max, progress, ticks }
+    } = this.state;
     if (isLoading) {
-      return <Loader inline size='lg' />;
+      return <Loader inline size='lg' text='Jobs are refreshing...' />;
     }
     const filterByNames = Object.keys(filterBy).filter((filter) => filterBy[filter].length);
     return (
@@ -227,6 +266,14 @@ class JobList extends React.Component {
             </div>
           </div>
         ) : null}
+        <ProgressBar
+          label={`Jobs will refresh in ${max - progress} sec`}
+          striped
+          ticks={ticks}
+          value={progress}
+          max={max}
+          min={0}
+        />
         <Table border>
           {this.renderHead()}
           <Table.VirtualBody height={640}>{tableJobsList.map((item) => this.renderRow(item))}</Table.VirtualBody>

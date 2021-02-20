@@ -52,61 +52,162 @@
     }
   }
 
+  [class^='InputForm_Hightlight_'] {
+    color: black;
+    display: inline;
+    position: relative;
+    line-height: initial;
+
+    &::after {
+      position: absolute;
+      transform: none;
+      color: red;
+      width: fit-content;
+      left: 0;
+      right: 0;
+      margin: auto;
+    }
+  }
+
   .InputForm_Hightlight_ {
     &unknown {
       background: #db1802cc;
+
+      &:hover {
+        &::after {
+          content: 'UNKNOWN';
+        }
+      }
     }
 
     &domain {
       background: map-deep-get($palette-colors, 'natural', 'base', 'marker');
+
+      &:hover {
+        &::after {
+          content: 'DOMAIN';
+        }
+      }
     }
 
     &email {
       background: map-deep-get($palette-colors, 'nav', 'base', 'marker');
+
+      &:hover {
+        &::after {
+          content: 'EMAIL';
+        }
+      }
     }
 
     &cve {
       background: map-deep-get($palette-colors, 'success', 'base', 'marker');
+
+      &:hover {
+        &::after {
+          content: 'CVE';
+        }
+      }
     }
 
     &cwe {
       background: map-deep-get($palette-colors, 'product', 'base', 'marker');
+
+      &:hover {
+        &::after {
+          content: 'CWE';
+        }
+      }
     }
 
     &capec {
       background: map-deep-get($palette-colors, 'success', 'base', 'marker');
+
+      &:hover {
+        &::after {
+          content: 'CAPEC';
+        }
+      }
     }
 
     &cpe {
       background: map-deep-get($palette-colors, 'feature', 'base', 'marker');
+
+      &:hover {
+        &::after {
+          content: 'CPE';
+        }
+      }
     }
 
     &url {
       background: map-deep-get($palette-colors, 'secondary', 'base', 'marker');
+
+      &:hover {
+        &::after {
+          content: 'URL';
+        }
+      }
     }
 
     &md5 {
       background: map-deep-get($palette-colors, 'success', 'base', 'marker');
+
+      &:hover {
+        &::after {
+          content: 'MD5';
+        }
+      }
     }
 
     &sha1 {
       background: map-deep-get($palette-colors, 'success', 'base', 'marker');
+
+      &:hover {
+        &::after {
+          content: 'SHA1';
+        }
+      }
     }
 
     &sha256 {
       background: map-deep-get($palette-colors, 'primary', 'base', 'marker');
+
+      &:hover {
+        &::after {
+          content: 'SHA256';
+        }
+      }
     }
 
     &sha512 {
       background: map-deep-get($palette-colors, 'success', 'base', 'marker');
+
+      &:hover {
+        &::after {
+          content: 'SHA512';
+        }
+      }
     }
 
     &ip {
       background: map-deep-get($palette-colors, 'danger', 'base', 'marker');
+
+      &:hover {
+        &::after {
+          content: 'IP';
+        }
+      }
     }
 
     &hostname {
       background: map-deep-get($palette-colors, 'success', 'base', 'marker');
+
+      &:hover {
+        &::after {
+          content: 'HOSTNAME';
+        }
+      }
     }
 
     &awshostname {
@@ -131,6 +232,14 @@
 
     &mitre_mitigation {
       background: map-deep-get($palette-colors, 'gray', 'base', 'marker');
+    }
+  }
+
+  .InputForm_IOC_Types_Legend_Value {
+    &:hover {
+      &::after {
+        content: '';
+      }
     }
   }
 }

@@ -4,16 +4,23 @@ import { JOB_STATUS } from '../utils/const';
 export default async () => {
   let jobs = await fetch({ url: '/api/jobs' });
   jobs = jobs.map(({ jobId, startTime, responses, submission = {} }) => {
-    const status = Math.random() > 0.5 ? JOB_STATUS.PENDING : JOB_STATUS.DONE;
-    const { metadata: { tags = [] } = {} } = submission;
+    let status = JOB_STATUS.DONE;
+    const { metadata: { tags = [], modules = [] } = {} } = submission;
+    const modulesStatus = modules.reduce((acc, module) => {
+      const isDone = Object.keys(responses).indexOf(module) >= 0;
+      if (isDone) {
+        acc[module] = JOB_STATUS.DONE;
+      } else {
+        acc[module] = JOB_STATUS.PENDING;
+        status = JOB_STATUS.PENDING;
+      }
+      return acc;
+    }, {});
     return {
       id: jobId,
       tags,
       status,
-      modules: Object.keys(responses).reduce((acc, module) => {
-        acc[module] = responses[module] ? JOB_STATUS.DONE : JOB_STATUS.PENDING;
-        return acc;
-      }, {}),
+      modules: modulesStatus,
       timestamp: startTime
     };
   });

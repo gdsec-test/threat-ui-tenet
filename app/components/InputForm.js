@@ -5,6 +5,7 @@ import createJob from '../api/createJob';
 import { IOC_TYPE } from '../utils/const';
 import Loader from './common/Loader';
 import Tags from './common/Tags';
+import InputFormSubmitPopup from './InputFormSubmitPopup';
 import { HighlightWithinTextarea } from 'react-highlight-within-textarea';
 import FileUpload from '@ux/file-upload';
 import { withRouter } from 'next/router';
@@ -173,11 +174,12 @@ class InputForm extends React.Component {
           inputs: item.inputs,
           modules: item.modules,
           metadata: {
-            tags: [...tags, IOCType]
+            tags: [...tags, IOCType],
+            modules: item.modules
           }
         }).then((res) => {
           const { submittedJobs } = this.state;
-          this.setState({ submittedJobs: submittedJobs.slice().concat([res.jobId]) });
+          this.setState({ submittedJobs: submittedJobs.slice().concat([{ id: res.jobId, tags: [...tags, IOCType] }]) });
           return res;
         })
       )
@@ -197,47 +199,11 @@ class InputForm extends React.Component {
       tags,
       textAreaValue
     } = this.state;
-    const { router } = this.props;
     if (isLoading) {
-      return <Loader inline size='lg' />;
+      return <Loader inline size='lg' text='Loading Input Form...' />;
     }
     if (showSubmitPopup) {
-      return (
-        <Form
-          className={'InputForm'}
-          action=''
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
-        >
-          <div>
-            {submitIsInProgress && (
-              <Fragment>
-                <div>Jobs are submitting...</div>
-                <Loader inline size='lg' />
-              </Fragment>
-            )}
-            {submittedJobs.map((id) => (
-              <div key={id}>
-                Job{' '}
-                <a
-                  href={`/job/${id}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    router.push(`/job/${id}`);
-                  }}
-                >
-                  {id}
-                </a>{' '}
-                submitted successfully
-              </div>
-            ))}
-            <Button design='secondary' onClick={() => router.push(`/jobs?jobIds=${submittedJobs.join(',')}`)}>
-              See created jobs
-            </Button>
-          </div>
-        </Form>
-      );
+      return <InputFormSubmitPopup submitIsInProgress={submitIsInProgress} submittedJobs={submittedJobs} />;
     }
     return (
       <Form
@@ -270,7 +236,9 @@ class InputForm extends React.Component {
             <FileUpload
               accept='text/plain'
               onChange={this.readFromFile}
-              label={getTooltip('Parse file', 'You can upload file with IOC values to be checked')}
+              label={
+                <Fragment>Parse file{getTooltip('', 'You can upload file with IOC values to be checked')}</Fragment>
+              }
               buttonLabel='sasdf'
               showFiles={false}
             />
@@ -292,11 +260,14 @@ class InputForm extends React.Component {
             }}
             onChange={({ target: { value } }) => this.detectIOCType(value)}
           />
-          <p>
+          <p className='InputForm_IOC_Types_Legend'>
             Types found:{' '}
             {Object.keys(detectedIOCTypes || {}).map((type) => {
               return (
-                <span key={type} className={`mr-3 InputForm_Hightlight_${type.toLowerCase()}`}>
+                <span
+                  key={type}
+                  className={`mr-3 InputForm_IOC_Types_Legend_Value InputForm_Hightlight_${type.toLowerCase()}`}
+                >
                   {type}
                 </span>
               );

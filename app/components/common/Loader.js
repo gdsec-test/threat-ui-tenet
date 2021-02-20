@@ -1,10 +1,13 @@
 import React from 'react';
 import { Spinner } from '@ux/uxcore2';
 
-export default () => {
+export default ({ text }) => {
   return (
     <div className='Loader'>
-      <Spinner size='lg' />
+      <div>{text}</div>
+      <div>
+        <Spinner size='lg' />
+      </div>
     </div>
   );
 };
