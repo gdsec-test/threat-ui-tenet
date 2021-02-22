@@ -25,6 +25,9 @@ const SORT = {
   ASC: 'ASC',
   DESC: 'DESC'
 };
+
+const intervalIds = {};
+
 class JobList extends React.Component {
   constructor() {
     super(...arguments);
@@ -80,13 +83,17 @@ class JobList extends React.Component {
       jobsRefresh: { step }
     } = this.state;
     this.getJobs();
-    setInterval(this.getJobs, updateInterval);
-    setInterval(() => {
+    intervalIds.jobs = setInterval(this.getJobs, updateInterval);
+    intervalIds.progress = setInterval(() => {
       const {
         jobsRefresh: { progress }
       } = this.state;
       this.setState({ jobsRefresh: { ...this.state.jobsRefresh, progress: progress + 1 } });
     }, step * 1000);
+  }
+
+  componentWillUnmount() {
+    Object.values(intervalIds).forEach((id) => clearInterval(id));
   }
 
   renderHead() {
@@ -152,7 +159,7 @@ class JobList extends React.Component {
           <a> {tags.join(', ')}</a>
         </Table.Cell>
         <Table.TextCell width={220} flex='none'>
-          {new Date(timestamp).toUTCString()}
+          {new Date(timestamp * 1000).toUTCString()}
         </Table.TextCell>
         <Table.TextCell width={100} flex='none' className={`${status === JOB_STATUS.PENDING ? 'pending' : ''}`}>
           {status}

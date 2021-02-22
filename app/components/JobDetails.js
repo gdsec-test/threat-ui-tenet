@@ -4,9 +4,9 @@ import Download from '@ux/icon/download';
 import getJob from '../api/getJob';
 import { THEMES } from '../utils/const';
 import JSONTree from 'react-json-tree';
-import ReactJson from 'react-json-view';
 import Loader from './common/Loader';
 import CopyToClipboard from './common/CopyToClipboard';
+import dataFormatters from '../utils/dataFormatters';
 const { DropdownItem } = Dropdown;
 import '@ux/icon/clipboard/index.css';
 import '@ux/icon/download/index.css';
@@ -25,6 +25,13 @@ export default class JobDetails extends React.Component {
   componentDidMount() {
     const { id } = this.props;
     getJob(id).then((jobDetails) => {
+      jobDetails.responses = Object.keys(jobDetails.responses).reduce((acc, key) => {
+        const moduleDataFormatter = dataFormatters[key];
+        if (moduleDataFormatter) {
+          acc[key] = moduleDataFormatter(acc[key]);
+        }
+        return acc;
+      }, jobDetails.responses);
       this.setState({
         isLoading: false,
         jobDetails
@@ -92,7 +99,6 @@ export default class JobDetails extends React.Component {
           </div>
         </div>
         <JSONTree data={responses} theme={theme} shouldExpandNode={() => true} />
-        <ReactJson src={responses} theme={theme} displayDataTypes={false} />
       </div>
     );
   }
