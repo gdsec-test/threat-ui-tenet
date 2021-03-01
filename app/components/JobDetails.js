@@ -98,7 +98,7 @@ export default class JobDetails extends React.Component {
             </span>
           </div>
         </div>
-        <JSONTree data={responses} theme={theme} shouldExpandNode={() => true} />
+        <JSONTree data={responses} theme={theme} shouldExpandNode={() => false} />
       </div>
     );
   }
