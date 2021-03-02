@@ -46,15 +46,19 @@ export default class JobDetails extends React.Component {
   }
 
   saveToFile() {
-    const { id } = this.props;
     const { jobDetails } = this.state;
+    const {
+      submission: {
+        metadata: { tags = [] }
+      }
+    } = jobDetails;
     const a = document.createElement('a');
     a.href = URL.createObjectURL(
       new Blob([JSON.stringify(jobDetails, null, 2)], {
         type: 'text/plain'
       })
     );
-    a.setAttribute('download', `${id}.json`);
+    a.setAttribute('download', `${tags.join(',')}.json`);
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -65,6 +69,13 @@ export default class JobDetails extends React.Component {
     if (isLoading) {
       return <Loader inline size='lg' text='Loading job details...' />;
     }
+    const {
+      submission: {
+        iocType,
+        iocs,
+        metadata: { tags = [] }
+      }
+    } = jobDetails;
     /* eslint-disable */
     const { responses, startTime, jobStatus, jobPercentage, submission } = jobDetails;
     let dateTime = new Date(startTime * 1000);
@@ -74,9 +85,10 @@ export default class JobDetails extends React.Component {
           className='table table-hover'
           data={[
             { name: 'Status', value: jobStatus },
+            { name: 'Tags', value: tags.join(', ') },
             { name: 'Progress', value: jobPercentage },
             { name: 'Started on', value: dateTime.toString() },
-            { name: 'Input', value: JSON.stringify(submission) }
+            { name: 'Input', value: `${iocType}: ${iocs.join(', ')}` }
           ]}
         ></Table>
         <div className='JobDetails_controls'>
@@ -98,7 +110,7 @@ export default class JobDetails extends React.Component {
             </span>
           </div>
         </div>
-        <JSONTree data={responses} theme={theme} shouldExpandNode={() => false} />
+        <JSONTree data={responses} theme={theme} shouldExpandNode={() => true} />
       </div>
     );
   }

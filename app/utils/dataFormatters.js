@@ -7,14 +7,15 @@ const parsers = {
 
 export default {
   shodan: (data = []) => {
-    return data.map((obj) => {
+    const result = data.map((obj) => {
       return { ...obj, Data: parsers.csv(obj.Data) };
     });
+    return result.length === 1 ? result[0] : result;
   },
   recordedfuture: (data = []) => {
-    return data.map((obj) => {
+    const result = data.map((obj) => {
       const spacedPropName = 'Affected Machines: CPE';
-      const result = parsers.csv(obj.Data);
+      const result = parsers[obj.DataType](obj.Data);
       result.forEach((item) => {
         if (item[spacedPropName]) {
           item[spacedPropName] = parsers.spaces(item[spacedPropName]);
@@ -22,5 +23,6 @@ export default {
       });
       return { ...obj, Data: result };
     });
+    return result.length === 1 ? result[0] : result;
   }
 };

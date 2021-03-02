@@ -107,25 +107,21 @@ class JobList extends React.Component {
           width={columnWidth + (isActive ? 20 : 0)}
           flex='none'
           className={`JobList_head_cell JobList_head_cell_sortable ${isActive}`}
+          onClick={() => {
+            const newSortByType = sortByType === SORT.DESC ? SORT.ASC : SORT.DESC;
+            this.setState({
+              sortBy: { [columnId]: newSortByType },
+              tableJobsList: tableJobsList.slice().sort((job1, job2) => {
+                if (newSortByType === SORT.ASC) {
+                  return job1[columnId] >= job2[columnId] ? 1 : -1;
+                }
+                return job1[columnId] <= job2[columnId] ? 1 : -1;
+              })
+            });
+          }}
         >
           {name}
-          <span
-            onClick={() => {
-              const newSortByType = sortByType === SORT.DESC ? SORT.ASC : SORT.DESC;
-              this.setState({
-                sortBy: { [columnId]: newSortByType },
-                tableJobsList: tableJobsList.slice().sort((job1, job2) => {
-                  if (newSortByType === SORT.ASC) {
-                    return job1[columnId] >= job2[columnId] ? 1 : -1;
-                  }
-                  return job1[columnId] <= job2[columnId] ? 1 : -1;
-                })
-              });
-            }}
-            className={`JobList_sortButton ${isDown}`}
-          >
-            <ChevronDown />
-          </span>
+          <ChevronDown className={`JobList_sortButton ${isDown}`} />
         </Table.TextHeaderCell>
       );
     };
