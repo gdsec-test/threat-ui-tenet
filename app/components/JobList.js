@@ -11,7 +11,7 @@ import CopyToClipboard from './common/CopyToClipboard';
 import '@ux/icon/chevron-down-lt/index.css';
 import '@ux/icon/x/index.css';
 
-const updateInterval = 10000;
+const updateInterval = 60000;
 
 const COLUMNS = {
   ID: { name: 'Id', id: 'id' },
