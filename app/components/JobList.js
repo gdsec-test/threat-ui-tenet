@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Tooltip, ProgressBar } from '@ux/uxcore2';
+import { Tooltip } from '@ux/uxcore2';
 import ChevronDown from '@ux/icon/chevron-down-lt';
 import Cross from '@ux/icon/x';
 import { Table } from 'evergreen-ui';
@@ -11,14 +11,14 @@ import CopyToClipboard from './common/CopyToClipboard';
 import '@ux/icon/chevron-down-lt/index.css';
 import '@ux/icon/x/index.css';
 
-const updateInterval = 30000;
+const updateInterval = 10000;
 
 const COLUMNS = {
   ID: { name: 'Id', id: 'id' },
   TAGS: { name: 'Tags', id: 'tags' },
   STATUS: { name: 'Status', id: 'status' },
   MODULES: { name: 'Modules', id: 'modules' },
-  TIMESTAMP: { name: 'Date\\Time', id: 'timestamp' }
+  TIMESTAMP: { name: 'Date/Time', id: 'timestamp' }
 };
 
 const SORT = {
@@ -32,10 +32,6 @@ class JobList extends React.Component {
   constructor() {
     super(...arguments);
     const max = Math.round(updateInterval / 1000);
-    const ticks = [];
-    for (let i = 0; i <= max; i++) {
-      ticks.push(i);
-    }
     this.state = {
       isLoading: true,
       pageSelected: 1,
@@ -47,14 +43,14 @@ class JobList extends React.Component {
       jobsRefresh: {
         max,
         step: 1,
-        progress: 0,
-        ticks
+        progress: 0
       }
     };
     this.renderHead = this.renderHead.bind(this);
     this.handleTagsFilterChange = this.handleTagsFilterChange.bind(this);
     this.renderRow = this.renderRow.bind(this);
     this.applyFilters = this.applyFilters.bind(this);
+    this.sortBy = this.sortBy.bind(this);
     this.getJobs = this.getJobs.bind(this);
   }
 
@@ -70,10 +66,12 @@ class JobList extends React.Component {
           isLoading: false,
           jobsList,
           tableJobsList: jobsList.slice(),
-          filterBy: { jobIds },
+          filterBy: { ...this.state.filterBy, jobIds },
           jobsRefresh: { ...this.state.jobsRefresh, progress: 0 }
         },
-        () => this.applyFilters()
+        () => {
+          this.applyFilters();
+        }
       );
     });
   }
@@ -98,7 +96,7 @@ class JobList extends React.Component {
 
   renderHead() {
     const getSortableButton = ({ id: columnId, name }, columnWidth) => {
-      const { sortBy, tableJobsList } = this.state;
+      const { sortBy } = this.state;
       const isActive = sortBy[columnId] ? 'JobList_head_cell_active' : '';
       const sortByType = this.state.sortBy[columnId] || SORT.ASC;
       const isDown = sortByType === SORT.DESC ? '' : 'JobList_sortButton_rotated';
@@ -109,15 +107,7 @@ class JobList extends React.Component {
           className={`JobList_head_cell JobList_head_cell_sortable ${isActive}`}
           onClick={() => {
             const newSortByType = sortByType === SORT.DESC ? SORT.ASC : SORT.DESC;
-            this.setState({
-              sortBy: { [columnId]: newSortByType },
-              tableJobsList: tableJobsList.slice().sort((job1, job2) => {
-                if (newSortByType === SORT.ASC) {
-                  return job1[columnId] >= job2[columnId] ? 1 : -1;
-                }
-                return job1[columnId] <= job2[columnId] ? 1 : -1;
-              })
-            });
+            this.sortBy(columnId, newSortByType);
           }}
         >
           {name}
@@ -134,7 +124,7 @@ class JobList extends React.Component {
           className='JobList_head_cell'
           placeholder='Search by tags'
           onChange={this.handleTagsFilterChange}
-          value={this.state.searchTagsQuery}
+          value={this.state.filterBy.searchTagsQuery}
         />
         {getSortableButton(COLUMNS.TIMESTAMP, 220)}
         {getSortableButton(COLUMNS.STATUS, 100)}
@@ -192,6 +182,21 @@ class JobList extends React.Component {
     return { jobIds: jobIds ? jobIds.split(',') : [] };
   }
 
+  sortBy(columnId, sortByType) {
+    const { tableJobsList } = this.state;
+    const newTableJobsList = tableJobsList.slice();
+    newTableJobsList.sort((job1, job2) => {
+      if (sortByType === SORT.ASC) {
+        return job1[columnId] >= job2[columnId] ? 1 : -1;
+      }
+      return job1[columnId] <= job2[columnId] ? 1 : -1;
+    });
+    this.setState({
+      sortBy: { [columnId]: sortByType },
+      tableJobsList: newTableJobsList
+    });
+  }
+
   applyFilters() {
     const {
       filterBy: { searchTagsQuery, jobIds },
@@ -214,9 +219,16 @@ class JobList extends React.Component {
         tags.find((tag) => formattedQuery.find((query) => tag.indexOf(query) >= 0))
       );
     }
-    this.setState({
-      tableJobsList
-    });
+    this.setState(
+      {
+        tableJobsList
+      },
+      () => {
+        Object.keys(this.state.sortBy).forEach((columnId) => {
+          this.sortBy(columnId, this.state.sortBy[columnId]);
+        });
+      }
+    );
   }
 
   handleTagsFilterChange(searchTagsQuery) {
@@ -234,7 +246,7 @@ class JobList extends React.Component {
       tableJobsList,
       isLoading,
       filterBy,
-      jobsRefresh: { max, progress, ticks }
+      jobsRefresh: { max, progress }
     } = this.state;
     if (isLoading) {
       return <Loader inline size='lg' text='Jobs are refreshing...' />;
@@ -269,14 +281,7 @@ class JobList extends React.Component {
             </div>
           </div>
         ) : null}
-        <ProgressBar
-          label={`Jobs will refresh in ${max - progress} sec`}
-          striped
-          ticks={ticks}
-          value={progress}
-          max={max}
-          min={0}
-        />
+        <div>{`Jobs will refresh in ${max - progress} sec`}</div>
         <Table border>
           {this.renderHead()}
           <Table.VirtualBody height={640}>{tableJobsList.map((item) => this.renderRow(item))}</Table.VirtualBody>

@@ -143,8 +143,9 @@ class InputForm extends React.Component {
       submitIsInProgress: true,
       submittedJobs: []
     });
-    const { detectedIOCModules, tags } = this.state;
+    const { detectedIOCModules, tags, selectedIOCModules } = this.state;
     const jobs = new Map();
+    const detectedIOCModulesKeys = getKeys(detectedIOCModules);
     [...detectedIOCModules.entries()].forEach(([module, IOCTypes = []]) => {
       IOCTypes.forEach(({ inputs = [], type }) => {
         if (type.toLowerCase() === 'unknown') {
@@ -157,7 +158,8 @@ class InputForm extends React.Component {
           });
         }
         const job = jobs.get(type);
-        if (job.modules.indexOf(module) < 0) {
+        const foundIOCModule = selectedIOCModules.indexOf(detectedIOCModulesKeys.indexOf(module)) >= 0;
+        if (job.modules.indexOf(module) < 0 && foundIOCModule) {
           job.modules.push(module);
         }
         inputs.forEach((inp) => {
@@ -167,6 +169,11 @@ class InputForm extends React.Component {
         });
       });
     }, {});
+    jobs.forEach((item, IOCType) => {
+      if (item.modules.length === 0) {
+        jobs.delete(IOCType);
+      }
+    });
     await Promise.all(
       [...jobs.entries()].map(([IOCType, item]) =>
         createJob({
