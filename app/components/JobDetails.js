@@ -6,7 +6,7 @@ import { THEMES } from '../utils/const';
 import JSONTree from 'react-json-tree';
 import Loader from './common/Loader';
 import CopyToClipboard from './common/CopyToClipboard';
-import dataFormatters from '../utils/dataFormatters';
+import { parseData, expandData, formatData } from '../utils/dataFormatters';
 const { DropdownItem } = Dropdown;
 import '@ux/icon/clipboard/index.css';
 import '@ux/icon/download/index.css';
@@ -25,13 +25,7 @@ export default class JobDetails extends React.Component {
   componentDidMount() {
     const { id } = this.props;
     getJob(id).then((jobDetails) => {
-      jobDetails.responses = Object.keys(jobDetails.responses).reduce((acc, key) => {
-        const moduleDataFormatter = dataFormatters[key];
-        if (moduleDataFormatter) {
-          acc[key] = moduleDataFormatter(acc[key]);
-        }
-        return acc;
-      }, jobDetails.responses);
+      jobDetails.responses = parseData(jobDetails.responses);
       this.setState({
         isLoading: false,
         jobDetails
@@ -110,7 +104,13 @@ export default class JobDetails extends React.Component {
             </span>
           </div>
         </div>
-        <JSONTree data={responses} theme={theme} shouldExpandNode={() => true} />
+        <JSONTree
+          data={responses}
+          theme={theme}
+          labelRenderer={(keyPath) => <b>{keyPath[0]}</b>}
+          valueRenderer={formatData}
+          shouldExpandNode={expandData}
+        />
       </div>
     );
   }
