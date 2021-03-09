@@ -16,7 +16,7 @@ const DataParseSchema = {
   },
   recordedfuture: (data = []) => {
     const result = data.map((obj) => {
-      const spacedPropName = 'Affected Machines: CPE';
+      const spacedPropName = ['Affected Machines: CPE', 'RawRisk Rules Associated'];
       const result = parsers[obj.DataType](obj.Data);
       result.forEach((item) => {
         if (item[spacedPropName]) {
