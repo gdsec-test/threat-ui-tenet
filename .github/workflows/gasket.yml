@@ -18,6 +18,21 @@ jobs:
         with:
           node-version: 12
 
+      - name: Post status
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{github.token}}
+          script: |
+            github.request('POST /repos/' + context.repo.owner + '/' + context.repo.repo + '/statuses/' + context.sha, {
+              sha: context.sha,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'success',
+              context:  'SuperContext',
+              description:   'Super desc',
+              target_url: 'https://godaddy.com'
+            })
+
       - name: Checkout this repo on to a job runner.
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # Checkout this repository.
 
