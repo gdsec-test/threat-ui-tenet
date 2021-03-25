@@ -58,7 +58,7 @@ jobs:
       - name: Build docker container
         id: container
         run: |
-          export $(grep -v '^#' .varenv | xargs) && docker build --no-cache --build-arg NODE_ENV=$NODE_ENV -t tmp . | while read line ; do echo "$(date)| $line"; done;
+          export $(grep -v '^#' .varenv | xargs) && docker build --build-arg NODE_ENV=$NODE_ENV -t tmp . | while read line ; do echo "$(date)| $line"; done;
           echo "::set-output name=id::$(docker images -q tmp)"
 
       - name: Login to Amazon ECR
@@ -87,7 +87,7 @@ jobs:
 
       - name: Scan Image For Vulnerabilities
         env:
-          container-name: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY}}
+          container-name: ${{ env.ECR_REPOSITORY}}:latest
           aws-account-id: 786677461057
           aws-region: us-west-2
           aws-access-key-id: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY_ID }}
