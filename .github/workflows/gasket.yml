@@ -39,17 +39,17 @@ jobs:
         run: |
           echo ${{ secrets.NPM_ARTIFACTORY_TOKEN }} >> .npmrc
 
-      - name: Install node modules
-        working-directory: app
-        run: |
-          npm i
-          export $(grep -v '^#' ../.varenv | xargs) && npm prune
+#      - name: Install node modules
+#        working-directory: app
+#        run: |
+#          npm i
+#          export $(grep -v '^#' ../.varenv | xargs) && npm prune
 
-      - name: Build application code (also generate self-signed SSL certs)
-        working-directory: app
-        run: |
-          export $(grep -v '^#' ../.varenv | xargs) && npm run createcert
-          npm run build
+#      - name: Build application code (also generate self-signed SSL certs)
+#        working-directory: app
+#        run: |
+#          export $(grep -v '^#' ../.varenv | xargs) && npm run createcert
+#          npm run build
 
       - name: Log into golden image ECR
         run: |

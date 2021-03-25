@@ -10,10 +10,17 @@ COPY .varenv .varenv
 
 WORKDIR /app
 
+RUN npm i
+RUN export $(grep -v '^#' ../.varenv | xargs) && npm prune
+
 RUN apk add openssl
 
 # Generate self-signed cert thats used by the gasket service (check plugins/deploy-plugin.js)
-RUN npm run createcert
+
+RUN export $(grep -v '^#' ../.varenv | xargs) && npm run createcert
+
+# Build application
+RUN npm run build
 
 RUN mkdir /.cache && chown nobody /.cache
 # RUN chown -R nobody /app
