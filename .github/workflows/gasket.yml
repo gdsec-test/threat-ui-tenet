@@ -28,9 +28,9 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'success',
-              context:  'SuperContext',
-              description:   'Super desc',
-              target_url: 'https://godaddy.com'
+              context:  'My New Context',
+              description:   'My New Desc',
+              target_url: 'https://www.godaddy.com'
             })
 
       - name: Checkout this repo on to a job runner.
