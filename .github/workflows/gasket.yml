@@ -10,6 +10,8 @@ on:
 
 jobs:
   deploy:
+    env:
+      ECR_REPOSITORY: com.godaddy.threat-ui-tenet
     runs-on: self-hosted
     steps:
       - uses: actions/setup-node@05f0551dbd620d7be8d92f9f7c1674ebf6bcb0eb
@@ -63,11 +65,37 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@a3b1dc9bc1598017eaab0d7f39725589b0bfb68b
 
+      - name: Tag image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          docker tag ${{ steps.container.outputs.id }} $ECR_REGISTRY/$ECR_REPOSITORY
+
       - name: Deploy image to ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: com.godaddy.threat-ui-tenet
         run: |
-          docker tag ${{ steps.container.outputs.id }} $ECR_REGISTRY/$ECR_REPOSITORY
           docker push $ECR_REGISTRY/$ECR_REPOSITORY
+
+      - name: Scan Image For Vulnerabilities
+        env:
+          container-name: ${{ steps.login-ecr.outputs.registry }}/${{ env.$ECR_REPOSITORY}}
+          aws-account-id: 786677461057
+          aws-region: us-west-2
+          aws-access-key-id: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.DEV_AWS_SECRET_TOKEN_VALUE }}
+          role-to-assume: ${{ secrets.DEV_AWS_DEPLOY_ROLE }}
+        uses: gdcorp-actions/container-scan@main
+        with:
+          aws-access-key-id: ${{ env.aws-access-key-id }}
+          aws-secret-access-key: ${{ env.aws-secret-access-key }}
+          aws-region: ${{ env.aws-region }}
+          aws-account-id: ${{ env.aws-account-id }}
+          container-name: ${{ env.container-name }}
+          role-to-assume: ${{ env.role-to-assume }}
+          SCANNER_GOLDEN_AWS_SECRET_ACCESS_KEY_ID: ${{secrets.SCANNER_GOLDEN_AWS_SECRET_ACCESS_KEY_ID}}
+          SCANNER_GOLDEN_AWS_SECRET_TOKEN_VALUE: ${{secrets.SCANNER_GOLDEN_AWS_SECRET_TOKEN_VALUE}}
+
+      - name: Update ECS Fargate Cluster with new image
+        run: |
           aws ecs update-service --cluster threat-ui-tenet-cluster --service threat-ui-tenet-fargate --force-new-deployment --region us-west-2
