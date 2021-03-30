@@ -6,6 +6,7 @@ on:
     paths:
       - "app/**"
       - "Dockerfile"
+      - ".varenv"
       - ".github/workflows/gasket.yml"
 
 jobs:

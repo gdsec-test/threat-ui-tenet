@@ -22,6 +22,7 @@ on:
     branches: [main]
     paths:
       - "sceptre/**"
+      - ".varenv"
       - ".github/workflows/sceptre.yml"
 
 jobs:
