@@ -14,24 +14,32 @@ jobs:
       ECR_REPOSITORY: com.godaddy.threat-ui-tenet
     runs-on: self-hosted
     steps:
+      - name: Set env variables for deployment
+        id: set_vars
+        run: |
+          export $(grep -v '^#' .varenv | xargs)
+          echo ::set-output name=NODE_ENV::${NODE_ENV}
+          echo ::set-output name=GD_ROOT_DOMAIN::${GD_ROOT_DOMAIN}
+
+      - name: Set params for development env
+        if: steps.set_vars.outputs.NODE_ENV == 'development'
+        run: |
+          echo "AWS_DEPLOY_SECRET_ACCESS_KEY_ID=${{ secrets.DEV_AWS_SECRET_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_DEPLOY_SECRET_TOKEN_VALUE=${{ secrets.DEV_AWS_SECRET_TOKEN_VALUE }}" >> $GITHUB_ENV
+          echo "AWS_DEPLOY_ROLE=${{ secrets.DEV_AWS_DEPLOY_ROLE }}" >> $GITHUB_ENV
+          echo "AWS_CLUSTER_SSL_CERT_ID=6b8fa223-fcb8-4b58-b06e-49ee814098d0" >> $GITHUB_ENV
+
+      - name: Set params for production env
+        if: steps.set_vars.outputs.NODE_ENV == 'production'
+        run: |
+          echo "AWS_DEPLOY_SECRET_ACCESS_KEY_ID=${{ secrets.PROD_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_DEPLOY_SECRET_TOKEN_VALUE=${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "AWS_DEPLOY_ROLE=${{ secrets.PROD_AWS_DEPLOY_ROLE }}" >> $GITHUB_ENV
+          echo "AWS_CLUSTER_SSL_CERT_ID=0ed4b93f-b7ad-4dba-9102-572cf48cc9ad" >> $GITHUB_ENV
+
       - uses: actions/setup-node@05f0551dbd620d7be8d92f9f7c1674ebf6bcb0eb
         with:
           node-version: 12
-
-      - name: Post test status
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{github.token}}
-          script: |
-            github.request('POST /repos/' + context.repo.owner + '/' + context.repo.repo + '/statuses/' + context.sha, {
-              sha: context.sha,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'success',
-              context:  'Some super',
-              description: 'https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/runs/' + context.runId,
-              target_url: 'https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/runs/' + context.runNumber
-            });
 
       - name: Checkout this repo on to a job runner.
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # Checkout this repository.
@@ -43,9 +51,9 @@ jobs:
       - name: Configure AWS credentials using Cloud Key Based Service Accounts
         uses: aws-actions/configure-aws-credentials@1ed6eed14f0f832cad5830fb357d937c2f20ec67
         with:
-          aws-access-key-id: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.DEV_AWS_SECRET_TOKEN_VALUE }}
-          role-to-assume: ${{ secrets.DEV_AWS_DEPLOY_ROLE }}
+          aws-access-key-id: ${{ env.AWS_DEPLOY_SECRET_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_DEPLOY_SECRET_TOKEN_VALUE }}
+          role-to-assume: ${{ env.AWS_DEPLOY_ROLE }}
           role-duration-seconds: 3600
           aws-region: us-west-2
 
@@ -53,18 +61,6 @@ jobs:
         working-directory: app
         run: |
           echo ${{ secrets.NPM_ARTIFACTORY_TOKEN }} >> .npmrc
-
-#      - name: Install node modules
-#        working-directory: app
-#        run: |
-#          npm i
-#          export $(grep -v '^#' ../.varenv | xargs) && npm prune
-
-#      - name: Build application code (also generate self-signed SSL certs)
-#        working-directory: app
-#        run: |
-#          export $(grep -v '^#' ../.varenv | xargs) && npm run createcert
-#          npm run build
 
       - name: Log into golden image ECR
         run: |
@@ -86,46 +82,46 @@ jobs:
         run: |
           docker tag ${{ steps.container.outputs.id }} $ECR_REGISTRY/$ECR_REPOSITORY
 
-      - name: Checkout GitHub Action for Scan Image
-        uses: actions/checkout@v2
-        with:
-          repository: gdcorp-actions/container-scan
-          ref: main
-          token: ${{ secrets.SCANNER_ACTION_PAT_TOKEN }}
-          path: .github/actions/container-scan
+      # - name: Checkout GitHub Action for Scan Image
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: gdcorp-actions/container-scan
+      #     ref: main
+      #     token: ${{ secrets.SCANNER_ACTION_PAT_TOKEN }}
+      #     path: .github/actions/container-scan
 
-      - name: Scan Image For Vulnerabilities
-        continue-on-error: true
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        uses: ./.github/actions/container-scan
-        with:
-          container-name: ${{ env.ECR_REGISTRY}}/${{ env.ECR_REPOSITORY}}:latest
-          SCANNER_GOLDEN_AWS_SECRET_ACCESS_KEY_ID: ${{secrets.SCANNER_GOLDEN_AWS_SECRET_ACCESS_KEY_ID}}
-          SCANNER_GOLDEN_AWS_SECRET_TOKEN_VALUE: ${{secrets.SCANNER_GOLDEN_AWS_SECRET_TOKEN_VALUE}}
+      # - name: Scan Image For Vulnerabilities
+      #   continue-on-error: true
+      #   env:
+      #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      #   uses: ./.github/actions/container-scan
+      #   with:
+      #     container-name: ${{ env.ECR_REGISTRY}}/${{ env.ECR_REPOSITORY}}:latest
+      #     SCANNER_GOLDEN_AWS_SECRET_ACCESS_KEY_ID: ${{secrets.SCANNER_GOLDEN_AWS_SECRET_ACCESS_KEY_ID}}
+      #     SCANNER_GOLDEN_AWS_SECRET_TOKEN_VALUE: ${{secrets.SCANNER_GOLDEN_AWS_SECRET_TOKEN_VALUE}}
 
-      - name: Post status
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{github.token}}
-          script: |
-            const { statuses = [] } = await github.request('GET /repos/' + context.repo.owner + '/' + context.repo.repo + '/commits/' + context.sha + '/status', {
-              ref: context.sha,
-              owner: context.repo.owner,
-              repo: context.repo.repo
-            });
-            const fail = statuses.find(({state}) => state === 'failure');
-            if (fail) {
-              github.request('POST /repos/' + context.repo.owner + '/' + context.repo.repo + '/statuses/' + context.sha, {
-                sha: context.sha,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                state: 'failure',
-                context:  'prod/CirrusScan',
-                description:   fail.description,
-                target_url: 'https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/runs/' + context.runNumber
-              });
-            }
+      # - name: Post status
+      #   uses: actions/github-script@v3
+      #   with:
+      #     github-token: ${{github.token}}
+      #     script: |
+      #       const { statuses = [] } = await github.request('GET /repos/' + context.repo.owner + '/' + context.repo.repo + '/commits/' + context.sha + '/status', {
+      #         ref: context.sha,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo
+      #       });
+      #       const fail = statuses.find(({state}) => state === 'failure');
+      #       if (fail) {
+      #         github.request('POST /repos/' + context.repo.owner + '/' + context.repo.repo + '/statuses/' + context.sha, {
+      #           sha: context.sha,
+      #           owner: context.repo.owner,
+      #           repo: context.repo.repo,
+      #           state: 'failure',
+      #           context:  'prod/CirrusScan',
+      #           description:   fail.description,
+      #           target_url: 'https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/runs/' + context.runNumber
+      #         });
+      #       }
 
       - name: Deploy image to ECR and Update ECS Fargate Cluster with new image
         env:

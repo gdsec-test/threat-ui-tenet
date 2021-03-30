@@ -51,18 +51,44 @@ jobs:
     runs-on: self-hosted
     needs: checkout-code
     steps:
+      - name: Set env variables for deployment
+        id: set_vars
+        run: |
+          export $(grep -v '^#' .varenv | xargs)
+          echo ::set-output name=NODE_ENV::${NODE_ENV}
+          echo ::set-output name=GD_ROOT_DOMAIN::${GD_ROOT_DOMAIN}
+
+      - name: Set params for development env
+        if: steps.set_vars.outputs.NODE_ENV == 'development'
+        run: |
+          echo "AWS_DEPLOY_SECRET_ACCESS_KEY_ID=${{ secrets.DEV_AWS_SECRET_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_DEPLOY_SECRET_TOKEN_VALUE=${{ secrets.DEV_AWS_SECRET_TOKEN_VALUE }}" >> $GITHUB_ENV
+          echo "AWS_DEPLOY_ROLE=${{ secrets.DEV_AWS_DEPLOY_ROLE }}" >> $GITHUB_ENV
+          echo "AWS_CLUSTER_SSL_CERT_ID=6b8fa223-fcb8-4b58-b06e-49ee814098d0" >> $GITHUB_ENV
+
+      - name: Set params for production env
+        if: steps.set_vars.outputs.NODE_ENV == 'production'
+        run: |
+          echo "AWS_DEPLOY_SECRET_ACCESS_KEY_ID=${{ secrets.PROD_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_DEPLOY_SECRET_TOKEN_VALUE=${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "AWS_DEPLOY_ROLE=${{ secrets.PROD_AWS_DEPLOY_ROLE }}" >> $GITHUB_ENV
+          echo "AWS_CLUSTER_SSL_CERT_ID=0ed4b93f-b7ad-4dba-9102-572cf48cc9ad" >> $GITHUB_ENV
+
       - name: Configure AWS credentials using Cloud Key Based Service Accounts
         uses: aws-actions/configure-aws-credentials@1417e62aeacec5e7fbe447bb7712d50847507342
         with:
-          aws-access-key-id: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.DEV_AWS_SECRET_TOKEN_VALUE }}
-          role-to-assume: ${{ secrets.DEV_AWS_DEPLOY_ROLE }}
+          aws-access-key-id: ${{ env.AWS_DEPLOY_SECRET_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_DEPLOY_SECRET_TOKEN_VALUE }}
+          role-to-assume: ${{ env.AWS_DEPLOY_ROLE }}
           role-duration-seconds: 3600
           aws-region: us-west-2
+
       - name: Deploy / Update ECR sceptre deployment
         working-directory: ./sceptre
+        env:
+          AWS_CLUSTER_SSL_CERT_ID: ${{env.AWS_CLUSTER_SSL_CERT_ID}}
+          NODE_ENV: ${{env.NODE_ENV}}
         run: |
-          export $(grep -v '^#' ../.varenv | xargs)
           sceptre launch -y dev/us-west-2/threat-ui-tenet/ecr.yaml
           sceptre launch -y dev/us-west-2/threat-ui-tenet/iam-role.yaml
           sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-cluster.yaml
