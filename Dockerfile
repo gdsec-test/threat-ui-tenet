@@ -29,7 +29,8 @@ RUN mkdir /.cache && chown nobody /.cache
 # RUN chown -R nobody /app/build
 RUN npm rebuild node-sass
 
-CMD npx gasket build --env=${NODE_ENV}} && npx gasket start --env=${NODE_ENV}
+RUN echo ${NODE_ENV}
+CMD npx gasket build --env=${NODE_ENV} && npx gasket start --env=${NODE_ENV}
 
 EXPOSE 8443
 

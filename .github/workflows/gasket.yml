@@ -70,6 +70,7 @@ jobs:
       - name: Build docker container
         id: container
         run: |
+          echo $NODE_ENV
           export $(grep -v '^#' .varenv | xargs) && docker build --build-arg NODE_ENV=$NODE_ENV -t tmp . | while read line ; do echo "$(date)| $line"; done;
           echo "::set-output name=id::$(docker images -q tmp)"
 
