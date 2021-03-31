@@ -57,18 +57,25 @@ function getApiProxy(apiBaseUrl) {
 module.exports = {
   name: 'threatpi',
   hooks: {
-    middleware: function (gasket) {
-      return function (req, res, next) {
-        let apiBaseUrl = gasket.config.apiBaseUrl;
-        apiBaseUrl = 'https://api.threat.int.dev-gdcorp.tools';
-        if (process.env === 'production') {
-          apiBaseUrl = 'https://api.threat.int.gdcorp.tools';
-        }
-        console.log('process.env.NODE_ENV: ' + process.env.NODE_ENV);
-        console.log(apiBaseUrl);
-        req.getApiProxy = getApiProxy(apiBaseUrl);
-        next();
-      };
+    middleware: {
+      timing: {
+        after: ['@gasket/redux']
+      },
+      handler: function (gasket) {
+        return function (req, res, next) {
+          console.log('REDUX STATE');
+          console.log(req.store.getState());
+          let apiBaseUrl = gasket.config.apiBaseUrl;
+          apiBaseUrl = 'https://api.threat.int.dev-gdcorp.tools';
+          if (process.env === 'production') {
+            apiBaseUrl = 'https://api.threat.int.gdcorp.tools';
+          }
+          console.log('process.env.NODE_ENV: ' + process.env.NODE_ENV);
+          console.log(apiBaseUrl);
+          req.getApiProxy = getApiProxy(apiBaseUrl);
+          next();
+        };
+      }
     },
 
     express: function (gasket, app) {
