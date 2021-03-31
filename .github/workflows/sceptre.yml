@@ -3,7 +3,6 @@
 #
 # Requirements:
 # - An initialized npm project with tests
-# - A project.json with values for "version" and "scripts"["test"]
 #
 # Example values:
 # "version": "1.0.1",
@@ -11,9 +10,6 @@
 #     "test": "mocha test.js"
 # },
 #
-# - An .npmrc file containing:
-#
-# registry=https://npm.pkg.github.com/<organization>
 
 name: Update AWS Infrastructure
 

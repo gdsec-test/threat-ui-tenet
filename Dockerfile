@@ -8,6 +8,7 @@ USER root
 COPY app /app
 COPY .varenv .varenv
 
+
 WORKDIR /app
 
 RUN npm i
