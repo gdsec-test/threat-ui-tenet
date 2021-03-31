@@ -34,11 +34,13 @@ function getApiProxy(apiBaseUrl) {
     if (req.method !== 'GET') {
       payload.body = JSON.stringify(req.body);
     }
+    console.log('REQUEST ' + url);
     const response = await fetch(url, payload);
 
     if (response.status === 401) {
       const ssoLogin = getLoginUrlFromRequest(req);
       if (ssoLogin) {
+        console.log('REDIRECT TO LOGIN  ' + ssoLogin);
         originalResponse.status(401).send({ error: 'Unauthorized', ssoLogin });
       }
     } else {
@@ -57,7 +59,13 @@ module.exports = {
   hooks: {
     middleware: function (gasket) {
       return function (req, res, next) {
-        const apiBaseUrl = gasket.config.apiBaseUrl;
+        let apiBaseUrl = gasket.config.apiBaseUrl;
+        apiBaseUrl = 'https://api.threat.int.dev-gdcorp.tools';
+        if (process.env === 'production') {
+          apiBaseUrl = 'https://api.threat.int.gdcorp.tools';
+        }
+        console.log('process.env.NODE_ENV: ' + process.env.NODE_ENV);
+        console.log(apiBaseUrl);
         req.getApiProxy = getApiProxy(apiBaseUrl);
         next();
       };

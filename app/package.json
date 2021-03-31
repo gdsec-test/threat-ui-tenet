@@ -12,7 +12,7 @@
   "dependencies": {
     "@gasket/assets": "^5.6.0",
     "@gasket/auth": "^2.6.1",
-    "@gasket/cli": "^5.7.0",
+    "@gasket/cli": "^6.0.11",
     "@gasket/fetch": "^5.6.0",
     "@gasket/intl": "^5.7.0",
     "@gasket/log": "^5.6.0",

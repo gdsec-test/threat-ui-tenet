@@ -1,7 +1,7 @@
 module.exports = {
   plugins: {
     presets: ['@godaddy/webapp'],
-    add: ['@godaddy/gasket-plugin-auth', '@godaddy/gasket-plugin-proxy', '@gasket/mocha']
+    add: ['@godaddy/gasket-plugin-auth', '@godaddy/gasket-plugin-proxy', '@gasket/mocha', '@gasket/plugin-redux']
   },
   rigor: {
     serviceId: 'tenet'
