@@ -62,6 +62,7 @@ jobs:
           echo "AWS_DEPLOY_SECRET_TOKEN_VALUE=${{ secrets.DEV_AWS_SECRET_TOKEN_VALUE }}" >> $GITHUB_ENV
           echo "AWS_DEPLOY_ROLE=${{ secrets.DEV_AWS_DEPLOY_ROLE }}" >> $GITHUB_ENV
           echo "AWS_CLUSTER_SSL_CERT_ID=6b8fa223-fcb8-4b58-b06e-49ee814098d0" >> $GITHUB_ENV
+          echo "NODE_ENV=development" >> $GITHUB_ENV
 
       - name: Set params for production env
         if: steps.set_vars.outputs.NODE_ENV == 'production'
@@ -70,6 +71,7 @@ jobs:
           echo "AWS_DEPLOY_SECRET_TOKEN_VALUE=${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
           echo "AWS_DEPLOY_ROLE=${{ secrets.PROD_AWS_DEPLOY_ROLE }}" >> $GITHUB_ENV
           echo "AWS_CLUSTER_SSL_CERT_ID=0ed4b93f-b7ad-4dba-9102-572cf48cc9ad" >> $GITHUB_ENV
+          echo "NODE_ENV=production" >> $GITHUB_ENV
 
       - name: Configure AWS credentials using Cloud Key Based Service Accounts
         uses: aws-actions/configure-aws-credentials@1417e62aeacec5e7fbe447bb7712d50847507342
@@ -86,6 +88,7 @@ jobs:
           AWS_CLUSTER_SSL_CERT_ID: ${{env.AWS_CLUSTER_SSL_CERT_ID}}
           NODE_ENV: ${{env.NODE_ENV}}
         run: |
+          export $(grep -v '^#' ../.varenv | xargs)
           sceptre launch -y dev/us-west-2/threat-ui-tenet/ecr.yaml
           sceptre launch -y dev/us-west-2/threat-ui-tenet/iam-role.yaml
           sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-cluster.yaml
