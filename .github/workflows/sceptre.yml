@@ -89,6 +89,7 @@ jobs:
           NODE_ENV: ${{env.NODE_ENV}}
         run: |
           export $(grep -v '^#' ../.varenv | xargs)
+          export
           sceptre launch -y dev/us-west-2/threat-ui-tenet/ecr.yaml
           sceptre launch -y dev/us-west-2/threat-ui-tenet/iam-role.yaml
           sceptre launch -y dev/us-west-2/threat-ui-tenet/fargate-cluster.yaml
