@@ -40,7 +40,7 @@ jobs:
           echo "AWS_CLUSTER_SSL_CERT_ID=0ed4b93f-b7ad-4dba-9102-572cf48cc9ad" >> $GITHUB_ENV
           echo "NODE_ENV=production" >> $GITHUB_ENV
 
-      - uses: actions/setup-node@05f0551dbd620d7be8d92f9f7c1674ebf6bcb0eb
+      - uses: actions/setup-node@46071b5c7a2e0c34e49c3cb8a0e792e86e18d5ea
         with:
           node-version: 12
 
