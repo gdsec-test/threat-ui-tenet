@@ -74,7 +74,7 @@ jobs:
           echo "NODE_ENV=production" >> $GITHUB_ENV
 
       - name: Configure AWS credentials using Cloud Key Based Service Accounts
-        uses: aws-actions/configure-aws-credentials@1417e62aeacec5e7fbe447bb7712d50847507342
+        uses: aws-actions/configure-aws-credentials@0309c38ebd10f90dfbb3889431bcf4ea38088012
         with:
           aws-access-key-id: ${{ env.AWS_DEPLOY_SECRET_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.AWS_DEPLOY_SECRET_TOKEN_VALUE }}
