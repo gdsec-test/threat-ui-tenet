@@ -14,6 +14,9 @@ export const IOC_TYPE = {
   MITRE_SUBTECHNIQUE: 'mitre_subtechnique',
   MITRE_TACTIC: 'mitre_tactic',
   MITRE_TECHNIQUE: 'mitre_technique',
+  MITRE_MATRIX: 'mitre_matrix',
+  MITRE_GROUP: 'mitre_group',
+  MITRE_SOFTWARE: 'mitre_software',
   SHA1: 'sha1',
   SHA256: 'sha256',
   SHA512: 'sha512',
@@ -60,7 +63,10 @@ export const IOC_TYPE_DESC = {
   mitre_tactic: { desc: 'Mitre Tactic', id: 'mitre_tactic' },
   mitre_technique: { desc: 'Mitre Technique', id: 'mitre_technique' },
   mitre_subtechnique: { desc: 'Mitre Subtechnique', id: 'mitre_subtechnique' },
-  mitre_mitigation: { desc: 'Mitre Mitigation', id: 'mitre_mitigation' }
+  mitre_mitigation: { desc: 'Mitre Mitigation', id: 'mitre_mitigation' },
+  mitre_matrix: { desc: 'Mitre Matrix', id: 'mitre_matrix' },
+  mitre_group: { desc: 'Mitre Group', id: 'mitre_group' },
+  mitre_software: { desc: 'Mitre Software', id: 'mitre_software' }
 };
 
 export const THEMES = [
