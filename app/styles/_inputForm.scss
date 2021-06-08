@@ -233,6 +233,18 @@
     &mitre_mitigation {
       background: map-deep-get($palette-colors, 'gray', 'base', 'marker');
     }
+
+    &mitre_matrix {
+      background: map-deep-get($palette-colors, 'primary', 'base', 'marker');
+    }
+
+    &mitre_software {
+      background: map-deep-get($palette-colors, 'secondary', 'highlight', 'color');
+    }
+
+    &mitre_group {
+      background: map-deep-get($palette-colors, 'info', 'base', 'color');
+    }
   }
 
   .InputForm_IOC_Types_Legend_Value {
