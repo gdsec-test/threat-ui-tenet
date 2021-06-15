@@ -26,6 +26,18 @@ const DataParseSchema = {
       return { ...obj, Data: result };
     });
     return result.length === 1 ? result[0] : result;
+  },
+  urlhaus: (data = []) => {
+    const result = data.map((obj) => {
+      return { ...obj, Data: parsers.csv(obj.Data) };
+    });
+    return result.length === 1 ? result[0] : result;
+  },
+  virustotal: (data = []) => {
+    const result = data.map((obj) => {
+      return { ...obj, Data: parsers.csv(obj.Data) };
+    });
+    return result.length === 1 ? result[0] : result;
   }
 };
 
@@ -53,6 +65,12 @@ const DataExpandSchema = {
       Data: true
     },
     recordedfuture: {
+      Data: true
+    },
+    urlhaus: {
+      Data: true
+    },
+    virustotal: {
       Data: true
     }
   }
