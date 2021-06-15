@@ -83,6 +83,12 @@ const DataFormatSchema = {
           </a>
         )
       }
+    },
+    urlhaus: {
+      Data: {}
+    },
+    virustotal: {
+      Data: {}
     }
   }
 };
