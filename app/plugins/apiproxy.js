@@ -61,10 +61,7 @@ module.exports = {
       },
       handler: function (gasket) {
         return function (req, res, next) {
-          console.log('REDUX STATE');
-          console.log(req.store.getState());
           const apiBaseUrl = gasket.config.apiBaseUrl;
-          console.log(apiBaseUrl);
           req.getApiProxy = getApiProxy(apiBaseUrl);
           next();
         };

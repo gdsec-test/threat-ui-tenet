@@ -15,5 +15,7 @@
     "eslint-plugin-mocha": "^8.0.0",
     "eslint-plugin-react-hooks": "^4.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "path-parse": "^1.0.7"
+  }
 }

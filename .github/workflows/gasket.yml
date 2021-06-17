@@ -86,46 +86,34 @@ jobs:
         run: |
           docker tag ${{ steps.container.outputs.id }} $ECR_REGISTRY/$ECR_REPOSITORY
 
-      # - name: Checkout GitHub Action for Scan Image
-      #   uses: actions/checkout@v2
-      #   with:
-      #     repository: gdcorp-actions/container-scan
-      #     ref: main
-      #     token: ${{ secrets.SCANNER_ACTION_PAT_TOKEN }}
-      #     path: .github/actions/container-scan
+      - name: Configure AWS credentials using Cloud Key Based Service Accounts
+        uses: aws-actions/configure-aws-credentials@13d241b293754004c80624b5567555c4a39ffbe3
+        with:
+          aws-access-key-id: ${{ env.PROD_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.PROD_AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ env.PROD_AWS_DEPLOY_ROLE }}
+          role-duration-seconds: 3600
+          aws-region: us-east-1
 
-      # - name: Scan Image For Vulnerabilities
-      #   continue-on-error: true
-      #   env:
-      #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-      #   uses: ./.github/actions/container-scan
-      #   with:
-      #     container-name: ${{ env.ECR_REGISTRY}}/${{ env.ECR_REPOSITORY}}:latest
-      #     SCANNER_GOLDEN_AWS_SECRET_ACCESS_KEY_ID: ${{secrets.SCANNER_GOLDEN_AWS_SECRET_ACCESS_KEY_ID}}
-      #     SCANNER_GOLDEN_AWS_SECRET_TOKEN_VALUE: ${{secrets.SCANNER_GOLDEN_AWS_SECRET_TOKEN_VALUE}}
+      - name: Checkout GitHub Action for Scan Image
+        uses: actions/checkout@v2
+        with:
+          repository: gdcorp-actions/container-scan
+          ref: main
+          token: ${{ secrets.SCANNER_ACTION_PAT_TOKEN }}  # ask for this PAT, it is needed to checkout code for scanning
+          path: .github/actions/container-scan
 
-      # - name: Post status
-      #   uses: actions/github-script@v3
-      #   with:
-      #     github-token: ${{github.token}}
-      #     script: |
-      #       const { statuses = [] } = await github.request('GET /repos/' + context.repo.owner + '/' + context.repo.repo + '/commits/' + context.sha + '/status', {
-      #         ref: context.sha,
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo
-      #       });
-      #       const fail = statuses.find(({state}) => state === 'failure');
-      #       if (fail) {
-      #         github.request('POST /repos/' + context.repo.owner + '/' + context.repo.repo + '/statuses/' + context.sha, {
-      #           sha: context.sha,
-      #           owner: context.repo.owner,
-      #           repo: context.repo.repo,
-      #           state: 'failure',
-      #           context:  'prod/CirrusScan',
-      #           description:   fail.description,
-      #           target_url: 'https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/runs/' + context.runNumber
-      #         });
-      #       }
+
+      - name: Scan Images For Vulnerabilities
+        continue-on-error: true
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        uses: ./.github/actions/container-scan
+        with:
+          container-name: ${{ env.ECR_REGISTRY}}/${{ env.ECR_REPOSITORY}}
+          aws-access-key-id: ${{env.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{env.AWS_SECRET_ACCESS_KEY}}
+          aws-session-token: ${{env.AWS_SESSION_TOKEN}}
 
       - name: Deploy image to ECR and Update ECS Fargate Cluster with new image
         env:
