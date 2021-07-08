@@ -35,7 +35,8 @@ export const MODULES = {
   MITRE: 'mitre',
   TANIUM: 'tanium',
   URLHAUS: 'urlhaus',
-  GEOIP: 'geoip'
+  GEOIP: 'geoip',
+  PASSIVETOTAL: 'passivetotal'
 };
 
 export const JOB_STATUS = {

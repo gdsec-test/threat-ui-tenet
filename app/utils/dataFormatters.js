@@ -38,6 +38,12 @@ const DataParseSchema = {
       return { ...obj, Data: parsers.csv(obj.Data) };
     });
     return result.length === 1 ? result[0] : result;
+  },
+  passivetotal: (data = []) => {
+    const result = data.map((obj) => {
+      return { ...obj, Data: parsers.csv(obj.Data) };
+    });
+    return result.length === 1 ? result[0] : result;
   }
 };
 
@@ -71,6 +77,9 @@ const DataExpandSchema = {
       Data: true
     },
     virustotal: {
+      Data: true
+    },
+    passivetotal: {
       Data: true
     }
   }
@@ -106,6 +115,9 @@ const DataFormatSchema = {
       Data: {}
     },
     virustotal: {
+      Data: {}
+    },
+    passivetotal: {
       Data: {}
     }
   }
