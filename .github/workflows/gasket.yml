@@ -93,7 +93,7 @@ jobs:
           aws-secret-access-key: ${{ env.PROD_AWS_SECRET_ACCESS_KEY }}
           role-to-assume: ${{ env.PROD_AWS_DEPLOY_ROLE }}
           role-duration-seconds: 3600
-          aws-region: us-east-1
+          aws-region: us-west-2
 
       - name: Checkout GitHub Action for Scan Image
         uses: actions/checkout@v2
