@@ -191,7 +191,7 @@
     }
 
     &ip {
-      background: map-deep-get($palette-colors, 'danger', 'base', 'marker');
+      background: map-deep-get($palette-colors, 'warning', 'midrange', 'marker');
 
       &:hover {
         &::after {
