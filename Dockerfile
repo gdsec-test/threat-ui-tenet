@@ -20,16 +20,17 @@ RUN apk add openssl
 RUN export $(grep -v '^#' ../.varenv | xargs) && npm run createcert
 
 RUN mkdir /.cache && chown nobody /.cache
-# RUN chown -R nobody /app
-# RUN chown -R nobody /app/.next
-# RUN chown -R nobody /app/build
+RUN chown -R nobody .
+#RUN chown nobody /app
+#RUN chown -R nobody /app/.next
+#RUN chown -R nobody /app/build
 RUN npm rebuild node-sass
 
 RUN echo ${NODE_ENV}
 # Build application
 RUN npx gasket build --env=${NODE_ENV}
 
-CMD npx gasket build --env=${NODE_ENV} && npx gasket start --env=${NODE_ENV}
+CMD npx gasket start --env=${NODE_ENV}
 
 EXPOSE 8443
 
