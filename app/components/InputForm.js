@@ -23,10 +23,12 @@ const getTooltip = (caption, message) => (
 );
 
 class InputForm extends React.Component {
+  isNoIOCTypesDetected;
   constructor() {
     super(...arguments);
     this.state = this.resetForm();
     this.state.isLoading = true;
+    this.fileUpload = React.createRef();
     this.onIOCModuleChange = this.onIOCModuleChange.bind(this);
     this.detectIOCType = this.detectIOCType.bind(this);
     this.createJob = this.createJob.bind(this);
@@ -70,7 +72,7 @@ class InputForm extends React.Component {
       detectedIOCTypes,
       detectedIOCModules,
       selectedIOCModules: getKeys(detectedIOCModules).map((_, i) => i),
-      isNoIOCTypesDetected: !IOCTypeNames.find((type) => type !== 'unknown')
+      isNoIOCTypesDetected: !IOCTypeNames.find((type) => type.toLowerCase() !== 'unknown')
     });
   }
 
@@ -93,6 +95,7 @@ class InputForm extends React.Component {
       reader.onload = () => {
         const text = reader.result;
         this.detectIOCType(text);
+        this.fileUpload.current.resetFiles();
       };
       reader.readAsText(file);
     });
@@ -107,7 +110,8 @@ class InputForm extends React.Component {
       submittedJobs: [],
       isLoading: false,
       isNoIOCTypesDetected: true.valueOf,
-      tags: []
+      tags: [],
+      files: []
     };
   }
 
@@ -241,10 +245,17 @@ class InputForm extends React.Component {
         <div className='InputForm_IOCValue_Group'>
           <div className='InputForm_FileUpload'>
             <FileUpload
+              ref={this.fileUpload}
               accept='text/plain'
+              multiple={false}
+              maxSizeError={true}
+              duplicateError={true}
               onChange={this.readFromFile}
               label={
-                <Fragment>Parse file{getTooltip('', 'You can upload file with IOC values to be checked')}</Fragment>
+                <Fragment>
+                  {/* eslint-disable-next-line max-len */}
+                  Parse file{getTooltip('', 'You can upload a text file with IOC values to be checked. IOCs can be comma-separated, space-separated or each IOC can be on a new line. Types found will be updated in 1-2 seconds')}
+                </Fragment>
               }
               buttonLabel='sasdf'
               showFiles={false}
@@ -258,18 +269,21 @@ class InputForm extends React.Component {
             placeholder='Start typing IOC'
             autoComplete='off'
             highlight={() => {
-              return Object.keys(detectedIOCTypes || {}).map((type) => {
-                return {
-                  highlight: new RegExp(detectedIOCTypes[type].join('|').replaceAll('\\', '\\\\'), 'img'),
-                  className: `InputForm_Hightlight_${type.toLowerCase()}`
-                };
-              });
+              try {
+                return Object.keys(detectedIOCTypes || {}).map((type) => {
+                  return {
+                    highlight: new RegExp(detectedIOCTypes[type].join('|').replaceAll('\\', '\\\\'), 'img'),
+                    className: `InputForm_Hightlight_${type.toLowerCase()}`
+                  };
+                });
+              } catch (err) { this.resetForm(); }
             }}
             onChange={({ target: { value } }) => this.detectIOCType(value)}
           />
           <p className='InputForm_IOC_Types_Legend'>
             Types found:{' '}
-            {Object.keys(detectedIOCTypes || {}).map((type) => {
+            {
+              Object.keys(detectedIOCTypes || {}).map((type) => {
               return (
                 <span
                   key={type}
@@ -314,7 +328,7 @@ class InputForm extends React.Component {
         </Dropdown>
         {isNoIOCTypesDetected && (
           <div style={{ color: 'red' }} className='mt-3'>
-            {getTooltip('No IOC Types recognized. Cannot submit jobs', 'All IOCs are Unkown to be analized')}
+            {getTooltip('No IOC Types recognized. Cannot submit jobs.', 'All IOCs are Unknown')}
           </div>
         )}
         <Button disabled={isNoIOCTypesDetected} design='primary' title='Submit' type='submit'>
