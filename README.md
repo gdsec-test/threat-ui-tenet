@@ -24,6 +24,8 @@ Download all 6 files from links below (_.crt, _.key and intermediate \*.crt) for
 - https://cloud.int.godaddy.com/security/certs/5f38c890db3da4d44a21892d13961943
 - https://cloud.int.godaddy.com/security/certs/a6b3bdb3dbade458fe6ec170ba9619e5
 
+For local development environement, append **"local."** to all 6 files in your (_.cert, _.key and intermediate \*.crt) local **`./app/cert`** folder
+
 ### 4) Install NodeJS + NPM, NPX and Pre-Commit. Recommended version 12.16.1, or up to 14.x.x
 
 **NodeJS + NPM**: Can use one of next sources:
@@ -50,6 +52,8 @@ cd app && npm install
 ```
 npm run local
 ```
+
+Troubleshooting tip: If **npm run local** fails, manually install dependencies or peer dependencies which are not downloaded automatically (for example, gasket/plugin-nextjs)
 
 Go to https://local.ui.threat.int.dev-gdcorp.tools:8443 in favorite browser.
 It supports live reload and code update at least for client-side code (no need to restart server)
