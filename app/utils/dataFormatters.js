@@ -45,6 +45,12 @@ const DataParseSchema = {
     });
     return result.length === 1 ? result[0] : result;
   },
+  trustar: (data = []) => {
+    const result = data.map((obj) => {
+      return { ...obj, Data: parsers.csv(obj.Data) };
+    });
+    return result.length === 1 ? result[0] : result;
+  },
   zerobounce: (data = []) => {
     const result = data.map((obj) => {
       return { ...obj, Data: parsers.csv(obj.Data) };
@@ -88,6 +94,9 @@ const DataExpandSchema = {
     passivetotal: {
       Data: true
     },
+    trustar: {
+      Data: true
+    },
     zerobounce: {
       Data: true
     }
@@ -127,6 +136,9 @@ const DataFormatSchema = {
       Data: {}
     },
     passivetotal: {
+      Data: {}
+    },
+    trustar: {
       Data: {}
     },
     zerobounce: {
