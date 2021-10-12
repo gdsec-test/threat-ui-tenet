@@ -36,7 +36,9 @@ export const MODULES = {
   TANIUM: 'tanium',
   URLHAUS: 'urlhaus',
   GEOIP: 'geoip',
-  PASSIVETOTAL: 'passivetotal'
+  PASSIVETOTAL: 'passivetotal',
+  TRUSTAR: 'trustar',
+  ZEROBOUNCE: 'zerobounce'
 };
 
 export const JOB_STATUS = {
