@@ -56,6 +56,12 @@ const DataParseSchema = {
       return { ...obj, Data: parsers.csv(obj.Data) };
     });
     return result.length === 1 ? result[0] : result;
+  },
+  nvd: (data = []) => {
+    const result = data.map((obj) => {
+      return { ...obj, Data: parsers.csv(obj.Data) };
+    });
+    return result.length === 1 ? result[0] : result;
   }
 };
 
@@ -98,6 +104,9 @@ const DataExpandSchema = {
       Data: true
     },
     zerobounce: {
+      Data: true
+    },
+    nvd: {
       Data: true
     }
   }
@@ -142,6 +151,9 @@ const DataFormatSchema = {
       Data: {}
     },
     zerobounce: {
+      Data: {}
+    },
+    nvd: {
       Data: {}
     }
   }
