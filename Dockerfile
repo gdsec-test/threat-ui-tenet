@@ -2,22 +2,23 @@ FROM 764525110978.dkr.ecr.us-west-2.amazonaws.com/alpine-node:14.17.0-alpine-3.1
 
 ARG NODE_ENV
 ENV NODE_ENV=$NODE_ENV
+ARG GD_ROOT_DOMAIN
+ENV GD_ROOT_DOMAIN=$GD_ROOT_DOMAIN
 
 USER root
 COPY app /app
-COPY .varenv .varenv
 
 
 WORKDIR /app
 
 RUN npm i
-RUN export $(grep -v '^#' ../.varenv | xargs) && npm prune
+RUN npm prune
 
 RUN apk add openssl
 
 # Generate self-signed cert thats used by the gasket service (check plugins/deploy-plugin.js)
 
-RUN export $(grep -v '^#' ../.varenv | xargs) && npm run createcert
+RUN npm run createcert
 
 RUN mkdir /.cache && chown nobody /.cache
 RUN chown -R nobody .

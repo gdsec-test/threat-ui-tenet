@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "description": "Threat API UI aka Tenet",
   "scripts": {
-    "createcert": "export $(grep -v '^#' ../.varenv | xargs) && rm -ifr cert && mkdir -p cert && openssl genrsa -des3 -out ./cert/server.origKey -passout pass:server 1024 && openssl req -new -key ./cert/server.origKey  -out ./cert/server.csr  -subj \"/C=US/ST=Arizona/L=Scottsdale/O=Go Daddy/OU=Product Security/CN=ui.threat.int.$GD_ROOT_DOMAIN/emailAddress=ogomozov@godaddy.com\"  -passin pass:server && openssl rsa -in ./cert/server.origKey  -out ./cert/server.key -passin pass:server && openssl x509 -req -days 3650  -in ./cert/server.csr  -signkey ./cert/server.key  -out ./cert/server.crt && rm ./cert/server.origKey",
-    "build": "export $(grep -v '^#' ../.varenv | xargs) && gasket build --env=$NODE_ENV",
-    "start": "export $(grep -v '^#' ../.varenv | xargs) && gasket start --env=$NODE_ENV",
+    "createcert": "rm -ifr cert && mkdir -p cert && openssl genrsa -des3 -out ./cert/server.origKey -passout pass:server 1024 && openssl req -new -key ./cert/server.origKey  -out ./cert/server.csr  -subj \"/C=US/ST=Arizona/L=Scottsdale/O=Go Daddy/OU=Product Security/CN=ui.threat.int.$GD_ROOT_DOMAIN/emailAddress=ogomozov@godaddy.com\"  -passin pass:server && openssl rsa -in ./cert/server.origKey  -out ./cert/server.key -passin pass:server && openssl x509 -req -days 3650  -in ./cert/server.csr  -signkey ./cert/server.key  -out ./cert/server.crt && rm ./cert/server.origKey",
+    "build": "gasket build --env=development",
+    "start": "gasket start --env=development",
     "local": "gasket local --env=local",
     "local:debug": "npx -n --inspect gasket local --env=local"
   },
