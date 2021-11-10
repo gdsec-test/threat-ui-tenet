@@ -26,9 +26,9 @@ jobs:
   tartufo-code-secrets-scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@1e204e9a9253d643386038d443f96446fa156a97 # Checkout this repository
+      - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # Checkout this repository
       - name: Checkout GoDaddy Actions repo # Checkout shared actions repository gd-actions
-        uses: actions/checkout@1e204e9a9253d643386038d443f96446fa156a97
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
         with:
           repository: gdcorp-cp/gd-actions
           token: ${{ secrets.REPO_CLONE_TOKEN_SA_PAT }} # PAT with read access to gdcorp-cp/gd-actions
@@ -43,7 +43,7 @@ jobs:
     needs: tartufo-code-secrets-scan
     steps:
       - name: Checkout this repo on to a job runner.
-        uses: actions/checkout@1e204e9a9253d643386038d443f96446fa156a97 # Checkout this repository.
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # Checkout this repository.
 
   deploy-fargate-infrastructure:
     runs-on: self-hosted
