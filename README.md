@@ -81,3 +81,5 @@ If code pushed to `develop` branch, it will be automatically deployed to `DEV` e
 For production
 
 If code pushed to `main` branch, it will be automatically deployed to `PROD` env
+
+Fixing security vulnerability issues - https://docs.npmjs.com/auditing-package-dependencies-for-security-vulnerabilities
