@@ -39,6 +39,7 @@ export const MODULES = {
   PASSIVETOTAL: 'passivetotal',
   TRUSTAR: 'trustar',
   ZEROBOUNCE: 'zerobounce',
+  URLSCANIO: 'urlscanio',
   SUCURI: 'sucuri'
 };
 

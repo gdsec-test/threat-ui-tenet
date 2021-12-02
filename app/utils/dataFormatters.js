@@ -63,6 +63,12 @@ const DataParseSchema = {
     });
     return result.length === 1 ? result[0] : result;
   },
+  urlscanio: (data = []) => {
+    const result = data.map((obj) => {
+      return { ...obj, Data: parsers.csv(obj.Data) };
+    });
+    return result.length === 1 ? result[0] : result;
+  },
   sucuri: (data = []) => {
     const result = data.map((obj) => {
       return { ...obj, Data: parsers.csv(obj.Data) };
@@ -115,6 +121,9 @@ const DataExpandSchema = {
     nvd: {
       Data: true
     },
+    urlscanio: {
+      Data: true
+    },
     sucuri: {
       Data: true
     }
@@ -163,6 +172,9 @@ const DataFormatSchema = {
       Data: {}
     },
     nvd: {
+      Data: {}
+    },
+    urlscanio: {
       Data: {}
     },
     sucuri: {
