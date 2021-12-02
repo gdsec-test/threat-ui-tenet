@@ -69,7 +69,7 @@ jobs:
           echo "GD_ROOT_DOMAIN=gdcorp.tools" >> $GITHUB_ENV
 
       - name: Configure AWS credentials using Cloud Key Based Service Accounts
-        uses: aws-actions/configure-aws-credentials@0d9a5be0dceea74e09396820e1e522ba4a110d2f
+        uses: aws-actions/configure-aws-credentials@ea7b857d8a33dc2fb4ef5a724500044281b49a5e
         with:
           aws-access-key-id: ${{ env.AWS_DEPLOY_SECRET_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.AWS_DEPLOY_SECRET_TOKEN_VALUE }}
