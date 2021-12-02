@@ -38,7 +38,8 @@ export const MODULES = {
   GEOIP: 'geoip',
   PASSIVETOTAL: 'passivetotal',
   TRUSTAR: 'trustar',
-  ZEROBOUNCE: 'zerobounce'
+  ZEROBOUNCE: 'zerobounce',
+  URLSCANIO: 'urlscanio'
 };
 
 export const JOB_STATUS = {
