@@ -39,7 +39,8 @@ export const MODULES = {
   PASSIVETOTAL: 'passivetotal',
   TRUSTAR: 'trustar',
   ZEROBOUNCE: 'zerobounce',
-  URLSCANIO: 'urlscanio'
+  URLSCANIO: 'urlscanio',
+  SUCURI: 'sucuri'
 };
 
 export const JOB_STATUS = {

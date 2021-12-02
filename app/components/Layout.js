@@ -2,7 +2,7 @@ import React from 'react';
 import Head from '../components/head';
 import Link from 'next/link';
 import { Button } from '@ux/uxcore2';
-import { withLocaleRequired } from '@gasket/intl';
+import { withLocaleRequired } from '@gasket/react-intl';
 import { withRouter } from 'next/router';
 import Arrow from '@ux/icon/link-arrow';
 import '@ux/icon/link-arrow/index.css';
@@ -28,4 +28,4 @@ export const Layout = ({ children, links = [], router }) => (
   </div>
 );
 
-export default withLocaleRequired('threat-ui-tenet')(withRouter(Layout));
+export default withLocaleRequired()(withRouter(Layout));

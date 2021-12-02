@@ -19,10 +19,14 @@ Copy content of secret https://us-west-2.console.aws.amazon.com/secretsmanager/h
 
 ### 3) Download SSL certificates
 
-Download all 6 files from links below (_.crt, _.key and intermediate \*.crt) for DEV and PROD env and save them in **`./app/cert`** folder
+Download files from links below (_.crt, _.key) for Local env and save them in **`./app/cert`** folder
 
-- https://cloud.int.godaddy.com/security/certs/5f38c890db3da4d44a21892d13961943
-- https://cloud.int.godaddy.com/security/certs/a6b3bdb3dbade458fe6ec170ba9619e5
+- https://cloud.int.godaddy.com/security/certs/9cf79b721bceac10ddbe21be6e4bcba6 - local development
+
+Additionally there are next SSL certificates for other environments
+
+- https://cloud.int.godaddy.com/security/certs/5f38c890db3da4d44a21892d13961943 - dev environment (not needed for local development)
+- https://cloud.int.godaddy.com/security/certs/a6b3bdb3dbade458fe6ec170ba9619e5 - production (not needed for local development)
 
 For local development environement, append **"local."** to all 6 files in your (_.cert, _.key and intermediate \*.crt) local **`./app/cert`** folder
 
@@ -54,6 +58,7 @@ npm run local
 ```
 
 Troubleshooting tip: If **npm run local** fails, manually install dependencies or peer dependencies which are not downloaded automatically (for example, gasket/plugin-nextjs)
+For proper upgrade or npm packages issues it is recommened to use `@godaddy/gasket-upgrade-cli` tool (https://github.secureserver.net/gasket/gasket/blob/master/docs/upgrades.md)
 
 Go to https://local.ui.threat.int.dev-gdcorp.tools:8443 in favorite browser.
 It supports live reload and code update at least for client-side code (no need to restart server)
@@ -68,18 +73,14 @@ Go to `chrome://inspect` in Chrome browser and open Chrome Dev Tools for your ba
 
 ## Deploy in different env
 
-By default automatci deployments happen in dev env. To deploy manually in production env, we need to update .varenv file
+Automatic deployments are setup from `main` and `develop`
 
 For development
 
-```bash
-NODE_ENV=development
-GD_ROOT_DOMAIN=dev-gdcorp.tools
-```
+If code pushed to `develop` branch, it will be automatically deployed to `DEV` env
 
 For production
 
-```bash
-NODE_ENV=production
-GD_ROOT_DOMAIN=gdcorp.tools
-```
+If code pushed to `main` branch, it will be automatically deployed to `PROD` env
+
+Fixing security vulnerability issues - https://docs.npmjs.com/auditing-package-dependencies-for-security-vulnerabilities

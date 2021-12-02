@@ -1,13 +1,11 @@
 name: Deploy New Build
 
 on:
-  workflow_dispatch:
   push:
-    branches: [main]
+    branches: [main, develop]
     paths:
       - "app/**"
       - "Dockerfile"
-      - ".varenv"
       - ".github/workflows/gasket.yml"
 
 jobs:
@@ -16,44 +14,39 @@ jobs:
       ECR_REPOSITORY: com.godaddy.threat-ui-tenet
     runs-on: self-hosted
     steps:
-      - name: Set env variables for deployment
-        id: set_vars
-        run: |
-          export $(grep -v '^#' .varenv | xargs)
-          echo ::set-output name=NODE_ENV::${NODE_ENV}
-          echo ::set-output name=GD_ROOT_DOMAIN::${GD_ROOT_DOMAIN}
-
       - name: Set params for development env
-        if: steps.set_vars.outputs.NODE_ENV == 'development'
+        if: github.ref == 'refs/heads/develop'
         run: |
           echo "AWS_DEPLOY_SECRET_ACCESS_KEY_ID=${{ secrets.DEV_AWS_SECRET_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_DEPLOY_SECRET_TOKEN_VALUE=${{ secrets.DEV_AWS_SECRET_TOKEN_VALUE }}" >> $GITHUB_ENV
           echo "AWS_DEPLOY_ROLE=${{ secrets.DEV_AWS_DEPLOY_ROLE }}" >> $GITHUB_ENV
           echo "AWS_CLUSTER_SSL_CERT_ID=6b8fa223-fcb8-4b58-b06e-49ee814098d0" >> $GITHUB_ENV
           echo "NODE_ENV=development" >> $GITHUB_ENV
+          echo "GD_ROOT_DOMAIN=dev-gdcorp.tools" >> $GITHUB_ENV
 
       - name: Set params for production env
-        if: steps.set_vars.outputs.NODE_ENV == 'production'
+        if: github.ref == 'refs/heads/main'
         run: |
           echo "AWS_DEPLOY_SECRET_ACCESS_KEY_ID=${{ secrets.PROD_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_DEPLOY_SECRET_TOKEN_VALUE=${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
           echo "AWS_DEPLOY_ROLE=${{ secrets.PROD_AWS_DEPLOY_ROLE }}" >> $GITHUB_ENV
           echo "AWS_CLUSTER_SSL_CERT_ID=0ed4b93f-b7ad-4dba-9102-572cf48cc9ad" >> $GITHUB_ENV
           echo "NODE_ENV=production" >> $GITHUB_ENV
+          echo "GD_ROOT_DOMAIN=gdcorp.tools" >> $GITHUB_ENV
 
-      - uses: actions/setup-node@25316bbc1f10ac9d8798711f44914b1cf3c4e954
+      - uses: actions/setup-node@04c56d2f954f1e4c69436aa54cfef261a018f458
         with:
           node-version: 12
 
       - name: Checkout this repo on to a job runner.
-        uses: actions/checkout@1e204e9a9253d643386038d443f96446fa156a97 # Checkout this repository.
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # Checkout this repository.
 
       - name: Install node modules for root folder
         run: |
           npm i
 
       - name: Configure AWS credentials using Cloud Key Based Service Accounts
-        uses: aws-actions/configure-aws-credentials@0d9a5be0dceea74e09396820e1e522ba4a110d2f
+        uses: aws-actions/configure-aws-credentials@ea7b857d8a33dc2fb4ef5a724500044281b49a5e
         with:
           aws-access-key-id: ${{ env.AWS_DEPLOY_SECRET_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.AWS_DEPLOY_SECRET_TOKEN_VALUE }}
@@ -73,8 +66,7 @@ jobs:
       - name: Build docker container
         id: container
         run: |
-          echo $NODE_ENV
-          export $(grep -v '^#' .varenv | xargs) && docker build --build-arg NODE_ENV=$NODE_ENV -t tmp . | while read line ; do echo "$(date)| $line"; done;
+          docker build --build-arg NODE_ENV=${{ env.NODE_ENV }} --build-arg GD_ROOT_DOMAIN=${{ env.GD_ROOT_DOMAIN }} -t tmp . | while read line ; do echo "$(date)| $line"; done;
           echo "::set-output name=id::$(docker images -q tmp)"
 
       - name: Login to Amazon ECR
@@ -88,7 +80,7 @@ jobs:
           docker tag ${{ steps.container.outputs.id }} $ECR_REGISTRY/$ECR_REPOSITORY
 
       - name: Configure AWS credentials using Cloud Key Based Service Accounts
-        uses: aws-actions/configure-aws-credentials@0d9a5be0dceea74e09396820e1e522ba4a110d2f
+        uses: aws-actions/configure-aws-credentials@ea7b857d8a33dc2fb4ef5a724500044281b49a5e
         with:
           aws-access-key-id: ${{ env.PROD_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.PROD_AWS_SECRET_ACCESS_KEY }}
@@ -97,7 +89,7 @@ jobs:
           aws-region: us-west-2
 
       - name: Checkout GitHub Action for Scan Image
-        uses: actions/checkout@1e204e9a9253d643386038d443f96446fa156a97
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
         with:
           repository: gdcorp-actions/container-scan
           ref: main

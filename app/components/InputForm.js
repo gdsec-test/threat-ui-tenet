@@ -68,11 +68,21 @@ class InputForm extends React.Component {
         );
       }
     });
+    let highlightWithinTextarea = [];
+    try {
+      highlightWithinTextarea = Object.keys(detectedIOCTypes || {}).map((type) => {
+        return {
+          highlight: new RegExp(detectedIOCTypes[type].join('|').replaceAll('\\', '\\\\'), 'img'),
+          className: `InputForm_Hightlight_${type.toLowerCase()}`
+        };
+      });
+    } catch (err) { this.resetForm(); }
     this.setState({
       detectedIOCTypes,
       detectedIOCModules,
       selectedIOCModules: getKeys(detectedIOCModules).map((_, i) => i),
-      isNoIOCTypesDetected: !IOCTypeNames.find((type) => type.toLowerCase() !== 'unknown')
+      isNoIOCTypesDetected: !IOCTypeNames.find((type) => type.toLowerCase() !== 'unknown'),
+      highlightWithinTextarea
     });
   }
 
@@ -111,7 +121,8 @@ class InputForm extends React.Component {
       isLoading: false,
       isNoIOCTypesDetected: true.valueOf,
       tags: [],
-      files: []
+      files: [],
+      highlightWithinTextarea: []
     };
   }
 
@@ -208,7 +219,8 @@ class InputForm extends React.Component {
       isLoading,
       isNoIOCTypesDetected,
       tags,
-      textAreaValue
+      textAreaValue,
+      highlightWithinTextarea
     } = this.state;
     if (isLoading) {
       return <Loader inline size='lg' text='Loading Input Form...' />;
@@ -257,29 +269,20 @@ class InputForm extends React.Component {
                   Parse file{getTooltip('', 'You can upload a text file with IOC values to be checked. IOCs can be comma-separated, space-separated or each IOC can be on a new line. Types found will be updated in 1-2 seconds')}
                 </Fragment>
               }
-              buttonLabel='sasdf'
+              buttonLabel='Parse File'
               showFiles={false}
             />
           </div>
-          <HighlightWithinTextarea
-            key={`textIOCinput`}
-            name='IOC'
-            value={textAreaValue}
-            containerClassName='InputForm_IOCValue'
-            placeholder='Start typing IOC'
-            autoComplete='off'
-            highlight={() => {
-              try {
-                return Object.keys(detectedIOCTypes || {}).map((type) => {
-                  return {
-                    highlight: new RegExp(detectedIOCTypes[type].join('|').replaceAll('\\', '\\\\'), 'img'),
-                    className: `InputForm_Hightlight_${type.toLowerCase()}`
-                  };
-                });
-              } catch (err) { this.resetForm(); }
-            }}
-            onChange={({ target: { value } }) => this.detectIOCType(value)}
-          />
+          <div className='InputForm_IOCValue'>
+            <HighlightWithinTextarea
+              key={`textIOCinput`}
+              name='IOC'
+              value={textAreaValue}
+              placeholder='Start typing IOC'
+              highlight={highlightWithinTextarea}
+              onChange={(value) => this.detectIOCType(value)}
+            />
+          </div>
           <p className='InputForm_IOC_Types_Legend'>
             Types found:{' '}
             {
