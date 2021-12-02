@@ -8,16 +8,10 @@
 
   .InputForm_IOCValue {
     border-radius: 2px;
+    border: 1px solid black;
     width: 100%;
-
-    div:first-child {
-      pointer-events: none;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 200px;
-    }
+    min-height: 200px;
+    margin-bottom: 20px;
   }
 
   .InputForm_Tags_List {
@@ -61,11 +55,14 @@
     &::after {
       position: absolute;
       transform: none;
-      color: red;
+      color: #50ff78cc;
       width: fit-content;
-      left: 0;
-      right: 0;
+      bottom: 0px;
+      z-index: 10000000;
       margin: auto;
+      font-weight: 900;
+      font-size: 40px;
+
     }
   }
 

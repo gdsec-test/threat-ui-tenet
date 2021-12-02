@@ -1,5 +1,5 @@
 import React from 'react';
-import { withLocaleRequired } from '@gasket/intl';
+import { withLocaleRequired } from '@gasket/react-intl';
 import Layout from '../components/Layout';
 import JobList from '../components/JobList';
 
@@ -9,4 +9,4 @@ export const IndexPage = () => (
   </Layout>
 );
 
-export default withLocaleRequired('threat-ui-tenet')(IndexPage);
+export default withLocaleRequired('/locales', { initialProps: true })(IndexPage);

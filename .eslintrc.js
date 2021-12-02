@@ -20,6 +20,7 @@ module.exports = {
     indent: 'off',
     'max-len': 'error',
     'max-params': ['error', 4],
+    'max-statements': ['warn', 20],
     'no-unused-vars': ['error', { ignoreRestSiblings: true }],
     'react/jsx-curly-spacing': 'off',
     'react-hooks/rules-of-hooks': 'error',

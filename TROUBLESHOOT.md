@@ -90,6 +90,7 @@ Above issues can have next types:
 2. CICD (Github Actions) build application and deploy image to ECR - Find broken steps in https://github.com/gdcorp-infosec/threat-ui-tenet/tree/main/.github/workflows/gasket.yml
 
 3. Front-End Gasket Application - fix code in https://github.com/gdcorp-infosec/threat-ui-tenet/tree/main/app
+For proper upgrade or npm packages issues it is recommened to use `@godaddy/gasket-upgrade-cli` tool (https://github.secureserver.net/gasket/gasket/blob/master/docs/upgrades.md)
 
 ## `CONTACT US:`
 

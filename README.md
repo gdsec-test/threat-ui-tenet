@@ -58,6 +58,7 @@ npm run local
 ```
 
 Troubleshooting tip: If **npm run local** fails, manually install dependencies or peer dependencies which are not downloaded automatically (for example, gasket/plugin-nextjs)
+For proper upgrade or npm packages issues it is recommened to use `@godaddy/gasket-upgrade-cli` tool (https://github.secureserver.net/gasket/gasket/blob/master/docs/upgrades.md)
 
 Go to https://local.ui.threat.int.dev-gdcorp.tools:8443 in favorite browser.
 It supports live reload and code update at least for client-side code (no need to restart server)

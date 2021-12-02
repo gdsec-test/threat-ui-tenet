@@ -1,3 +1,5 @@
+const path = require('path');
+
 const baseDevConfig = {
   redux: {
     initState: {
@@ -10,7 +12,6 @@ const baseDevConfig = {
   rootDomain: 'dev-gdcorp.tools',
   apiBaseUrl: 'https://api.threat.int.dev-gdcorp.tools'
 };
-
 module.exports = {
   plugins: {
     presets: ['@godaddy/webapp'],
@@ -20,8 +21,7 @@ module.exports = {
     serviceId: 'tenet'
   },
   environments: {
-    local: {
-      ...baseDevConfig,
+    local: { ...baseDevConfig,
       hostname: 'local.ui.threat.int.dev-gdcorp.tools',
       https: {
         root: './cert',
@@ -48,5 +48,14 @@ module.exports = {
       app: 'threat-ui-tenet',
       header: 'internal-header'
     }
+  },
+  nextConfig: {
+    future: {
+      webpack5: true
+    }
+  },
+  intl: {
+    localesDir: './locales',
+    serveStatic: true
   }
 };
