@@ -1,3 +1,0 @@
-environment: dev
-certificate_id: {{environment_variable.AWS_CLUSTER_SSL_CERT_ID}}
-node_env: {{environment_variable.NODE_ENV}}

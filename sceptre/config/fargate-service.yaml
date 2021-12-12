@@ -19,4 +19,4 @@ parameters:
   Memory: "2GB"
   EnvironmentVariablesJson: "[{\"Name\":\"NODE_ENV\",\"Value\":\"{{node_env}}\"},{\"Name\":\"AWS\",\"Value\":\"true\"}]"
 dependencies:
-  - {{environment}}/{{region}}/{{project_code}}/fargate-cluster.yaml
+  - fargate-cluster.yaml
