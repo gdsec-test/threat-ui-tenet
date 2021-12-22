@@ -1,6 +1,6 @@
-import React from 'react';
-import Papa from 'papaparse';
 import get from 'lodash.get';
+import Papa from 'papaparse';
+import React from 'react';
 
 const parsers = {
   csv: (data) => Papa.parse(data, { header: true, skipEmptyLines: true }).data,
@@ -8,6 +8,41 @@ const parsers = {
 };
 
 const DataParseSchema = {
+  apivoid: (data = []) => {
+    const BlacklistedProp = 'Blacklisted';
+    const result = data.map((obj) => {
+      const IOCsList = { ...obj, Data: parsers.csv(obj.Data) };
+      IOCsList.Data = IOCsList.Data.reduce((acc, item) => {
+        const { IoC, Blacklisted = '', ...rest } = item;
+        acc[IoC] = acc[IoC] || [];
+        acc[IoC].push({ Blacklisted, ...rest });
+        if (Blacklisted.toLowerCase() === 'true') {
+          acc[BlacklistedProp][IoC] = acc[BlacklistedProp][IoC] || [];
+          acc[BlacklistedProp][IoC].push(item);
+        }
+        return acc;
+      }, {[BlacklistedProp]: {}});
+      IOCsList.Metadata = IOCsList.Metadata.reduce((acc, item) => {
+      let IOC = 'unknown';
+      const t = item.split(',');
+      const itemProps = t.reduce((itemAcc, propItem) => {
+        const props = propItem.split(':');
+        const value = props.slice(1, props.length).join('');
+        if (props[0] === 'IOC') {
+          IOC = value;
+        } else {
+          itemAcc[props[0]] = value;
+        }
+        return itemAcc;
+      }, {});
+      acc[IOC] = acc[IOC] || {};
+      acc[IOC] = {...acc[IOC], ...itemProps};
+      return acc;
+      }, {});
+      return IOCsList;
+    });
+    return result.length === 1 ? result[0] : result;
+  },
   shodan: (data = []) => {
     const result = data.map((obj) => {
       return { ...obj, Data: parsers.csv(obj.Data) };
@@ -97,6 +132,9 @@ const getKeyPath = (keyPath) => {
 
 const DataExpandSchema = {
   root: {
+    apivoid: {
+      Data: true
+    },
     shodan: {
       Data: true
     },

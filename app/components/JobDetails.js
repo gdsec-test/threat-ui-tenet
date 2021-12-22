@@ -80,7 +80,7 @@ export default class JobDetails extends React.Component {
           data={[
             { name: 'Status', value: jobStatus },
             { name: 'Tags', value: tags.join(', ') },
-            { name: 'Progress', value: jobPercentage },
+            { name: 'Progress', value: Math.round(jobPercentage) + '%' },
             { name: 'Started on', value: dateTime.toString() },
             { name: 'Input', value: `${iocType}: ${iocs.join(', ')}` }
           ]}

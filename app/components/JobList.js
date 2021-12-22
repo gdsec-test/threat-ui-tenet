@@ -38,7 +38,9 @@ class JobList extends React.Component {
       pageItems: 5,
       jobsList: [],
       tableJobsList: [],
-      sortBy: {},
+      sortBy: {
+        [COLUMNS.TIMESTAMP.id]: SORT.DESC
+      },
       filterBy: {},
       jobsRefresh: {
         max,

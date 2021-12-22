@@ -25,6 +25,7 @@ export const IOC_TYPE = {
 };
 
 export const MODULES = {
+  APIVOID: 'apivoid',
   WHOIS: 'whois',
   SPLUNK: 'splunk',
   SNOW: 'snow',
