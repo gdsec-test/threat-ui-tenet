@@ -11,7 +11,8 @@ export const IndexPage = () => {
     <Layout
       links={[
         { url: '/', caption: 'Submit Job' },
-        { url: '/jobs', caption: 'Jobs List' }
+        { url: '/jobs', caption: 'Jobs List' },
+        { url: '/modules', caption: 'Modules' }
       ]}
     >
       <JobDetails id={id} />

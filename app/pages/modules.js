@@ -1,17 +1,17 @@
 import React from 'react';
-import { withLocaleRequired } from '@gasket/react-intl';
 import Layout from '../components/Layout';
-import JobList from '../components/JobList';
+import ModuleList from '../components/ModuleList';
 
 export const IndexPage = () => (
   <Layout
     links={[
       { url: '/', caption: 'Submit Job' },
+      { url: '/jobs', caption: 'Jobs List' },
       { url: '/modules', caption: 'Modules' }
     ]}
   >
-    <JobList />
+    <ModuleList />
   </Layout>
 );
 
-export default withLocaleRequired('/locales', { initialProps: true })(IndexPage);
+export default IndexPage;
