@@ -1,8 +1,8 @@
+/* eslint-disable max-len */
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-key */
-/* eslint-disable complexity */
 import React, { Fragment } from 'react';
 import { Table } from 'evergreen-ui';
-// import getModules from '../api/getModules';
 import getModulesListByIOCType from '../api/getModulesListByIOCType';
 import { withRouter } from 'next/router';
 import { IOC_TYPE } from '../utils/const';
@@ -35,15 +35,15 @@ class ModuleList extends React.Component {
       const mappedModules = [];
       for (const module in modulesList) {
         if (module) {
-          const listOfSupportedIOCTYpes = Object.keys(IOC_TYPE).filter(iocType => {
+          const listOfSupportedIOCTypes = Object.keys(IOC_TYPE).filter((iocType) => {
             const isSupported = modulesList[module].supportedIOCTypes.includes(iocType.toUpperCase());
             if (isSupported && currentlySupportedIOCs.indexOf(iocType) < 0) {
               currentlySupportedIOCs.push(iocType);
             }
             return isSupported;
           });
-          if (listOfSupportedIOCTYpes.length) {
-            mappedModules.push({ module, listOfSupportedIOCTYpes });
+          if (listOfSupportedIOCTypes.length) {
+            mappedModules.push({ module, listOfSupportedIOCTypes });
           }
         }
       }
@@ -67,31 +67,37 @@ class ModuleList extends React.Component {
     const { currentlySupportedIOCs } = this.state;
     return (
       <Table.Head className='JobList_head'>
-        <Table.TextHeaderCell className='JobList_head_cell' width={colWidth} flex='none'>
+        <Table.TextHeaderCell className='JobList_head_cell' width={colWidth}>
           {'Module'}
         </Table.TextHeaderCell>
         <Fragment>
-          {
-            currentlySupportedIOCs.map((iocType, i) => {
-              return <Table.TextHeaderCell className='JobList_head_cell' id={i}>
-                {iocType}
-              </Table.TextHeaderCell>;
-            })
-          }
+          {currentlySupportedIOCs.map((iocType, i) => {
+            return (
+              <Table.TextHeaderCell className='JobList_head_cell' id={i} width={colWidth}>
+                {iocType.toUpperCase() === 'HOSTNAME'
+                  ? 'GODADDY HOSTNAME'
+                  : iocType.toUpperCase() === 'AWSHOSTNAME'
+                  ? 'AWS HOSTNAME'
+                  : iocType.replace('_', ' ')}
+              </Table.TextHeaderCell>
+            );
+          })}
         </Fragment>
       </Table.Head>
     );
   }
 
-  renderRow({ module, listOfSupportedIOCTYpes }) {
+  renderRow({ module, listOfSupportedIOCTypes }) {
     const { currentlySupportedIOCs } = this.state;
     return (
-      <Table.Row key={module} className='JobList_row' width={colWidth} flex='none'>
-        <Table.Cell className='JobList_id' width={colWidth} flex='none'>
+      <Table.Row key={module} className='JobList_row'>
+        <Table.Cell className='JobList_id' width={colWidth}>
           {module}
         </Table.Cell>
-        {currentlySupportedIOCs.map((iocType, i) => {
-          return <Table.TextCell>{listOfSupportedIOCTYpes.includes(iocType.toUpperCase()) ? 'Yes' : 'No'}</Table.TextCell>;
+        {currentlySupportedIOCs.map((iocType) => {
+          return (
+            <Table.TextCell>{listOfSupportedIOCTypes.includes(iocType.toUpperCase()) ? 'Yes' : 'No'}</Table.TextCell>
+          );
         })}
       </Table.Row>
     );
