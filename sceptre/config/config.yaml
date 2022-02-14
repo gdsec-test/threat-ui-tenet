@@ -2,7 +2,7 @@ project_code: threat-ui-tenet
 region: us-west-2
 ecr_version: '1.1.0'
 fargate_cluster_version: '1.0.0'
-fargate_service_version: '1.26.1'
+fargate_service_version: 1.26.1
 iam_role_version: '1.0.7'
 cloudwatch_version: '1.0.7'
 development_team: threattools

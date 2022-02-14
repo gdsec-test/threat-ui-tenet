@@ -21,8 +21,8 @@ Parameters:
     Description: (optional) The tag of the docker image to deploy in the Task definition
     Default: latest
   ProductVersion:
-    Type: String
-    Default: '1.3.0'
+    Type: Number
+    Default: 1.6.0
   EnvironmentVariablesJson:
     Type: String
     Default: '{}'
