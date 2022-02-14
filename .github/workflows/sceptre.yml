@@ -25,15 +25,37 @@ jobs:
   tartufo-code-secrets-scan:
     runs-on: ubuntu-latest
     steps:
+      - name: Configure AWS credentials using Cloud Key Based Service Accounts
+        uses: aws-actions/configure-aws-credentials@ea7b857d8a33dc2fb4ef5a724500044281b49a5e
+        with:
+          aws-access-key-id: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.DEV_AWS_SECRET_TOKEN_VALUE }}
+          role-to-assume: ${{ secrets.DEV_AWS_DEPLOY_ROLE }}
+          role-duration-seconds: 3600
+          aws-region: us-west-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@41032bd0f8164c350fb597a5e1ec886624de7465
+
+      - name: Docker login for Golden Containers ECR
+        env:
+          ECR_REGISTRY: 764525110978.dkr.ecr.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com # Do NOT change (region pulled from above)!
+        run: |
+          echo "Using: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # Checkout this repository
       - name: Checkout GoDaddy Actions repo # Checkout shared actions repository gd-actions
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
         with:
-          repository: gdcorp-cp/gd-actions
+          repository: gdcorp-actions/tartufo
           token: ${{ secrets.REPO_CLONE_TOKEN_SA_PAT }} # PAT with read access to gdcorp-cp/gd-actions
-          path: gd-actions # Relative to github working directory
+          path: tartufo-action # Relative to github working directory
+          ref: main
           persist-credentials: false
-      - uses: ./gd-actions/tartufo # Relative reference to action in gd-actions repository
+
+      - uses: ./tartufo-action # Relative reference to action in gd-actions repository
         with:
           github_token: ${{ secrets.REPO_CLONE_TOKEN_SA_PAT }}
 
