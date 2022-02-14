@@ -60,11 +60,11 @@ Parameters:
   MinContainers:
     Type: String
     Description: (optional) Min number of containers in the Autoscaling Group (0 to 20)
-    Default: '0'
+    Default: '1'
   DesiredContainers:
     Type: String
     Description: (optional) Desired/default number of containers in the Autoscaling Group (0 to 20)
-    Default: '0'
+    Default: '1'
   MaxContainers:
     Type: String
     Description: (optional) Max number of containers in the Autoscaling Group (1 to 20)
