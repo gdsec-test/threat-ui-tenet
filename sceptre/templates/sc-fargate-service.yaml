@@ -58,17 +58,17 @@ Parameters:
     Description: (optional) This may need to be adjusted if the container takes a while to start up
     Default: 30
   MinContainers:
-    Type: String
+    Type: Number
     Description: (optional) Min number of containers in the Autoscaling Group (0 to 20)
-    Default: '1'
+    Default: 1
   DesiredContainers:
-    Type: String
+    Type: Number
     Description: (optional) Desired/default number of containers in the Autoscaling Group (0 to 20)
-    Default: '1'
+    Default: 1
   MaxContainers:
-    Type: String
+    Type: Number
     Description: (optional) Max number of containers in the Autoscaling Group (1 to 20)
-    Default: '5'
+    Default: 5
   Cpu:
     Type: String
     Description: (optional) How much Cpu to allocate for the container workloads
