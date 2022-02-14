@@ -10,9 +10,9 @@ parameters:
   TrafficType: internal
   ProductVersion: {{fargate_service_version}}
   CustomIAMRoleNameSuffix: custom-fargate-role
-  DesiredContainers: {{min_containers_count}}
-  MinContainers: {{min_containers_count}}
-  MaxContainers: {{max_containers_count}}
+  DesiredContainers: "{{min_containers_count}}"
+  MinContainers: "{{min_containers_count}}"
+  MaxContainers: "{{max_containers_count}}"
   ContainerPort: "8443"
   ContainerProtocol: "HTTPS"
   Cpu: "1024"

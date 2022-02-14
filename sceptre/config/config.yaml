@@ -8,7 +8,7 @@ cloudwatch_version: '1.0.7'
 development_team: threattools
 cluster_name: threat-ui-tenet-cluster
 service_name: threat-ui-tenet-fargate-service
-min_containers_count: 1
+min_containers_count: 2
 max_containers_count: 3
 certificate_id: {{environment_variable.AWS_CLUSTER_SSL_CERT_ID}}
 node_env: {{environment_variable.NODE_ENV}}
