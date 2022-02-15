@@ -85,8 +85,10 @@ Resources:
       Dimensions:
         - Name: "ClusterName"
           Value: !Sub ${ClusterName}
+        - Name: "ServiceName"
+          Value: !Sub ${ServiceName}
       EvaluationPeriods: 3
-      MetricName: ContainerInstanceCount
+      MetricName: DeploymentCount
       Namespace: 'ECS/ContainerInsights'
       Period: 300
       Statistic: Average
