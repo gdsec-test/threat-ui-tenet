@@ -2,12 +2,12 @@ project_code: threat-ui-tenet
 region: us-west-2
 ecr_version: '1.1.0'
 fargate_cluster_version: '1.0.0'
-fargate_service_version: '1.6.3'
+fargate_service_version: '1.20.0'
 iam_role_version: '1.0.7'
 cloudwatch_version: '1.0.7'
 development_team: threattools
 cluster_name: threat-ui-tenet-cluster
-service_name: threat-ui-tenet-fargate
+service_name: threat-ui-tenet-fargate-service
 min_containers_count: "1"
 max_containers_count: "3"
 certificate_id: {{environment_variable.AWS_CLUSTER_SSL_CERT_ID}}

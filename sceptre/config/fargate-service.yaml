@@ -3,7 +3,7 @@ stack_name: {{project_code}}-fargate-service
 parameters:
   ClusterName: {{cluster_name}}
   ECRRepoSuffix: dkr.ecr.{{region}}.amazonaws.com/com.godaddy.{{project_code}}
-  ServiceName: {{project_code}}-fargate
+  ServiceName: {{service_name}}
   CertificateId: {{certificate_id}}
   HealthCheckPath: /healthcheck
   HealthCheckGracePeriodSeconds: "240"
