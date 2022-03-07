@@ -114,4 +114,4 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           docker push $ECR_REGISTRY/$ECR_REPOSITORY
-          aws ecs update-service --cluster threat-ui-tenet-cluster --service threat-ui-tenet-fargate --force-new-deployment --region us-west-2
+          aws ecs update-service --cluster threat-ui-tenet-cluster --service threat-ui-tenet-fargate-service --force-new-deployment --region us-west-2
