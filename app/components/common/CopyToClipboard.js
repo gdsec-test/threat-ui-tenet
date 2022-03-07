@@ -1,9 +1,10 @@
-import React from 'react';
 import Clipboard from '@ux/icon/clipboard';
-import { Tooltip } from 'evergreen-ui';
 import '@ux/icon/clipboard/index.css';
+import { Tooltip } from 'evergreen-ui';
+import React from 'react';
+import RenderError from './RenderError';
 
-export default class extends React.Component {
+ class CopyToClipboard extends React.Component {
   constructor() {
     super(...arguments);
     this.state = { isShowCopyTooltip: false };
@@ -35,3 +36,5 @@ export default class extends React.Component {
     );
   }
 }
+
+export default RenderError(CopyToClipboard);

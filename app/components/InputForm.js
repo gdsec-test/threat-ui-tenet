@@ -9,6 +9,7 @@ import getIOCTypesByInput from '../api/getIOCTypesByInput';
 import getModulesListByIOCType from '../api/getModulesListByIOCType';
 import Loader from './common/Loader';
 import Tags from './common/Tags';
+import RenderError from './common/RenderError';
 import InputFormSubmitPopup from './InputFormSubmitPopup';
 
 const { DropdownItem } = Dropdown;
@@ -379,4 +380,4 @@ class InputForm extends React.Component {
   }
 }
 
-export default withRouter(InputForm);
+export default withRouter(RenderError(InputForm));

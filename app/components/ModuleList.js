@@ -1,14 +1,15 @@
 /* eslint-disable max-len */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-key */
-import React, { Fragment } from 'react';
-import { Table } from 'evergreen-ui';
-import getModulesListByIOCType from '../api/getModulesListByIOCType';
-import { withRouter } from 'next/router';
-import { IOC_TYPE } from '../utils/const';
-import Loader from './common/Loader';
 import '@ux/icon/chevron-down-lt/index.css';
 import '@ux/icon/x/index.css';
+import { Table } from 'evergreen-ui';
+import { withRouter } from 'next/router';
+import React, { Fragment } from 'react';
+import getModulesListByIOCType from '../api/getModulesListByIOCType';
+import { IOC_TYPE } from '../utils/const';
+import Loader from './common/Loader';
+import RenderError from './common/RenderError';
 
 const colWidth = 150;
 
@@ -121,4 +122,4 @@ class ModuleList extends React.Component {
   }
 }
 
-export default withRouter(ModuleList);
+export default withRouter(RenderError(ModuleList));

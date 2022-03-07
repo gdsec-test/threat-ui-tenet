@@ -10,6 +10,7 @@ import Loader from './common/Loader';
 import CopyToClipboard from './common/CopyToClipboard';
 import '@ux/icon/chevron-down-lt/index.css';
 import '@ux/icon/x/index.css';
+import RenderError from './common/RenderError';
 
 const updateInterval = 60000;
 
@@ -293,4 +294,4 @@ class JobList extends React.Component {
   }
 }
 
-export default withRouter(JobList);
+export default withRouter(RenderError(JobList));
