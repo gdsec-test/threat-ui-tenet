@@ -1,16 +1,15 @@
+import FileUpload from '@ux/file-upload';
+import '@ux/file-upload/dist/styles.css';
+import { Button, Checkbox, Dropdown, Form, Tooltip } from '@ux/uxcore2';
+import { withRouter } from 'next/router';
 import React, { Fragment } from 'react';
+import { HighlightWithinTextarea } from 'react-highlight-within-textarea';
+import createJob from '../api/createJob';
 import getIOCTypesByInput from '../api/getIOCTypesByInput';
 import getModulesListByIOCType from '../api/getModulesListByIOCType';
-import createJob from '../api/createJob';
-import { IOC_TYPE } from '../utils/const';
 import Loader from './common/Loader';
 import Tags from './common/Tags';
 import InputFormSubmitPopup from './InputFormSubmitPopup';
-import { HighlightWithinTextarea } from 'react-highlight-within-textarea';
-import FileUpload from '@ux/file-upload';
-import { withRouter } from 'next/router';
-import { Form, Dropdown, Tooltip, Button } from '@ux/uxcore2';
-import '@ux/file-upload/dist/styles.css';
 
 const { DropdownItem } = Dropdown;
 
@@ -115,7 +114,7 @@ class InputForm extends React.Component {
     return {
       textAreaValue: '',
       detectedIOCModules: new Map(),
-      selectedIOCModules: [IOC_TYPE.UNKNOWN],
+      selectedIOCModules: [],
       showSubmitPopup: false,
       submittedJobs: [],
       isLoading: false,
@@ -209,6 +208,30 @@ class InputForm extends React.Component {
     this.setState({ submitIsInProgress: false });
   }
 
+  get isAllModulesChecked() {
+    const {
+      selectedIOCModules
+    } = this.state;
+    return selectedIOCModules.length > 0;
+  }
+
+  get isAllModulesIndeterminate() {
+    const {
+      detectedIOCModules,
+      selectedIOCModules
+    } = this.state;
+    return selectedIOCModules.length < getKeys(detectedIOCModules).length && selectedIOCModules.length > 0;
+  }
+
+  onToggleAllChange = (e) => {
+    const { checked } = e.target;
+    const {
+      detectedIOCModules,
+    } = this.state;
+    const selectedIOCModules = checked ? getKeys(detectedIOCModules).map((_, i) => i) : [];
+    this.setState({ selectedIOCModules });
+  }
+
   render() {
     const {
       detectedIOCTypes,
@@ -220,7 +243,8 @@ class InputForm extends React.Component {
       isNoIOCTypesDetected,
       tags,
       textAreaValue,
-      highlightWithinTextarea
+      highlightWithinTextarea,
+      selectedIOCModules
     } = this.state;
     if (isLoading) {
       return <Loader inline size='lg' text='Loading Input Form...' />;
@@ -228,6 +252,7 @@ class InputForm extends React.Component {
     if (showSubmitPopup) {
       return <InputFormSubmitPopup submitIsInProgress={submitIsInProgress} submittedJobs={submittedJobs} />;
     }
+    const detectedIOCModulesCount = getKeys(detectedIOCModules).length
     return (
       <Form
         className={'InputForm'}
@@ -314,21 +339,33 @@ class InputForm extends React.Component {
             );
           })}
         </p> */}
-        <Dropdown
-          type='multiselect'
-          label={
-            <span style={{ fontWeight: 'bold' }}>
-              {getTooltip('IOC Modules', 'Choose Modules supported for current IOC')}
-            </span>
-          }
-          name='IOC Types'
-          onChange={this.onIOCModuleChange}
-          selected={this.state.selectedIOCModules}
-        >
-          {[...detectedIOCModules.entries()].map(([module]) => {
-            return <DropdownItem key={module} value={module}>{`${module}`}</DropdownItem>;
-          })}
-        </Dropdown>
+        <div className={`InputForm_Dropdown`}>
+          <Dropdown
+            type='multiselect'
+            label={
+              <span style={{ fontWeight: 'bold' }}>
+                {getTooltip('IOC Modules', 'Choose Modules supported for current IOC')}
+              </span>
+            }
+            name='IOC Types'
+            onChange={this.onIOCModuleChange}
+            selected={selectedIOCModules}
+          >
+            {[...detectedIOCModules.entries()].map(([module]) => {
+              return <DropdownItem key={module} value={module}>{`${module}`}</DropdownItem>;
+            })}
+          </Dropdown>
+          <div className={`InputForm_Dropdown_ToggleAll`}>
+            <Checkbox
+              label={`${ selectedIOCModules.length === 0 ? 'no' :
+                ( selectedIOCModules.length < detectedIOCModulesCount ? 'some' : 'all') } modules selected`}
+              indeterminate={ this.isAllModulesIndeterminate }
+              checked={ this.isAllModulesChecked }
+              onChange={ this.onToggleAllChange }
+              disabled={!detectedIOCModulesCount}
+            />
+          </div>
+        </div>
         {isNoIOCTypesDetected && (
           <div style={{ color: 'red' }} className='mt-3'>
             {getTooltip('No IOC Types recognized. Cannot submit jobs.', 'All IOCs are Unknown')}

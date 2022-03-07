@@ -46,6 +46,16 @@
     }
   }
 
+  .InputForm_Dropdown {
+    position: relative;
+    .InputForm_Dropdown_ToggleAll {
+      position: absolute;
+      top: 0;
+      left: 150px;
+      height: 2em;
+    }
+  }
+
   [class^='InputForm_Hightlight_'] {
     color: black;
     display: inline;
