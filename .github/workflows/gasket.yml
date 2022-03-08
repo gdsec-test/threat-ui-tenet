@@ -34,7 +34,7 @@ jobs:
           echo "NODE_ENV=production" >> $GITHUB_ENV
           echo "GD_ROOT_DOMAIN=gdcorp.tools" >> $GITHUB_ENV
 
-      - uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561
+      - uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a
         with:
           node-version: 12
 
