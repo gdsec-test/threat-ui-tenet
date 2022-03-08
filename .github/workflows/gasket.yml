@@ -46,7 +46,7 @@ jobs:
           npm i
 
       - name: Configure AWS credentials using Cloud Key Based Service Accounts
-        uses: aws-actions/configure-aws-credentials@ea7b857d8a33dc2fb4ef5a724500044281b49a5e
+        uses: aws-actions/configure-aws-credentials@05b148adc31e091bafbaf404f745055d4d3bc9d2
         with:
           aws-access-key-id: ${{ env.AWS_DEPLOY_SECRET_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.AWS_DEPLOY_SECRET_TOKEN_VALUE }}
@@ -80,7 +80,7 @@ jobs:
           docker tag ${{ steps.container.outputs.id }} $ECR_REGISTRY/$ECR_REPOSITORY
 
       - name: Configure AWS credentials using Cloud Key Based Service Accounts
-        uses: aws-actions/configure-aws-credentials@ea7b857d8a33dc2fb4ef5a724500044281b49a5e
+        uses: aws-actions/configure-aws-credentials@05b148adc31e091bafbaf404f745055d4d3bc9d2
         with:
           aws-access-key-id: ${{ env.PROD_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.PROD_AWS_SECRET_ACCESS_KEY }}
