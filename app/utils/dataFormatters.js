@@ -113,13 +113,27 @@ const DataParseSchema = {
 };
 
 export const parseData = (data) => {
-  return Object.keys(data).reduce((acc, key) => {
+  data.badness = [];
+  const { responses = {} } = data;
+  data.responses = Object.keys(responses).reduce((acc, key) => {
     const moduleDataFormatter = DataParseSchema[key];
     if (moduleDataFormatter) {
-      acc[key] = moduleDataFormatter(acc[key]);
+      const badness = [];
+      const result = moduleDataFormatter(acc[key]);
+      [].concat(result.Data).forEach(({Badness} = {}) => {
+        const badnessScore = parseFloat(Badness);
+        if (!isNaN(badnessScore)) {
+          badness.push(badnessScore);
+        }
+      });
+      if (badness.length) {
+        data.badness.push({ module: key, badness });
+      }
+      acc[key] = result;
     }
     return acc;
-  }, data);
+  }, responses);
+  return data;
 };
 
 const getKeyPath = (keyPath) => {
@@ -229,3 +243,27 @@ export const formatData = (raw, value, ...keyPath) => {
   }
   return value; // if it's not in schema, we don't expand at all
 };
+
+
+export const badnessFormatter = (badnessResponses) => {
+  let badnessScore = 'N\\A';
+  const severity = {
+    critical: '#B30000',
+    major: '#E07800',
+    minor: '#4FA800'
+  }
+  if (badnessResponses.length) {
+    badnessScore = badnessResponses.reduce((acc, {module, badness}) => {
+      const average = Math.max(...badness);
+      if (average < 0.5) {
+        acc.push(<span style={{color: severity.minor}}>{average.toFixed(2)} ({module});</span>);
+      } else if (average < 0.75) {
+        acc.push(<span style={{color: severity.major}}>{average.toFixed(2)} ({module});</span>);
+      } else if (average <= 1) {
+        acc.push(<span style={{color: severity.critical}}>{average.toFixed(2)} ({module});</span>);
+      }
+      return acc;
+    }, [])
+  }
+  return badnessScore;
+}

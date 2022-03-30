@@ -6,7 +6,7 @@ import React from 'react';
 import JSONTree from 'react-json-tree';
 import getJob from '../api/getJob';
 import { THEMES } from '../utils/const';
-import { expandData, formatData, parseData } from '../utils/dataFormatters';
+import { expandData, formatData, parseData, badnessFormatter } from '../utils/dataFormatters';
 import CopyToClipboard from './common/CopyToClipboard';
 import Loader from './common/Loader';
 import RenderError from './common/RenderError';
@@ -27,7 +27,7 @@ class JobDetails extends React.Component {
   componentDidMount() {
     const { id } = this.props;
     getJob(id).then((jobDetails) => {
-      jobDetails.responses = parseData(jobDetails.responses);
+      jobDetails = parseData(jobDetails);
       this.setState({
         isLoading: false,
         jobDetails
@@ -73,14 +73,17 @@ class JobDetails extends React.Component {
       }
     } = jobDetails;
     /* eslint-disable */
-    const { responses, startTime, jobStatus, jobPercentage, submission } = jobDetails;
+    const { responses, startTime, jobStatus, jobPercentage, submission, badness = [] } = jobDetails;
+    let badnessScore = badnessFormatter(badness);
+    badnessScore = <td className='JobDetails_badness'>{badnessScore}</td>
     let dateTime = new Date(startTime * 1000);
     return (
       <div className='JobDetails'>
         <Table
-          className='table table-hover'
+          className='JobDetails_Primary_Form table table-hover'
           data={[
             { name: 'Status', value: jobStatus },
+            { name: 'Badness', value: badnessScore },
             { name: 'Tags', value: tags.join(', ') },
             { name: 'Progress', value: Math.round(jobPercentage) + '%' },
             { name: 'Started on', value: dateTime.toString() },
