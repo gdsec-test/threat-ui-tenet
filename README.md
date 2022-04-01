@@ -21,14 +21,12 @@ Copy content of secret https://us-west-2.console.aws.amazon.com/secretsmanager/h
 
 Download files from links below (_.crt, _.key) for Local env and save them in **`./app/cert`** folder
 
-- https://cloud.int.godaddy.com/security/certs/9cf79b721bceac10ddbe21be6e4bcba6 - local development
+Open https://cloud.int.godaddy.com/security/certs/list?filterName=ui.threat.int&filterStatus=ISSUED%2CPENDING_ISSUANCE%2CDENIED and see for most fresh issued certificate (newest expire date)
+`local.ui.threat.int.dev-gdcorp.tools` - local machine development only
+`ui.threat.int.dev-gdcorp.tools` - dev (and dev-private) environment (not needed for local development)
+`ui.threat.int.gdcorp.tools` - production (not needed for local development)
 
-Additionally there are next SSL certificates for other environments
-
-- https://cloud.int.godaddy.com/security/certs/5f38c890db3da4d44a21892d13961943 - dev environment (not needed for local development)
-- https://cloud.int.godaddy.com/security/certs/a6b3bdb3dbade458fe6ec170ba9619e5 - production (not needed for local development)
-
-For local development environement, append **"local."** to all 6 files in your (_.cert, _.key and intermediate \*.crt) local **`./app/cert`** folder
+For local emulation of environement, rename any env cert to `local.ui.threat.int.dev-gdcorp.tools` (_.cert, _.key and intermediate \*.crt) and save in **`./app/cert`** folder
 
 ### 4) Install NodeJS + NPM, NPX and Pre-Commit. Recommended version 12.16.1, or up to 14.x.x
 

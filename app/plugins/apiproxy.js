@@ -19,6 +19,10 @@ const PROXY_ENDPOINTS = [
   },
   {
     url: 'modules'
+  },
+  {
+    url: 'vulnerability',
+    method: 'post'
   }
 ];
 

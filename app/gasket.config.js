@@ -1,5 +1,3 @@
-const path = require('path');
-
 const baseDevConfig = {
   redux: {
     initState: {
@@ -21,7 +19,8 @@ module.exports = {
     serviceId: 'tenet'
   },
   environments: {
-    local: { ...baseDevConfig,
+    local: {
+      ...baseDevConfig,
       hostname: 'local.ui.threat.int.dev-gdcorp.tools',
       https: {
         root: './cert',

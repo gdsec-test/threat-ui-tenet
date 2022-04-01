@@ -1,10 +1,11 @@
-import React, { Fragment } from 'react';
+import { Button, Form } from '@ux/uxcore2';
 import { withRouter } from 'next/router';
-import { Form, Button } from '@ux/uxcore2';
-import Loader from './common/Loader';
+import React, { Fragment } from 'react';
 import CopyToClipboard from './common/CopyToClipboard';
+import Loader from './common/Loader';
+import RenderError from './common/RenderError';
 
-export default withRouter(({ submitIsInProgress, submittedJobs, router }) => {
+export default withRouter(RenderError(({ submitIsInProgress, submittedJobs, router }) => {
   return (
     <Form
       className={'InputForm'}
@@ -44,4 +45,4 @@ export default withRouter(({ submitIsInProgress, submittedJobs, router }) => {
       </div>
     </Form>
   );
-});
+}));

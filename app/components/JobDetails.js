@@ -1,17 +1,19 @@
-import React from 'react';
-import { Table, Dropdown } from '@ux/uxcore2';
+import '@ux/icon/clipboard/index.css';
 import Download from '@ux/icon/download';
+import '@ux/icon/download/index.css';
+import { Dropdown, Table } from '@ux/uxcore2';
+import React from 'react';
+import JSONTree from 'react-json-tree';
 import getJob from '../api/getJob';
 import { THEMES } from '../utils/const';
-import JSONTree from 'react-json-tree';
-import Loader from './common/Loader';
+import { expandData, formatData, parseData, badnessFormatter } from '../utils/dataFormatters';
 import CopyToClipboard from './common/CopyToClipboard';
-import { parseData, expandData, formatData } from '../utils/dataFormatters';
+import Loader from './common/Loader';
+import RenderError from './common/RenderError';
 const { DropdownItem } = Dropdown;
-import '@ux/icon/clipboard/index.css';
-import '@ux/icon/download/index.css';
+const customError = "Error during rendering theme. Please, switch to another theme"
 
-export default class JobDetails extends React.Component {
+class JobDetails extends React.Component {
   constructor() {
     super(...arguments);
     this.state = {
@@ -25,7 +27,7 @@ export default class JobDetails extends React.Component {
   componentDidMount() {
     const { id } = this.props;
     getJob(id).then((jobDetails) => {
-      jobDetails.responses = parseData(jobDetails.responses);
+      jobDetails = parseData(jobDetails);
       this.setState({
         isLoading: false,
         jobDetails
@@ -71,16 +73,19 @@ export default class JobDetails extends React.Component {
       }
     } = jobDetails;
     /* eslint-disable */
-    const { responses, startTime, jobStatus, jobPercentage, submission } = jobDetails;
+    const { responses, startTime, jobStatus, jobPercentage, submission, badness = [] } = jobDetails;
+    let badnessScore = badnessFormatter(badness);
+    badnessScore = <td className='JobDetails_badness'>{badnessScore}</td>
     let dateTime = new Date(startTime * 1000);
     return (
       <div className='JobDetails'>
         <Table
-          className='table table-hover'
+          className='JobDetails_Primary_Form table table-hover'
           data={[
             { name: 'Status', value: jobStatus },
+            { name: 'Badness', value: badnessScore },
             { name: 'Tags', value: tags.join(', ') },
-            { name: 'Progress', value: jobPercentage },
+            { name: 'Progress', value: Math.round(jobPercentage) + '%' },
             { name: 'Started on', value: dateTime.toString() },
             { name: 'Input', value: `${iocType}: ${iocs.join(', ')}` }
           ]}
@@ -115,3 +120,5 @@ export default class JobDetails extends React.Component {
     );
   }
 }
+
+export default RenderError(JobDetails, customError);
