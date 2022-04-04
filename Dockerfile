@@ -12,7 +12,7 @@ COPY --chown=nobody app /app
 WORKDIR /app
 
 # RUN npm ci --no-audit
-RUN npm i
+RUN npm i --production=false
 
 # Generate self-signed cert thats used by the gasket service (check plugins/deploy-plugin.js)
 RUN npm run createcert
