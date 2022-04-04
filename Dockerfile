@@ -22,9 +22,9 @@ RUN npm run createcert
 RUN npm rebuild node-sass
 
 # Build application
-RUN npx gasket build --env=${NODE_ENV}
+RUN npx gasket build
 
-CMD npx gasket start --env=${NODE_ENV}
+CMD npx gasket start
 
 EXPOSE 8443
 
