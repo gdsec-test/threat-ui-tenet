@@ -1,4 +1,4 @@
-FROM 764525110978.dkr.ecr.us-west-2.amazonaws.com/alpine-node:12-alpine-3.12
+FROM 764525110978.dkr.ecr.us-west-2.amazonaws.com/alpine-node:14-alpine-3.14
 
 ARG NODE_ENV
 ENV NODE_ENV=$NODE_ENV
