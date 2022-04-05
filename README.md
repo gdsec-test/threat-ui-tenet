@@ -45,8 +45,8 @@ Run **`npm install -g npx`** to install NPX
 ### 5) Install dependencies
 
 ```
-npm install
-cd app && npm install
+npm install --production=false
+cd app && npm install --production=false
 ```
 
 ### 6) Run web server and open application in browser

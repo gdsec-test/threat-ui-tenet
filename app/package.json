@@ -52,6 +52,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.10",
+    "@babel/eslint-parser": "^7.17.0",
     "@babel/register": "^7.0.0",
     "@godaddy/eslint-plugin-react-intl": "^1.1.1",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
