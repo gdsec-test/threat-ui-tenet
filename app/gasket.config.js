@@ -10,6 +10,18 @@ const baseDevConfig = {
   rootDomain: 'dev-gdcorp.tools',
   apiBaseUrl: 'https://api.threat.int.dev-gdcorp.tools'
 };
+let developmentConfig = baseDevConfig;
+if (process.env.LOCAL_TENET_CONFIG === "true") {
+  developmentConfig = {
+    ...baseDevConfig,
+    hostname: 'local.ui.threat.int.dev-gdcorp.tools',
+    https: {
+      root: './cert',
+      key: 'ui.threat.int.dev-gdcorp.tools.key',
+      cert: ['ui.threat.int.dev-gdcorp.tools.crt']
+    }
+  }
+}
 module.exports = {
   plugins: {
     presets: ['@godaddy/webapp'],
@@ -19,16 +31,7 @@ module.exports = {
     serviceId: 'tenet'
   },
   environments: {
-    local: {
-      ...baseDevConfig,
-      hostname: 'local.ui.threat.int.dev-gdcorp.tools',
-      https: {
-        root: './cert',
-        key: 'local.ui.threat.int.dev-gdcorp.tools.key',
-        cert: ['local.ui.threat.int.dev-gdcorp.tools.crt']
-      }
-    },
-    development: baseDevConfig,
+    development: developmentConfig,
     production: {
       redux: {
         initState: {
@@ -49,6 +52,7 @@ module.exports = {
     }
   },
   nextConfig: {
+    productionBrowserSourceMaps: true,
     future: {
       webpack5: true
     }
