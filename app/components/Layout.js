@@ -1,19 +1,20 @@
 import { withLocaleRequired } from '@gasket/react-intl';
 import Arrow from '@ux/icon/link-arrow';
 import '@ux/icon/link-arrow/index.css';
-import { Button, Modal } from '@ux/uxcore2';
+import { Button } from '@ux/uxcore2';
 import Link from 'next/link';
 import { withRouter } from 'next/router';
-import React, { useState } from 'react';
-import JSONTree from 'react-json-tree';
-import startVulnerabilityWatch from '../api/startVulnerabilityWatch';
+import React from 'react';
 import Head from '../components/head';
-import { expandData, formatData } from '../utils/dataFormatters';
-import Loader from './common/Loader';
 
-export const Layout = ({ children, links = [], router }) => {
-  const [showVulnModal, toggleVulnModal] = useState(false);
-  const [report, setReport] = useState(null);
+const ALL_NAVIGATION_LINKS = [
+  { url: '/', caption: 'Submit Job' },
+  { url: '/jobs', caption: 'Jobs List' },
+  { url: '/modules', caption: 'Modules' },
+  { url: '/vulnwatch', caption: 'Vulnerability Watch' }
+];
+
+export const Layout = ({ children, router }) => {
   return <div className='Layout container m-t-3'>
     <Head title='Home' />
     <div className='row'>
@@ -21,43 +22,16 @@ export const Layout = ({ children, links = [], router }) => {
         <Button className='Layout_Navigation_Back Layout_Navigation_Button' onClick={() => router.back()}>
           <Arrow />
         </Button>
-        {links.map(({ url, caption }) => (
+        {ALL_NAVIGATION_LINKS.filter(({url}) => { return url !== router.route; }).map(({ url, caption }) => (
           <Link key={url} href={url}>
             <Button className='Layout_Navigation_Button'>{caption}</Button>
           </Link>
         ))}
-        <Button className='Layout_Navigation_Button' onClick={() => {
-          toggleVulnModal(true);
-          startVulnerabilityWatch().then((watchReport) => {
-            setReport(watchReport);
-          }).catch(err => {
-            setReport(err);
-          });
-          }}>
-          Start Vuln Scanner
-        </Button>
       </div>
     </div>
     <div className='row'>
       <div className='card ux-card'>{children}</div>
     </div>
-    {showVulnModal && 
-      <Modal  title='Vulnerability Watch Report' onClose={ () => {
-        toggleVulnModal(false);
-        setReport(null);
-        }}>
-      {report ? 
-      <JSONTree
-          data={report}
-          theme={'monokai'}
-          labelRenderer={(keyPath) => <b>{keyPath[0]}</b>}
-          valueRenderer={formatData}
-          shouldExpandNode={expandData}
-        /> : 
-        <Loader inline size='lg' text='Loading report...' />
-      }
-      </Modal>
-    }
   </div>
 };
 

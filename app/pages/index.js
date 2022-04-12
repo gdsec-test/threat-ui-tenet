@@ -3,12 +3,7 @@ import InputForm from '../components/InputForm';
 import Layout from '../components/Layout';
 
 export const IndexPage = () => (
-  <Layout
-    links={[
-      { url: '/jobs', caption: 'Jobs List' },
-      { url: '/modules', caption: 'Modules' }
-    ]}
-  >
+  <Layout>
     <InputForm />
   </Layout>
 );

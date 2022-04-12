@@ -4,10 +4,10 @@
   "description": "Threat API UI aka Tenet",
   "scripts": {
     "createcert": "rm -ifr cert && mkdir -p cert && openssl genrsa -des3 -out ./cert/server.origKey -passout pass:server 1024 && openssl req -new -key ./cert/server.origKey  -out ./cert/server.csr  -subj \"/C=US/ST=Arizona/L=Scottsdale/O=Go Daddy/OU=Product Security/CN=ui.threat.int.$GD_ROOT_DOMAIN/emailAddress=ogomozov@godaddy.com\"  -passin pass:server && openssl rsa -in ./cert/server.origKey  -out ./cert/server.key -passin pass:server && openssl x509 -req -days 3650  -in ./cert/server.csr  -signkey ./cert/server.key  -out ./cert/server.crt && rm ./cert/server.origKey",
-    "build": "gasket build --env=development",
-    "start": "gasket start --env=development",
-    "local": "gasket local --env=local",
-    "local:debug": "npx -n --inspect gasket local --env=local"
+    "build": "export NODE_ENV=production && gasket build --env=development",
+    "start": "export NODE_ENV=production && gasket start --env=development",
+    "local": "export NODE_ENV=production && export LOCAL_TENET_CONFIG=true && gasket local --env=development",
+    "local:debug": "export NODE_ENV=production && export LOCAL_TENET_CONFIG=true && npx -n --inspect gasket build --env=development && gasket start --env=development"
   },
   "dependencies": {
     "@gasket/assets": "^6.0.0",
@@ -65,7 +65,6 @@
     "eslint-plugin-mocha": "^10.0.3",
     "eslint-plugin-next": "0.0.0",
     "eslint-plugin-react": "^7.29.4",
-    "eslint-plugin-react-hooks": "^4.2.0",
     "jsdom": "^15.0.0",
     "mocha": "^9.1.3",
     "nyc": "^15.1.0",
@@ -81,9 +80,6 @@
     "stylelint-config-godaddy": "^0.4.0",
     "webpack": "^5.21.2"
   },
-  "browserslist": [
-    "extends browserslist-config-godaddy"
-  ],
   "stylelint": {
     "extends": [
       "stylelint-config-godaddy"

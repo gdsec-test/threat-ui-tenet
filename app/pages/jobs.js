@@ -4,12 +4,7 @@ import Layout from '../components/Layout';
 import JobList from '../components/JobList';
 
 export const IndexPage = () => (
-  <Layout
-    links={[
-      { url: '/', caption: 'Submit Job' },
-      { url: '/modules', caption: 'Modules' }
-    ]}
-  >
+  <Layout>
     <JobList />
   </Layout>
 );

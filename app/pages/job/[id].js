@@ -1,20 +1,14 @@
-import React from 'react';
 import { withLocaleRequired } from '@gasket/react-intl';
-import Layout from '../../components/Layout';
-import JobDetails from '../../components/JobDetails';
 import { useRouter } from 'next/router';
+import React from 'react';
+import JobDetails from '../../components/JobDetails';
+import Layout from '../../components/Layout';
 
 export const IndexPage = () => {
   const router = useRouter();
   const { id } = router.query;
   return (
-    <Layout
-      links={[
-        { url: '/', caption: 'Submit Job' },
-        { url: '/jobs', caption: 'Jobs List' },
-        { url: '/modules', caption: 'Modules' }
-      ]}
-    >
+    <Layout>
       <JobDetails id={id} />
     </Layout>
   );

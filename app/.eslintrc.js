@@ -1,6 +1,5 @@
 module.exports = {
   extends: ['next'],
-  plugins: ['react-hooks'],
   ignorePatterns: ['build/', '.next/', 'node_modules/'],
   rules: {
     'react/prop-types': 'off',
@@ -18,13 +17,12 @@ module.exports = {
       }
     ],
     indent: 'off',
-    'max-len': 'error',
+    'max-len': ['error', 120],
     'max-params': ['error', 4],
     'max-statements': ['warn', 20],
-    'no-unused-vars': ['error', { ignoreRestSiblings: true }],
+    'react/display-name': 'off',
+    'no-unused-vars': ['warn', { ignoreRestSiblings: true }],
     'react/jsx-curly-spacing': 'off',
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'error',
     'no-multiple-empty-lines': [
       'error',
       {
