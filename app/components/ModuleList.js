@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-key */
-import '@ux/icon/chevron-down-lt/index.css';
 import '@ux/icon/x/index.css';
 import { Table } from 'evergreen-ui';
 import { withRouter } from 'next/router';

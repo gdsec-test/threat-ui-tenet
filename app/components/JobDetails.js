@@ -3,7 +3,7 @@ import Download from '@ux/icon/download';
 import '@ux/icon/download/index.css';
 import { Dropdown, Table } from '@ux/uxcore2';
 import React from 'react';
-import JSONTree from 'react-json-tree';
+import { JSONTree } from 'react-json-tree';
 import getJob from '../api/getJob';
 import { THEMES } from '../utils/const';
 import { expandData, formatData, parseData, badnessFormatter } from '../utils/dataFormatters';
