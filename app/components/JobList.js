@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Tooltip } from '@ux/uxcore2';
-import ChevronDown from '@ux/icon/chevron-down-lt';
+import ChevronDown from '@ux/icon/chevron-down';
 import Cross from '@ux/icon/x';
 import { Table } from 'evergreen-ui';
 import getJobs from '../api/getJobs';
@@ -8,7 +8,7 @@ import { JOB_STATUS } from '../utils/const';
 import { withRouter } from 'next/router';
 import Loader from './common/Loader';
 import CopyToClipboard from './common/CopyToClipboard';
-import '@ux/icon/chevron-down-lt/index.css';
+import '@ux/icon/chevron-down/index.css';
 import '@ux/icon/x/index.css';
 import RenderError from './common/RenderError';
 
