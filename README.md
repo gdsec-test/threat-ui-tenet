@@ -47,11 +47,13 @@ Run **`npm install -g npx`** to install NPX
 ### 5) Install dependencies
 
 ```
-npm install --production=false --legacy-peer-deps
-cd app && npm install --production=false --legacy-peer-deps
+npm install --production=false
+cd app && npm install --production=false
 ```
 
 ### 6) Run web server and open application in browser
+
+!!!Auth in AWS Account
 
 ```
 npm run local

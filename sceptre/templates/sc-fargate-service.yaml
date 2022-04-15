@@ -105,6 +105,11 @@ Parameters:
     Type: String
     Description: (optional) Enabled ALB access logging
     Default: true
+  ScheduleExpression:
+    Type: String
+    Description: (optional) The schedule on which the service will be rotated.
+    AllowedPattern: ^(|cron\(([^ ]* ){5}[^ ]*\)|rate\([1-9][0-9]* (minute?|minutes?|hours?|days?)\))$
+    Default: "rate(1 day)"    
 Resources:
   FargateService:
     Type: AWS::ServiceCatalog::CloudFormationProvisionedProduct
@@ -157,3 +162,22 @@ Resources:
         - Key: doNotShutDown
           # change to false if it can be turned off outside of business hours
           Value: true
+
+  FargateServiceRotator:
+    DependsOn: FargateService
+    Type: AWS::ServiceCatalog::CloudFormationProvisionedProduct
+    Properties:
+      ProductName: FargateServiceRotator
+      ProvisioningArtifactName: 1.0.1
+      ProvisionedProductName: !Sub ${ServiceName}-threat-ui-rotator
+      ProvisioningParameters:
+        - Key: ClusterName
+          Value: !Ref ClusterName
+        - Key: ServiceName
+          Value: !Ref ServiceName
+        - Key: ScheduleExpression
+          Value: !Ref ScheduleExpression
+      Tags:
+        - Key: doNotShutDown
+          # change to true if it must remain on outside of business hours in Pre-Prod envs
+          Value: false          

@@ -4,12 +4,14 @@
   "description": "Threat API UI aka Tenet",
   "scripts": {
     "createcert": "rm -ifr cert && mkdir -p cert && openssl genrsa -des3 -out ./cert/server.origKey -passout pass:server 1024 && openssl req -new -key ./cert/server.origKey  -out ./cert/server.csr  -subj \"/C=US/ST=Arizona/L=Scottsdale/O=Go Daddy/OU=Product Security/CN=ui.threat.int.$GD_ROOT_DOMAIN/emailAddress=ogomozov@godaddy.com\"  -passin pass:server && openssl rsa -in ./cert/server.origKey  -out ./cert/server.key -passin pass:server && openssl x509 -req -days 3650  -in ./cert/server.csr  -signkey ./cert/server.key  -out ./cert/server.crt && rm ./cert/server.origKey",
-    "build": "export NODE_ENV=development && gasket build --env=development",
-    "start": "export NODE_ENV=development && gasket start --env=development",
-    "local": "export NODE_ENV=development && export LOCAL_TENET_CONFIG=true && gasket local --env=development",
-    "local:debug": "export NODE_ENV=production && export LOCAL_TENET_CONFIG=true && npx -n --inspect gasket build --env=development && gasket start --env=development"
+    "build": "export NODE_ENV=development && . get-forensic-creds.sh && gasket build --env=development",
+    "start": "export NODE_ENV=development && . get-forensic-creds.sh && gasket start --env=development",
+    "local": "export NODE_ENV=development && export LOCAL_TENET_CONFIG=true && . get-forensic-creds.sh && gasket local --env=development",
+    "local:debug": "export NODE_ENV=development && export LOCAL_TENET_CONFIG=true && . get-forensic-creds.sh && npx --node-options='--inspect' gasket local --env=development"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.67.0",
+    "@aws-sdk/client-sts": "^3.67.0",
     "@gasket/assets": "^6.0.0",
     "@gasket/auth": "^2.6.0",
     "@gasket/cli": "^6.0.0",
@@ -32,20 +34,27 @@
     "evergreen-ui": "^6.6.0",
     "express": "^4.16.3",
     "file-loader": "^6.2.0",
+    "fine-uploader": "^5.16.2",
+    "fine-uploader-wrappers": "^1.0.1",
+    "install": "^0.13.0",
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.0",
+    "multiparty": "^4.2.3",
     "next": "^12.1.0",
     "next-redux-wrapper": "^6.0.2",
+    "npm": "^8.7.0",
     "papaparse": "^5.3.0",
     "prop-types": "^15.6.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-fine-uploader": "^1.1.1",
     "react-highlight-within-textarea": "^2.1.2",
     "react-intl": "^5.24.0",
     "react-json-tree": "^0.16.0",
     "react-redux": "^7.1.0",
     "react-transition-group": "^4.3.0",
     "redux": "^4.0.4",
+    "rimraf": "^3.0.2",
     "size-limit": "^4.7.0",
     "url-loader": "^4.1.1",
     "url-parse": "^1.5.3"
@@ -55,6 +64,7 @@
     "@babel/eslint-parser": "^7.17.0",
     "@babel/register": "^7.0.0",
     "@godaddy/eslint-plugin-react-intl": "^1.1.1",
+    "@typescript-eslint/parser": "^5.19.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
     "chai": "^4.3.4",
     "enzyme": "^3.10.0",
@@ -76,14 +86,9 @@
     "sass": "^1.29.0",
     "setup-env": "^1.2.2",
     "sinon": "^7.4.1",
-    "stylelint": "^13.0.0",
-    "stylelint-config-godaddy": "^0.4.0",
+    "stylelint": "^14.0.0",
+    "typescript": "^4.6.3",
     "webpack": "^5.21.2"
-  },
-  "stylelint": {
-    "extends": [
-      "stylelint-config-godaddy"
-    ]
   },
   "eslintIgnore": [
     "coverage/",

@@ -1,6 +1,10 @@
 const fetch = require('@gasket/fetch');
 const { getLoginUrlFromRequest } = require('@gasket/auth/lib/utils');
 const express = require('express');
+const { S3Client } = require('@aws-sdk/client-s3');
+const listForensicStorage = require('../server/listForensicStorage');
+const uploadFile = require('../server/uploadFile');
+const { REGION } = require('../server/const');
 
 const PROXY_ENDPOINTS = [
   {
@@ -26,7 +30,7 @@ const PROXY_ENDPOINTS = [
   }
 ];
 
-function getApiProxy(apiBaseUrl) {
+function getApiProxy (apiBaseUrl) {
   return async function (req, originalResponse) {
     const url = apiBaseUrl + req.path.replace('/api', '/v1');
     const payload = {
@@ -81,6 +85,22 @@ module.exports = {
           await req.getApiProxy(req, res);
         });
       });
+      const { AccessKeyId, SecretAccessKey } = JSON.parse(process.env.FORENSIC_USER_CREDS);
+      const s3Client = new S3Client({
+        region: REGION,
+        credentials: {
+          accessKeyId: AccessKeyId,
+          secretAccessKey: SecretAccessKey
+        }
+      });
+      function apiListForensicStorage() {
+        listForensicStorage.apply(this, [s3Client, ...arguments])
+      }
+      function apiUploadFile() {
+        uploadFile.apply(this, [s3Client, ...arguments])
+      }
+      app.get('/api/forensic', apiListForensicStorage);
+      app.post('/api/forensic/upload', apiUploadFile);
     }
   }
 };
