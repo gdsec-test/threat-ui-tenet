@@ -66,7 +66,7 @@ jobs:
       - name: Build docker container
         id: container
         run: |
-          . get-forensic-creds.sh
+          . app/get-forensic-creds.sh
           docker build --build-arg FORENSIC_USER_CREDS=${{ env.FORENSIC_USER_CREDS }} --build-arg NODE_ENV=${{ env.NODE_ENV }} --build-arg GD_ROOT_DOMAIN=${{ env.GD_ROOT_DOMAIN }} -t tmp . | while read line ; do echo "$(date)| $line"; done;
           echo "::set-output name=id::$(docker images -q tmp)"
 

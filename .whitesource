@@ -10,6 +10,10 @@
     "displayMode": "diff"
   },
   "issueSettings": {
-    "minSeverityLevel": "LOW"
+    "minSeverityLevel": "HIGH"
+  },
+  "remediateSettings": {
+    "enableRenovate": true,
+    "extends": ["config:base"]
   }
 }
