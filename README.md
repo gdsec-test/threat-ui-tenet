@@ -16,6 +16,8 @@ next line into your **`/etc/hosts`** file
 
 Create file **`.npmrc`** in home folder (**`~/.npmrc`**)
 Copy content of secret https://us-west-2.console.aws.amazon.com/secretsmanager/home?region=us-west-2#/secret?name=npmrc_creds from AWS Secret Manager into this file
+Similar file is stored in repo, but without secret, which is appended during CICD
+`!!!Important: .npmrc file should have exact format including line breaks to work properly, or it won't be used for private repo`
 
 ### 3) Download SSL certificates
 
@@ -58,6 +60,7 @@ cd app && npm install --production=false
 ```
 npm run local
 ```
+
 !!!Gasket `local` environment is no longer supported and locally we run `development` environment. Local env can be separated by special env var `LOCAL_TENET_CONFIG=true`
 
 Troubleshooting tip: If **npm run local** fails, manually install dependencies or peer dependencies which are not downloaded automatically (for example, gasket/plugin-nextjs)

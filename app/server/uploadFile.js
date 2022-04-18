@@ -5,7 +5,7 @@ const rimraf = require('rimraf'),
   uploadedFilesPath = '.next/forensic/',
   chunkDirName = 'chunks',
   maxFileSize = process.env.MAX_FILE_SIZE || 1024 * 1024 * 1024; // 1Gb in bytes, 0 for unlimited
-const { BUCKET } = require('./const');
+const { getBucket } = require('./const');
 const { getEventListeners, EventEmitter } = require('events');
 const uploadEmitter = new EventEmitter();
 
@@ -260,7 +260,7 @@ function saveFileInS3 ({ s3Client, S3Path, fileName, filePath, destinationDir, s
       throw err;
     }
     const params = {
-      Bucket: BUCKET['dev-private'],
+      Bucket: getBucket(),
       // Specify the name of the new object. For example, 'index.html'.
       // To create a directory for the object, use '/'. For example, 'myApp/package.json'.
       Key: formattedFileName,

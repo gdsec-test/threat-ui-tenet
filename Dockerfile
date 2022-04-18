@@ -14,8 +14,7 @@ COPY --chown=nobody app /app
 WORKDIR /app
 
 # RUN npm ci --no-audit
-RUN npm cache verify
-RUN npm i --production=false --verbose
+RUN npm i --production=false
 
 # Generate self-signed cert thats used by the gasket service (check plugins/deploy-plugin.js)
 RUN npm run createcert
@@ -25,7 +24,7 @@ RUN npm run createcert
 RUN npm rebuild node-sass
 
 # Build application
-RUN export NODE_ENV=${NODE_ENV} && npx gasket build --env=${NODE_ENV}
+RUN export NODE_ENV=${NODE_ENV} && export FORENSIC_USER_CREDS=${FORENSIC_USER_CREDS} && npx gasket build --env=${NODE_ENV}
 
 CMD export NODE_ENV=${NODE_ENV} && export FORENSIC_USER_CREDS=${FORENSIC_USER_CREDS} && npx gasket start --env=${NODE_ENV}
 
