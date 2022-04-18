@@ -1,0 +1,62 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Deploy the IAM Forensice Storage User
+Parameters:
+  DevelopmentEnvironment:
+    Type: AWS::SSM::Parameter::Value<String>
+    Description: SSM Parameter for development environment this will live in.
+    Default: /AdminParams/Team/Environment
+    AllowedValues:
+      - /AdminParams/Team/Environment
+  UserName:
+    Type: String
+    Description: Name of custom forensic User
+    Default: "forensic-storage-user"
+Resources:
+  ForensicIAMPolicy:
+    Type: AWS::ServiceCatalog::CloudFormationProvisionedProduct
+    Properties:
+      ProductName: IAMPolicy
+      ProvisioningArtifactName: 1.0.0
+      ProvisionedProductName: !Sub iam-policy-for-${UserName}
+      ProvisioningParameters:
+        - Key: PolicyNameSuffix
+          Value: !Sub ${UserName}-policy
+        - Key: PolicyJSON
+          Value: !Sub |
+            {
+               "Version": "2012-10-17",
+               "Statement": [{
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:Get*",
+                    "s3:List*",
+                    "s3:Put*",
+                    "s3:Delete*"
+                  ],
+                  "Resource": [
+                    "arn:aws:s3:::gd-respstorag-${DevelopmentEnvironment}-godaddy-threat-research-forensic",
+                    "arn:aws:s3:::gd-respstorag-${DevelopmentEnvironment}-godaddy-threat-research-forensic/*"
+                  ]
+               }]
+            }
+      Tags:
+        - Key: doNotShutDown
+          Value: "true"
+
+  IAMUser:
+    DependsOn: ForensicIAMPolicy
+    Type: AWS::ServiceCatalog::CloudFormationProvisionedProduct
+    Properties:
+      ProductName: IAMUser
+      ProvisioningArtifactName: 3.2.0
+      ProvisionedProductName: !Sub iam-user-for-${UserName}
+      ProvisioningParameters:
+        - Key: UserName
+          Value: !Ref UserName
+        - Key: PolicyName
+          Value: CustomPolicy
+        - Key: CustomPolicySuffix
+          Value: !Sub ${UserName}-policy
+      Tags:
+        - Key: doNotShutDown
+          Value: true          

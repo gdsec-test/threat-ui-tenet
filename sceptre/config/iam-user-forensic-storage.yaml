@@ -1,0 +1,3 @@
+template_path: sc-iam-user-forensic-storage.yaml
+stack_name: {{project_code}}-iam-user-forensic-storage
+parameters:
