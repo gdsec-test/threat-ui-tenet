@@ -110,6 +110,7 @@ jobs:
           AWS_ENV: ${{env.AWS_ENV}}
         run: |
           export
+          sceptre launch -y iam-user-forensic-storage.yaml          
           sceptre launch -y ecr.yaml
           sceptre launch -y iam-role.yaml
           sceptre launch -y fargate-cluster.yaml
