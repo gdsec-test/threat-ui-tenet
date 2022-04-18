@@ -24,9 +24,9 @@ RUN npm run createcert
 RUN npm rebuild node-sass
 
 # Build application
-RUN export NODE_ENV=${NODE_ENV} && gasket build --env=${NODE_ENV}
+RUN export NODE_ENV=${NODE_ENV} && npx gasket build --env=${NODE_ENV}
 
-CMD export NODE_ENV=${NODE_ENV} && export FORENSIC_USER_CREDS=${FORENSIC_USER_CREDS} && gasket start --env=${NODE_ENV}
+CMD export NODE_ENV=${NODE_ENV} && export FORENSIC_USER_CREDS=${FORENSIC_USER_CREDS} && npx gasket start --env=${NODE_ENV}
 
 EXPOSE 8443
 
