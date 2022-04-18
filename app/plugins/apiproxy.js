@@ -4,6 +4,7 @@ const express = require('express');
 const { S3Client } = require('@aws-sdk/client-s3');
 const listForensicStorage = require('../server/listForensicStorage');
 const uploadFile = require('../server/uploadFile');
+const deleteFileFromForensicStorage = require('../server/deleteFileFromForensicStorage');
 const { REGION } = require('../server/const');
 
 const PROXY_ENDPOINTS = [
@@ -99,8 +100,12 @@ module.exports = {
       function apiUploadFile() {
         uploadFile.apply(this, [s3Client, ...arguments])
       }
+      function apiDeleteFileFromForensicStorage() {
+        deleteFileFromForensicStorage.apply(this, [s3Client, ...arguments])
+      }
       app.get('/api/forensic', apiListForensicStorage);
       app.post('/api/forensic/upload', apiUploadFile);
+      app.delete('/api/forensic/delete', apiDeleteFileFromForensicStorage);
     }
   }
 };

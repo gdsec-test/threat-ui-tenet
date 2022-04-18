@@ -18,13 +18,23 @@ function uploadFile (s3Client, req, res) {
   var form = new multiparty.Form();
 
   form.parse(req, function (err, fields, files) {
-    var partIndex = fields.qqpartindex;
+    const partIndex = fields.qqpartindex;
+    const S3Path = fields.folder && fields.folder.length ? fields.folder[0] : '';
+
     res.set('Content-Type', 'text/plain');
     const eventName = UPLOAD_FINISHED_EVENT + fields.qqfilename;
     if (!getEventListeners(uploadEmitter, eventName).length) {
-      uploadEmitter.once(eventName, function ({ fileName, fileDestination, success, failure }) {
+      uploadEmitter.once(eventName, function ({ fileName, fileDestination, destinationDir, success, failure }) {
         uploadEmitter.removeAllListeners(eventName);
-        saveFileInS3({ s3Client, fileName, filePath: fileDestination, success: success, error: failure });
+        saveFileInS3({
+          s3Client,
+          S3Path,
+          fileName,
+          filePath: fileDestination,
+          destinationDir,
+          success: success,
+          error: failure
+        });
       });
     }
     if (partIndex == null) {
@@ -166,7 +176,7 @@ function moveUploadedFile (file, uuid, success, failure) {
     destinationFile: fileDestination,
     success: () => {
       const eventName = UPLOAD_FINISHED_EVENT + file.name;
-      uploadEmitter.emit(eventName, { fileName, fileDestination, success, failure });
+      uploadEmitter.emit(eventName, { fileName, fileDestination, destinationDir, success, failure });
     },
     failure
   });
@@ -206,7 +216,7 @@ function combineChunks (file, uuid, success, failure) {
             }
           });
           const eventName = UPLOAD_FINISHED_EVENT + fileName;
-          uploadEmitter.emit(eventName, { fileName, fileDestination, success, failure });
+          uploadEmitter.emit(eventName, { fileName, fileDestination, destinationDir, success, failure });
         },
         failure
       );
@@ -239,7 +249,12 @@ function getChunkFilename (index, count) {
   return (zeros + index).slice(-digits);
 }
 
-function saveFileInS3 ({ s3Client, fileName, filePath, success, error }) {
+function saveFileInS3 ({ s3Client, S3Path, fileName, filePath, destinationDir, success, error }) {
+  let formattedFileName = fileName.join('');
+  if (S3Path && S3Path[S3Path.length - 1] === '/') {
+    S3Path = S3Path.slice(0, S3Path.length - 1);
+  }
+  formattedFileName = S3Path ? S3Path + '/' + formattedFileName : formattedFileName;
   fs.readFile(filePath, (err, data) => {
     if (err) {
       throw err;
@@ -248,14 +263,14 @@ function saveFileInS3 ({ s3Client, fileName, filePath, success, error }) {
       Bucket: BUCKET['dev-private'],
       // Specify the name of the new object. For example, 'index.html'.
       // To create a directory for the object, use '/'. For example, 'myApp/package.json'.
-      Key: fileName.join(''),
+      Key: formattedFileName,
       // Content of the new object.
       Body: data
     };
     s3Client
       .send(new PutObjectCommand(params))
       .then(data => {
-        rimraf(filePath, function (rimrafError) {
+        rimraf(destinationDir, function (rimrafError) {
           if (rimrafError) {
             console.log('Problem deleting file after sedning int to S3' + rimrafError);
           }
@@ -263,7 +278,7 @@ function saveFileInS3 ({ s3Client, fileName, filePath, success, error }) {
         success();
       })
       .catch(data => {
-        rimraf(filePath, function (rimrafError) {
+        rimraf(destinationDir, function (rimrafError) {
           if (rimrafError) {
             console.log('Problem deleting file after sedning int to S3' + rimrafError);
           }
