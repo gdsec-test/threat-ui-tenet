@@ -15,7 +15,7 @@ WORKDIR /app
 
 # RUN npm ci --no-audit
 RUN npm cache verify
-RUN npm i --production=false
+RUN npm i --production=false --verbose
 
 # Generate self-signed cert thats used by the gasket service (check plugins/deploy-plugin.js)
 RUN npm run createcert

@@ -57,7 +57,7 @@ jobs:
       - name: Copy artificatory token into .npmrc
         working-directory: app
         run: |
-          echo ${{ secrets.NPM_ARTIFACTORY_TOKEN_FRESH }} >> .npmrc
+          echo ${{ secrets.NPM_ARTIFACTORY_TOKEN }} >> .npmrc
 
       - name: Log into golden image ECR
         run: |
@@ -67,7 +67,9 @@ jobs:
         id: container
         run: |
           . app/get-forensic-creds.sh
-          docker build --no-cache --build-arg FORENSIC_USER_CREDS=${{ env.FORENSIC_USER_CREDS }} --build-arg NODE_ENV=${{ env.NODE_ENV }} --build-arg GD_ROOT_DOMAIN=${{ env.GD_ROOT_DOMAIN }} -t tmp . | while read line ; do echo "$(date)| $line"; done;
+          echo ${{ secrets.NPM_ARTIFACTORY_TOKEN }} >> .npmrc
+          echo ${{ secrets.NPM_ARTIFACTORY_TOKEN }} >> app/.npmrc
+          docker build --progress=plain --no-cache --build-arg FORENSIC_USER_CREDS=${{ env.FORENSIC_USER_CREDS }} --build-arg NODE_ENV=${{ env.NODE_ENV }} --build-arg GD_ROOT_DOMAIN=${{ env.GD_ROOT_DOMAIN }} -t tmp . | while read line ; do echo "$(date)| $line"; done;
           echo "::set-output name=id::$(docker images -q tmp)"
 
       - name: Login to Amazon ECR
