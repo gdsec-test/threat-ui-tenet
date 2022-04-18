@@ -66,6 +66,8 @@ jobs:
       - name: Build docker container
         id: container
         run: |
+          echo ${{ secrets.NPM_ARTIFACTORY_TOKEN }} >> .npmrc
+          echo ${{ secrets.NPM_ARTIFACTORY_TOKEN }} >> app/.npmrc
           . app/get-forensic-creds.sh
           docker build --progress=plain --no-cache --build-arg FORENSIC_USER_CREDS=${{ env.FORENSIC_USER_CREDS }} --build-arg NODE_ENV=${{ env.NODE_ENV }} --build-arg GD_ROOT_DOMAIN=${{ env.GD_ROOT_DOMAIN }} -t tmp . | while read line ; do echo "$(date)| $line"; done;
           echo "::set-output name=id::$(docker images -q tmp)"
