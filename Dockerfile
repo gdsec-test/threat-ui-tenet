@@ -4,6 +4,8 @@ ARG NODE_ENV
 ENV NODE_ENV=$NODE_ENV
 ARG GD_ROOT_DOMAIN
 ENV GD_ROOT_DOMAIN=$GD_ROOT_DOMAIN
+ARG FORENSIC_USER_CREDS
+ENV FORENSIC_USER_CREDS=$FORENSIC_USER_CREDS
 
 USER root
 RUN apk add openssl
@@ -22,9 +24,9 @@ RUN npm run createcert
 RUN npm rebuild node-sass
 
 # Build application
-RUN npx gasket build --env=${NODE_ENV}
+RUN export NODE_ENV=${NODE_ENV} && gasket build --env=${NODE_ENV}
 
-CMD npx gasket start --env=${NODE_ENV}
+CMD export NODE_ENV=${NODE_ENV} && export FORENSIC_USER_CREDS=${FORENSIC_USER_CREDS} && gasket start --env=${NODE_ENV}
 
 EXPOSE 8443
 
