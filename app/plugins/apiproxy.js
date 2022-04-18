@@ -86,22 +86,39 @@ module.exports = {
           await req.getApiProxy(req, res);
         });
       });
-      const { AccessKeyId, SecretAccessKey } = JSON.parse(process.env.FORENSIC_USER_CREDS);
-      const s3Client = new S3Client({
-        region: REGION,
-        credentials: {
-          accessKeyId: AccessKeyId,
-          secretAccessKey: SecretAccessKey
+      let s3Client;
+      if (!process.env.FORENSIC_USER_CREDS) {
+        console.warn('Credentials for forensic storage are not found in env variables');
+      } else {
+        const { AccessKeyId, SecretAccessKey } = JSON.parse(process.env.FORENSIC_USER_CREDS);
+        s3Client = new S3Client({
+          region: REGION,
+          credentials: {
+            accessKeyId: AccessKeyId,
+            secretAccessKey: SecretAccessKey
+          }
+        });
+      }
+      function apiListForensicStorage (req, res) {
+        if (!process.env.FORENSIC_USER_CREDS) {
+          res.send({ error: 'Forensic storage is not authorized. See logs' });
+        } else {
+          listForensicStorage.apply(this, [s3Client, ...arguments]);
         }
-      });
-      function apiListForensicStorage() {
-        listForensicStorage.apply(this, [s3Client, ...arguments])
       }
-      function apiUploadFile() {
-        uploadFile.apply(this, [s3Client, ...arguments])
+      function apiUploadFile (req, res) {
+        if (!process.env.FORENSIC_USER_CREDS) {
+          res.send({ error: 'Forensic storage is not authorized. See logs' });
+        } else {
+          uploadFile.apply(this, [s3Client, ...arguments]);
+        }
       }
-      function apiDeleteFileFromForensicStorage() {
-        deleteFileFromForensicStorage.apply(this, [s3Client, ...arguments])
+      function apiDeleteFileFromForensicStorage (req, res) {
+        if (!process.env.FORENSIC_USER_CREDS) {
+          res.send({ error: 'Forensic storage is not authorized. See logs' });
+        } else {
+          deleteFileFromForensicStorage.apply(this, [s3Client, ...arguments]);
+        }
       }
       app.get('/api/forensic', apiListForensicStorage);
       app.post('/api/forensic/upload', apiUploadFile);

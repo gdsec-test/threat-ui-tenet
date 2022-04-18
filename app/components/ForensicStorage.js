@@ -101,7 +101,11 @@ export const ForensicStorage = () => {
     }
     getForensicStorage()
     .then(s3DataResponse => {
-      setTreeData(formatTreeDataFolder(s3DataResponse));
+      if (s3DataResponse.error) {
+        alert("Error during reading S3 forensice storage:" + s3DataResponse.error);
+      } else {
+        setTreeData(formatTreeDataFolder(s3DataResponse));
+      }
     })
     .catch(err => {
       alert("Error during reading S3 forensice storage:" + err);
@@ -134,7 +138,7 @@ export const ForensicStorage = () => {
           <Button design="primary" text="Delete selected file in S3" onClick={() => {
             deleteForensicStorageFile(selectedFile).then(() => {
               setRefresh(!refresh);
-            });
+            }).catch(err => alert(err));
           }} />
           <span style={{
             fontSize: '1.2em',
