@@ -1,12 +1,12 @@
 import '@ux/icon/clipboard/index.css';
 import Download from '@ux/icon/download';
 import '@ux/icon/download/index.css';
-import { Dropdown, Table } from '@ux/uxcore2';
+import { Dropdown, Table, Tooltip } from '@ux/uxcore2';
 import React from 'react';
 import { JSONTree } from 'react-json-tree';
 import getJob from '../api/getJob';
 import { THEMES } from '../utils/const';
-import { expandData, formatData, parseData, badnessFormatter } from '../utils/dataFormatters';
+import { badnessFormatter, expandData, formatData, parseData } from '../utils/dataFormatters';
 import CopyToClipboard from './common/CopyToClipboard';
 import Loader from './common/Loader';
 import RenderError from './common/RenderError';
@@ -75,7 +75,14 @@ class JobDetails extends React.Component {
     /* eslint-disable */
     const { responses, startTime, jobStatus, jobPercentage, submission, badness = [] } = jobDetails;
     let badnessScore = badnessFormatter(badness);
-    badnessScore = <td className='JobDetails_badness'>{badnessScore}</td>
+    badnessScore = <td className='JobDetails_badness'>{badnessScore}
+      <Tooltip
+        title='Badness'
+        openOnHover={ true }
+        autoHideTimeout={ 600 }
+        message='(0.0 for good to 1.0 for bad)'
+      />
+    </td>;
     let dateTime = new Date(startTime * 1000);
     return (
       <div className='JobDetails'>
