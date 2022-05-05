@@ -80,7 +80,7 @@ class JobDetails extends React.Component {
         title='Badness'
         openOnHover={ true }
         autoHideTimeout={ 600 }
-        message='(0.0 for good to 1.0 for bad)'
+        message='0.0 for good to 1.0 for bad'
       />
     </td>;
     let dateTime = new Date(startTime * 1000);
