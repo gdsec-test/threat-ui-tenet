@@ -8,13 +8,14 @@ ARG FORENSIC_USER_CREDS
 ENV FORENSIC_USER_CREDS=$FORENSIC_USER_CREDS
 
 USER root
+RUN set -o pipefail
 RUN apk add openssl
 COPY --chown=nobody app /app
 
 WORKDIR /app
 
 # RUN npm ci --no-audit
-RUN npm i --production=false
+RUN npm i --production=false --loglevel error
 
 # Generate self-signed cert thats used by the gasket service (check plugins/deploy-plugin.js)
 RUN npm run createcert
