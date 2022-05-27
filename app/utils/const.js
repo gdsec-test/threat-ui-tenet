@@ -45,8 +45,8 @@ export const MODULES = {
 };
 
 export const JOB_STATUS = {
-  PENDING: 'PENDING',
-  DONE: 'DONE'
+  PENDING: 'Pending',
+  DONE: 'Done'
 };
 
 export const IOC_TYPE_DESC = {

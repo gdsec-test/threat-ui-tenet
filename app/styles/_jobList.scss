@@ -1,5 +1,17 @@
 .JobList {
-  padding: 1em;
+  > * {
+    border: none !important;
+  }
+
+  .JobList_Search_Tags {
+    width: 45%;
+    display: inline-flex;
+    padding: 24px 50px 38px 0px;
+    margin: 0;
+    input {
+      height: 56px;
+    }
+  }
 
   .JobList_filter_list {
     margin: 1em;
@@ -27,16 +39,25 @@
         color: map-deep-get($palette-colors, 'danger', 'base', 'color');
       }
     }
+    .is_done {
+      * {
+        color: map-deep-get($palette-colors, 'success', 'base', 'color');
+      }
+    }
 
     &:hover {
-      color: map-deep-get($palette-colors, 'primary', 'base', 'color');
+      color: map-deep-get($palette-colors, 'success', 'base', 'color');
       font-weight: bold;
       cursor: pointer;
     }
 
     .JobList_id,
     .JobList_modules {
-      font-weight: bold;
+      font-family: 'GD Sherpa';
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 150%;
       text-overflow: ellipsis;
       display: inline;
       white-space: nowrap;
@@ -44,23 +65,41 @@
   }
 
   .JobList_head {
+    font-family: 'GD Sherpa';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 14px;
+    line-height: 150%;
+    color: #111111;
+    background: none;
+
     .JobList_head_cell {
-      border-right: 1px solid black;
+      text-transform: initial;
 
       &.JobList_head_cell_sortable {
         .JobList_sortButton {
-          float: right;
-          color: map-deep-get($palette-colors, 'gray', 'base', 'color');
+          float: left;
+          color: black;
           transition: transform 500ms;
+          vertical-align: middle;
 
-          > svg {
-            vertical-align: middle;
-          }
 
           &.JobList_sortButton_rotated {
             transform: rotate(180deg);
           }
         }
+      }
+
+      .JobList_head_cell_right {
+        align-items: center;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .JobList_head_cell_center {
+        align-items: center;
+        display: flex;
+        justify-content: center;
       }
 
       &.JobList_head_cell_active {
@@ -70,7 +109,7 @@
         }
 
         .JobList_sortButton {
-          color: map-deep-get($palette-colors, 'primary', 'base', 'color');
+          color: map-deep-get($palette-colors, 'success', 'base', 'color');
         }
       }
     }

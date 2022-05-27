@@ -10,8 +10,17 @@
     border-radius: 2px;
     border: 1px solid black;
     width: 100%;
-    min-height: 200px;
+    min-height: 100px;
     margin-bottom: 20px;
+    [id^='placeholder'] {
+      position: absolute;
+      pointer-events: none;
+      color: darkgray;
+    }
+
+    [data-contents='true'] {
+      min-height: 100px;
+    }
   }
 
   .InputForm_Tags_List {
@@ -29,7 +38,7 @@
     .InputForm_FileUpload {
       width: 60px;
       position: absolute;
-      top: 40px;
+      top: 5px;
       right: 15px;
       z-index: 1;
 
@@ -72,7 +81,6 @@
       margin: auto;
       font-weight: 900;
       font-size: 40px;
-
     }
   }
 

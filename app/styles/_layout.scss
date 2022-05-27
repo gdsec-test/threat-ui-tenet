@@ -1,4 +1,24 @@
+// body.gasket-app {
+//   margin-left: 50px;
+// }
+
 .Layout {
+  &.container {
+    // max-width: 1200px;
+  }
+  
+  .Layout_Main_Content {
+    padding: 48px;
+    
+    .Layout_Main_Caption {
+      font-family: 'GD Sherpa';
+      font-style: normal;
+      font-weight: 500;
+      font-size: 31.3px;
+      line-height: 125%;
+    }
+  }
+
   .Layout_Navigation {
     color: red;
     flex-direction: row;
