@@ -28,6 +28,7 @@
     "@rigor/upload-coverage": "^1.0.0",
     "@ux/file-upload": "^2200.0.0",
     "@ux/scss-definitions": "^2002.0.3",
+    "@ux/search": "^2200.0.12",
     "@ux/text-input": "^2200.0.6",
     "@ux/uxcore2": "^2200.0.7",
     "browserslist-config-godaddy": "^3.0.0",

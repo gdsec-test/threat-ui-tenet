@@ -48,7 +48,8 @@ module.exports = {
   presentationCentral: {
     params: {
       app: 'threat-ui-tenet',
-      header: 'internal-header'
+      header: 'independents-header',
+      paletteId: 'godaddy-antares'
     }
   },
   nextConfig: {

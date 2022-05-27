@@ -1,25 +1,28 @@
-import React, { Fragment } from 'react';
+import ArrowDown from '@ux/icon/arrow-down';
+import '@ux/icon/arrow-down/index.css';
+import '@ux/icon/search/index.css';
+import '@ux/icon/x/index.css';
+import Search from '@ux/search';
+import '@ux/search/dist/styles.css';
+import '@ux/text-input/dist/styles.css';
 import { Tooltip } from '@ux/uxcore2';
-import ChevronDown from '@ux/icon/chevron-down';
-import Cross from '@ux/icon/x';
 import { Table } from 'evergreen-ui';
+import { withRouter } from 'next/router';
+import React, { Fragment } from 'react';
 import getJobs from '../api/getJobs';
 import { JOB_STATUS } from '../utils/const';
-import { withRouter } from 'next/router';
-import Loader from './common/Loader';
 import CopyToClipboard from './common/CopyToClipboard';
-import '@ux/icon/chevron-down/index.css';
-import '@ux/icon/x/index.css';
+import Loader from './common/Loader';
 import RenderError from './common/RenderError';
 
 const updateInterval = 60000;
 
 const COLUMNS = {
-  ID: { name: 'Id', id: 'id' },
-  TAGS: { name: 'Tags', id: 'tags' },
-  STATUS: { name: 'Status', id: 'status' },
-  MODULES: { name: 'Modules', id: 'modules' },
-  TIMESTAMP: { name: 'Date/Time', id: 'timestamp' }
+  ID: { name: 'ID', id: 'id', size: 200 },
+  TAGS: { name: 'Tags', id: 'tags', size: 200 },
+  STATUS: { name: 'Status', id: 'status', size: 100 },
+  MODULES: { name: 'Modules', id: 'modules', size: 100 },
+  TIMESTAMP: { name: 'Date/Time', id: 'timestamp', size: 220 }
 };
 
 const SORT = {
@@ -30,7 +33,7 @@ const SORT = {
 const intervalIds = {};
 
 class JobList extends React.Component {
-  constructor() {
+  constructor () {
     super(...arguments);
     const max = Math.round(updateInterval / 1000);
     this.state = {
@@ -57,11 +60,11 @@ class JobList extends React.Component {
     this.getJobs = this.getJobs.bind(this);
   }
 
-  getJobs() {
+  getJobs () {
     this.setState({
       isLoading: true
     });
-    getJobs().then((jobsListData) => {
+    getJobs().then(jobsListData => {
       const jobsList = jobsListData instanceof Array ? jobsListData : [];
       const { jobIds } = this.getUrlQueryParams();
       this.setState(
@@ -79,7 +82,7 @@ class JobList extends React.Component {
     });
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const {
       jobsRefresh: { step }
     } = this.state;
@@ -93,19 +96,19 @@ class JobList extends React.Component {
     }, step * 1000);
   }
 
-  componentWillUnmount() {
-    Object.values(intervalIds).forEach((id) => clearInterval(id));
+  componentWillUnmount () {
+    Object.values(intervalIds).forEach(id => clearInterval(id));
   }
 
-  renderHead() {
-    const getSortableButton = ({ id: columnId, name }, columnWidth) => {
+  renderHead () {
+    const getSortableHeader = ({ id: columnId, name }, columnWidth) => {
       const { sortBy } = this.state;
       const isActive = sortBy[columnId] ? 'JobList_head_cell_active' : '';
       const sortByType = this.state.sortBy[columnId] || SORT.ASC;
       const isDown = sortByType === SORT.DESC ? '' : 'JobList_sortButton_rotated';
       return (
         <Table.TextHeaderCell
-          width={columnWidth + (isActive ? 20 : 0)}
+          width={columnWidth}
           flex='none'
           className={`JobList_head_cell JobList_head_cell_sortable ${isActive}`}
           onClick={() => {
@@ -113,47 +116,54 @@ class JobList extends React.Component {
             this.sortBy(columnId, newSortByType);
           }}
         >
-          {name}
-          <ChevronDown className={`JobList_sortButton ${isDown}`} />
+          <div
+            className={`${columnId === COLUMNS.TIMESTAMP.id ? 'JobList_head_cell_right' : 'JobList_head_cell_center'}`}
+          >
+            <ArrowDown width={20} height={20} className={`JobList_sortButton ${isDown}`} />
+            {name}
+          </div>
         </Table.TextHeaderCell>
       );
     };
     return (
       <Table.Head className='JobList_head'>
-        <Table.TextHeaderCell className='JobList_head_cell' width={100} flex='none'>
+        <Table.TextHeaderCell className='JobList_head_cell' width={COLUMNS.ID.size} flex='none'>
           {COLUMNS.ID.name}
         </Table.TextHeaderCell>
-        <Table.SearchHeaderCell
-          className='JobList_head_cell'
-          placeholder='Search by tags'
-          onChange={this.handleTagsFilterChange}
-          value={this.state.filterBy.searchTagsQuery}
-        />
-        {getSortableButton(COLUMNS.TIMESTAMP, 220)}
-        {getSortableButton(COLUMNS.STATUS, 100)}
-        <Table.TextHeaderCell className='JobList_head_cell'>{COLUMNS.MODULES.name}</Table.TextHeaderCell>
+        <Table.TextHeaderCell className='JobList_head_cell' width={COLUMNS.TAGS.size} flex='none'>
+          {COLUMNS.TAGS.name}
+        </Table.TextHeaderCell>
+        {getSortableHeader(COLUMNS.TIMESTAMP, COLUMNS.TIMESTAMP.size)}
+        {getSortableHeader(COLUMNS.STATUS, COLUMNS.STATUS.size)}
+        <Table.TextHeaderCell className='JobList_head_cell' width={COLUMNS.MODULES.size}>
+          {COLUMNS.MODULES.name}
+        </Table.TextHeaderCell>
       </Table.Head>
     );
   }
 
-  renderRow({ id, tags, status, modules, timestamp }) {
+  renderRow ({ id, tags, status, modules, timestamp, jobPercentage }) {
     const { router } = this.props;
     return (
       <Table.Row key={id} className='JobList_row' isSelectable onSelect={() => router.push(`/job/${id}`)}>
-        <Table.Cell className='JobList_id' width={100} flex='none'>
+        <Table.Cell className='JobList_id' width={COLUMNS.ID.size} flex='none'>
           <CopyToClipboard value={`${location.origin}/job/${id}`} />
           {id}
         </Table.Cell>
-        <Table.Cell display='flex' alignItems='center'>
+        <Table.Cell flex='none' width={COLUMNS.TAGS.size} alignItems='center'>
           <a> {tags.join(', ')}</a>
         </Table.Cell>
-        <Table.TextCell width={220} flex='none'>
+        <Table.TextCell width={COLUMNS.TIMESTAMP.size} flex='none'>
           {new Date(timestamp * 1000).toUTCString()}
         </Table.TextCell>
-        <Table.TextCell width={100} flex='none' className={`${status === JOB_STATUS.PENDING ? 'pending' : ''}`}>
-          {status}
+        <Table.TextCell
+          width={COLUMNS.STATUS.size}
+          flex='none'
+          className={`${status === JOB_STATUS.PENDING ? 'pending' : 'is_done'}`}
+        >
+          {jobPercentage === 100 ? status : jobPercentage.toFixed(2) + '%'}
         </Table.TextCell>
-        <Table.Cell className='JobList_modules' display='flex' alignItems='center'>
+        <Table.Cell className='JobList_modules' display='flex' alignItems='center' width={COLUMNS.MODULES.size}>
           <Tooltip
             id={id}
             hideClose={true}
@@ -176,7 +186,7 @@ class JobList extends React.Component {
     );
   }
 
-  getUrlQueryParams() {
+  getUrlQueryParams () {
     const {
       router: {
         query: { jobIds }
@@ -185,7 +195,7 @@ class JobList extends React.Component {
     return { jobIds: jobIds ? jobIds.split(',') : [] };
   }
 
-  sortBy(columnId, sortByType) {
+  sortBy (columnId, sortByType) {
     const { tableJobsList } = this.state;
     const newTableJobsList = tableJobsList.slice();
     newTableJobsList.sort((job1, job2) => {
@@ -200,7 +210,7 @@ class JobList extends React.Component {
     });
   }
 
-  applyFilters() {
+  applyFilters () {
     const {
       filterBy: { searchTagsQuery, jobIds },
       jobsList
@@ -209,7 +219,8 @@ class JobList extends React.Component {
     const formattedQuery = (searchTagsQuery || '')
       .replaceAll(' ', ',')
       .split(',')
-      .filter((item) => item);
+      .filter(item => item)
+      .map(item => item.toLowerCase());
     if (jobIds && jobIds.length) {
       tableJobsList = tableJobsList.filter(({ id }) => jobIds.indexOf(id) >= 0);
     } else if (this.getUrlQueryParams().jobIds.length) {
@@ -219,7 +230,7 @@ class JobList extends React.Component {
     }
     if (formattedQuery.length) {
       tableJobsList = tableJobsList.filter(({ tags }) =>
-        tags.find((tag) => formattedQuery.find((query) => tag.indexOf(query) >= 0))
+        tags.find(tag => formattedQuery.find(query => tag.toLowerCase().indexOf(query) >= 0))
       );
     }
     this.setState(
@@ -227,14 +238,14 @@ class JobList extends React.Component {
         tableJobsList
       },
       () => {
-        Object.keys(this.state.sortBy).forEach((columnId) => {
+        Object.keys(this.state.sortBy).forEach(columnId => {
           this.sortBy(columnId, this.state.sortBy[columnId]);
         });
       }
     );
   }
 
-  handleTagsFilterChange(searchTagsQuery) {
+  handleTagsFilterChange (searchTagsQuery) {
     const { filterBy } = this.state;
     this.setState(
       {
@@ -244,50 +255,30 @@ class JobList extends React.Component {
     );
   }
 
-  render() {
+  render () {
     const {
       tableJobsList,
       isLoading,
-      filterBy,
       jobsRefresh: { max, progress }
     } = this.state;
     if (isLoading) {
       return <Loader inline size='lg' text='Jobs are refreshing...' />;
     }
-    const filterByNames = Object.keys(filterBy).filter((filter) => filterBy[filter].length);
     return (
       <div className='JobList'>
-        {filterByNames.length ? (
-          <div className='JobList_filter_list'>
-            <div>
-              {filterByNames.map((filter) => {
-                let filterValue = filterBy[filter];
-                filterValue =
-                  filterValue instanceof Array
-                    ? filterValue.map((s) => s.substring(0, 6) + '...').join(',')
-                    : filterValue.toString();
-                return (
-                  <span className='JobList_filter' key={filter}>
-                    {`${filter}: ${filterValue}`}
-                    <Cross
-                      onClick={() => {
-                        const filterBy = { ...this.state.filterBy };
-                        delete filterBy[filter];
-                        this.setState({ filterBy }, () => this.applyFilters());
-                      }}
-                      width={'1em'}
-                      height={'1em'}
-                    />
-                  </span>
-                );
-              })}
-            </div>
-          </div>
-        ) : null}
-        <div>{`Jobs will refresh in ${max - progress} sec`}</div>
+        <div>
+          <Search
+            type='text'
+            className='JobList_Search_Tags'
+            placeholder='Search Tags'
+            onChange={this.handleTagsFilterChange}
+          />
+          <span>{`Refreshing in ${max - progress} sec`}</span>
+        </div>
+
         <Table border>
           {this.renderHead()}
-          <Table.VirtualBody height={640}>{tableJobsList.map((item) => this.renderRow(item))}</Table.VirtualBody>
+          <Table.VirtualBody height={640}>{tableJobsList.map(item => this.renderRow(item))}</Table.VirtualBody>
         </Table>
       </div>
     );

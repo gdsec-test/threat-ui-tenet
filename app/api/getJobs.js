@@ -1,7 +1,7 @@
-import fetch from './fetch';
 import { JOB_STATUS } from '../utils/const';
+import fetch from './fetch';
 
-export default async () => {
+const getJobs = async () => {
   let jobs = await fetch({ url: '/api/jobs' });
   jobs = jobs.map(({ JobDB: { jobId, startTime, submission = {} }, jobPercentage }) => {
     let status = JOB_STATUS.DONE;
@@ -20,9 +20,12 @@ export default async () => {
       id: jobId,
       tags,
       status,
+      jobPercentage,
       modules: modulesStatus,
       timestamp: startTime
     };
   });
   return jobs;
 };
+
+export default getJobs;
