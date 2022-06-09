@@ -1,8 +1,5 @@
 import { withLocaleRequired } from '@gasket/react-intl';
-import Arrow from '@ux/icon/link-arrow';
 import '@ux/icon/link-arrow/index.css';
-import { Button } from '@ux/uxcore2';
-import Link from 'next/link';
 import { withRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import Head from '../components/head';
@@ -35,17 +32,18 @@ export const Layout = ({ children, router }) => {
           text: 'Hello World'
         });
         header.updateSidebarNav(menu);
-        header.onNavLinkClick(() => (key) => {
-          return (evt) => {
+        header.onNavLinkClick(() => key => {
+          return evt => {
             evt.preventDefault();
             router.push(evt.currentTarget.href);
             return false;
-          }
+          };
         });
       });
     }
   }, [router]);
-  const currentCaption = ALL_NAVIGATION_LINKS.find(link => link.url === router.route).caption;
+  const currentCaption =
+    router.route === '/job/[id]' ? 'Job Details' : ALL_NAVIGATION_LINKS.find(link => link.url === router.route).caption;
   return (
     <div className='Layout container m-t-3'>
       <Head title='Home' />
