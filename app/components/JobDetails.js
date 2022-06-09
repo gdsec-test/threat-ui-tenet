@@ -11,22 +11,23 @@ import CopyToClipboard from './common/CopyToClipboard';
 import Loader from './common/Loader';
 import RenderError from './common/RenderError';
 const { DropdownItem } = Dropdown;
-const customError = "Error during rendering theme. Please, switch to another theme"
+const customError = 'Error during rendering theme. Please, switch to another theme';
 
 class JobDetails extends React.Component {
-  constructor() {
+  constructor () {
     super(...arguments);
     this.state = {
       isLoading: true,
-      theme: 'monokai'
+      theme: 'monokai',
+      expandLongData: {}
     };
     this.onChangeTheme = this.onChangeTheme.bind(this);
     this.saveToFile = this.saveToFile.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const { id } = this.props;
-    getJob(id).then((jobDetails) => {
+    getJob(id).then(jobDetails => {
       jobDetails = parseData(jobDetails);
       this.setState({
         isLoading: false,
@@ -35,13 +36,13 @@ class JobDetails extends React.Component {
     });
   }
 
-  onChangeTheme({ selected }) {
+  onChangeTheme ({ selected }) {
     this.setState({
       theme: THEMES[selected].value
     });
   }
 
-  saveToFile() {
+  saveToFile () {
     const { jobDetails } = this.state;
     const {
       submission: {
@@ -60,8 +61,8 @@ class JobDetails extends React.Component {
     document.body.removeChild(a);
   }
 
-  render() {
-    const { jobDetails, isLoading, theme } = this.state;
+  render () {
+    const { jobDetails, isLoading, theme, expandLongData } = this.state;
     if (isLoading) {
       return <Loader inline size='lg' text='Loading job details...' />;
     }
@@ -75,14 +76,12 @@ class JobDetails extends React.Component {
     /* eslint-disable */
     const { responses, startTime, jobStatus, jobPercentage, submission, badness = [] } = jobDetails;
     let badnessScore = badnessFormatter(badness);
-    badnessScore = <td className='JobDetails_badness'>{badnessScore}
-      <Tooltip
-        title='Badness'
-        openOnHover={ true }
-        autoHideTimeout={ 600 }
-        message='0.0 for good to 1.0 for bad'
-      />
-    </td>;
+    badnessScore = (
+      <td className='JobDetails_badness'>
+        {badnessScore}
+        <Tooltip title='Badness' openOnHover={true} autoHideTimeout={600} message='0.0 for good to 1.0 for bad' />
+      </td>
+    );
     let dateTime = new Date(startTime * 1000);
     return (
       <div className='JobDetails'>
@@ -117,11 +116,33 @@ class JobDetails extends React.Component {
           </div>
         </div>
         <JSONTree
+          hideRoot={true}
           data={responses}
           theme={theme}
-          labelRenderer={(keyPath) => <b>{keyPath[0]}</b>}
-          valueRenderer={formatData}
-          shouldExpandNode={expandData}
+          labelRenderer={keyPath => {
+            if (keyPath.length === 1) {
+              // this is root module node
+              const moduleName = keyPath[0];
+              return (
+                <div className='JobDetails_Metadata_Control'>
+                  <b>{moduleName}</b>
+                </div>
+              );
+            }
+            return <b>{keyPath[0]}</b>;
+          }}
+          valueRenderer={(raw, value, ...keyPath) => {
+            const path = keyPath.join('');
+            const toggleClick = () => {
+              this.setState({
+                expandLongData: {...expandLongData, [path]: true}
+              })
+            };
+            return formatData(toggleClick, expandLongData[path], value, ...keyPath);
+          }}
+          shouldExpandNode={(keyPath) => {
+            return expandData(keyPath);
+          }}
         />
       </div>
     );

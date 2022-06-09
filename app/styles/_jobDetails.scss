@@ -27,4 +27,24 @@
       font-weight: bolder;
     }
   }
+
+  .JobDetails_ReportValue {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 500px;
+    display: inline-block;
+    padding-left: 10px;
+    vertical-align: middle;
+    &.expanded {
+      white-space: initial;
+      max-width: none;
+    }
+  }
+
+  .JobDetails_Metadata_Control {
+    .JobDetails_Metadata_Control_Metadata {
+      pointer-events: none;
+    }
+  }
 }
