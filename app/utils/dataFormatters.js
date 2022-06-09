@@ -4,7 +4,8 @@ import React from 'react';
 
 const parsers = {
   csv: (data) => Papa.parse(data, { header: true, skipEmptyLines: true }).data,
-  spaces: (data) => data.toString().split(' ')
+  spaces: (data) => data.toString().split(' '),
+  json: (data) => JSON.parse(data)
 };
 
 const DataParseSchema = {
@@ -12,32 +13,35 @@ const DataParseSchema = {
     const BlacklistedProp = 'Blacklisted';
     const result = data.map((obj) => {
       const IOCsList = { ...obj, Data: parsers.csv(obj.Data) };
-      IOCsList.Data = IOCsList.Data.reduce((acc, item) => {
-        const { IoC, Blacklisted = '', ...rest } = item;
-        acc[IoC] = acc[IoC] || [];
-        acc[IoC].push({ Blacklisted, ...rest });
-        if (Blacklisted.toLowerCase() === 'true') {
-          acc[BlacklistedProp][IoC] = acc[BlacklistedProp][IoC] || [];
-          acc[BlacklistedProp][IoC].push(item);
-        }
-        return acc;
-      }, {[BlacklistedProp]: {}});
+      IOCsList.Data = IOCsList.Data.reduce(
+        (acc, item) => {
+          const { IoC, Blacklisted = '', ...rest } = item;
+          acc[IoC] = acc[IoC] || [];
+          acc[IoC].push({ Blacklisted, ...rest });
+          if (Blacklisted.toLowerCase() === 'true') {
+            acc[BlacklistedProp][IoC] = acc[BlacklistedProp][IoC] || [];
+            acc[BlacklistedProp][IoC].push(item);
+          }
+          return acc;
+        },
+        { [BlacklistedProp]: {} }
+      );
       IOCsList.Metadata = IOCsList.Metadata.reduce((acc, item) => {
-      let IOC = 'unknown';
-      const t = item.split(',');
-      const itemProps = t.reduce((itemAcc, propItem) => {
-        const props = propItem.split(':');
-        const value = props.slice(1, props.length).join('');
-        if (props[0] === 'IOC') {
-          IOC = value;
-        } else {
-          itemAcc[props[0]] = value;
-        }
-        return itemAcc;
-      }, {});
-      acc[IOC] = acc[IOC] || {};
-      acc[IOC] = {...acc[IOC], ...itemProps};
-      return acc;
+        let IOC = 'unknown';
+        const t = item.split(',');
+        const itemProps = t.reduce((itemAcc, propItem) => {
+          const props = propItem.split(':');
+          const value = props.slice(1, props.length).join('');
+          if (props[0] === 'IOC') {
+            IOC = value;
+          } else {
+            itemAcc[props[0]] = value;
+          }
+          return itemAcc;
+        }, {});
+        acc[IOC] = acc[IOC] || {};
+        acc[IOC] = { ...acc[IOC], ...itemProps };
+        return acc;
       }, {});
       return IOCsList;
     });
@@ -76,7 +80,7 @@ const DataParseSchema = {
   },
   passivetotal: (data = []) => {
     const result = data.map((obj) => {
-      return { ...obj, Data: parsers.csv(obj.Data) };
+      return { ...obj, Data: parsers.json(obj.Data) };
     });
     return result.length === 1 ? result[0] : result;
   },
@@ -120,7 +124,7 @@ export const parseData = (data) => {
     if (moduleDataFormatter) {
       const badness = [];
       const result = moduleDataFormatter(acc[key]);
-      [].concat(result.Data).forEach(({Badness} = {}) => {
+      [].concat(result.Data).forEach(({ Badness } = {}) => {
         const badnessScore = parseFloat(Badness);
         if (!isNaN(badnessScore)) {
           badness.push(badnessScore);
@@ -244,26 +248,37 @@ export const formatData = (raw, value, ...keyPath) => {
   return value; // if it's not in schema, we don't expand at all
 };
 
-
 export const badnessFormatter = (badnessResponses) => {
   let badnessScore = 'N\\A';
   const severity = {
     critical: '#B30000',
     major: '#E07800',
     minor: '#4FA800'
-  }
+  };
   if (badnessResponses.length) {
-    badnessScore = badnessResponses.reduce((acc, {module, badness}) => {
+    badnessScore = badnessResponses.reduce((acc, { module, badness }) => {
       const average = Math.max(...badness);
       if (average < 0.5) {
-        acc.push(<span style={{color: severity.minor}}>{average.toFixed(2)} ({module});</span>);
+        acc.push(
+          <span style={{ color: severity.minor }}>
+            {average.toFixed(2)} ({module});
+          </span>
+        );
       } else if (average < 0.75) {
-        acc.push(<span style={{color: severity.major}}>{average.toFixed(2)} ({module});</span>);
+        acc.push(
+          <span style={{ color: severity.major }}>
+            {average.toFixed(2)} ({module});
+          </span>
+        );
       } else if (average <= 1) {
-        acc.push(<span style={{color: severity.critical}}>{average.toFixed(2)} ({module});</span>);
+        acc.push(
+          <span style={{ color: severity.critical }}>
+            {average.toFixed(2)} ({module});
+          </span>
+        );
       }
       return acc;
-    }, [])
+    }, []);
   }
   return badnessScore;
-}
+};
