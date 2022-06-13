@@ -27,10 +27,6 @@ export const Layout = ({ children, router }) => {
             active: true
           };
         });
-        //header.updateNavigationTop(<div>Resources</div>);
-        header.updateNavHeading({
-          text: 'Hello World'
-        });
         header.updateSidebarNav(menu);
         header.onNavLinkClick(() => key => {
           return evt => {

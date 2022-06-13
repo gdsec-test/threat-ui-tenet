@@ -102,13 +102,13 @@ export const ForensicStorage = () => {
     getForensicStorage()
     .then(s3DataResponse => {
       if (s3DataResponse.error) {
-        alert("Error during reading S3 forensice storage:" + s3DataResponse.error);
+        alert("Error during reading S3 forensic storage:" + s3DataResponse.error);
       } else {
         setTreeData(formatTreeDataFolder(s3DataResponse));
       }
     })
     .catch(err => {
-      alert("Error during reading S3 forensice storage:" + err);
+      alert("Error during reading S3 forensic storage:" + err);
     });
   }, [refresh]);
   return (

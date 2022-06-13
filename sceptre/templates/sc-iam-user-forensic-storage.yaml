@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Deploy the IAM Forensice Storage User
+Description: Deploy the IAM Forensic Storage User
 Parameters:
   DevelopmentEnvironment:
     Type: AWS::SSM::Parameter::Value<String>
