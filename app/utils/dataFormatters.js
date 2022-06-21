@@ -5,11 +5,15 @@ import React from 'react';
 const parsers = {
   csv: (data) => Papa.parse(data, { header: true, skipEmptyLines: true }).data,
   spaces: (data) => data.toString().split(' '),
-  json: (data) => JSON.parse(data)
+  json: (data) =>
+    // use the reviver function for handling formatting issues
+    JSON.parse(data, (key, value) => {
+      value ? value : 'No Data';
+    })
 };
 
-const extractData = result => {
-  const tempResult = result.map(report => {
+const extractData = (result) => {
+  const tempResult = result.map((report) => {
     let { Data, Metadata } = report;
     if (Data && Data.length && Data.length === 1) {
       Data = Data[0];
@@ -26,7 +30,7 @@ const extractData = result => {
 const DataParseSchema = {
   apivoid: (data = []) => {
     const BlacklistedProp = 'Blacklisted';
-    const result = data.map(obj => {
+    const result = data.map((obj) => {
       const IOCsList = { ...obj, Data: parsers.csv(obj.Data) };
       IOCsList.Data = IOCsList.Data.reduce(
         (acc, item) => {
@@ -63,16 +67,16 @@ const DataParseSchema = {
     return extractData(result);
   },
   shodan: (data = []) => {
-    const result = data.map(obj => {
+    const result = data.map((obj) => {
       return { ...obj, Data: parsers.csv(obj.Data) };
     });
     return extractData(result);
   },
   recordedfuture: (data = []) => {
-    const result = data.map(obj => {
+    const result = data.map((obj) => {
       const spacedPropName = ['Affected Machines: CPE', 'RawRisk Rules Associated'];
       const result = parsers[obj.DataType](obj.Data);
-      result.forEach(item => {
+      result.forEach((item) => {
         if (item[spacedPropName]) {
           item[spacedPropName] = parsers.spaces(item[spacedPropName]);
         }
@@ -82,56 +86,56 @@ const DataParseSchema = {
     return extractData(result);
   },
   urlhaus: (data = []) => {
-    const result = data.map(obj => {
+    const result = data.map((obj) => {
       return { ...obj, Data: parsers.csv(obj.Data) };
     });
     return extractData(result);
   },
   virustotal: (data = []) => {
-    const result = data.map(obj => {
+    const result = data.map((obj) => {
       return { ...obj, Data: parsers.csv(obj.Data) };
     });
     return extractData(result);
   },
   passivetotal: (data = []) => {
-    const result = data.map(obj => {
+    const result = data.map((obj) => {
       return { ...obj, Data: parsers.json(obj.Data) };
     });
     return extractData(result);
   },
   trustar: (data = []) => {
-    const result = data.map(obj => {
+    const result = data.map((obj) => {
       return { ...obj, Data: parsers.csv(obj.Data) };
     });
     return extractData(result);
   },
   zerobounce: (data = []) => {
-    const result = data.map(obj => {
+    const result = data.map((obj) => {
       return { ...obj, Data: parsers.csv(obj.Data) };
     });
     return extractData(result);
   },
   nvd: (data = []) => {
-    const result = data.map(obj => {
+    const result = data.map((obj) => {
       return { ...obj, Data: parsers.csv(obj.Data) };
     });
     return extractData(result);
   },
   urlscanio: (data = []) => {
-    const result = data.map(obj => {
+    const result = data.map((obj) => {
       return { ...obj, Data: parsers.csv(obj.Data) };
     });
     return extractData(result);
   },
   sucuri: (data = []) => {
-    const result = data.map(obj => {
+    const result = data.map((obj) => {
       return { ...obj, Data: parsers.csv(obj.Data) };
     });
     return extractData(result);
   }
 };
 
-export const parseData = data => {
+export const parseData = (data) => {
   data.badness = [];
   const { responses = {} } = data;
   data.responses = Object.keys(responses).reduce((acc, key) => {
@@ -155,10 +159,10 @@ export const parseData = data => {
   return data;
 };
 
-const getKeyPath = keyPath => {
+const getKeyPath = (keyPath) => {
   let parsedKeyPath = keyPath.slice(); // we make copy of original array casue we cannot change it
   // if it is element of array, we read schema config for whole array by removing index from path
-  parsedKeyPath = parsedKeyPath.filter(key => isNaN(parseInt(key)));
+  parsedKeyPath = parsedKeyPath.filter((key) => isNaN(parseInt(key)));
   parsedKeyPath = parsedKeyPath.reverse(); // we have to reverse path array, because it is reversed initially
   return parsedKeyPath;
 };
@@ -177,7 +181,7 @@ const DataExpandSchema = {
   sucuri: false
 };
 
-export const expandData = keyPath => {
+export const expandData = (keyPath) => {
   const config = get(DataExpandSchema, getKeyPath(keyPath));
   if (config) {
     // it is object or boolean
@@ -192,7 +196,7 @@ export const expandData = keyPath => {
 const DataFormatSchema = {
   shodan: {},
   recordedfuture: {
-    IntelCardLink: value => (
+    IntelCardLink: (value) => (
       <a target='_blank' rel='noreferrer' href={value}>
         {value}
       </a>
