@@ -7,9 +7,7 @@ const parsers = {
   spaces: (data) => data.toString().split(' '),
   json: (data) =>
     // use the reviver function for handling formatting issues
-    JSON.parse(data, (key, value) => {
-      value ? value : 'No Data';
-    })
+    JSON.parse(data)
 };
 
 const extractData = (result) => {
