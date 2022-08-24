@@ -49,7 +49,8 @@ module.exports = {
     params: {
       app: 'threat-ui-tenet',
       header: 'independents-header',
-      paletteId: 'godaddy-antares'
+      paletteId: 'godaddy-antares',
+      uxcore: 2200
     }
   },
   nextConfig: {
