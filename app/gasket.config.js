@@ -11,7 +11,7 @@ const baseDevConfig = {
   apiBaseUrl: 'https://api.threat.int.dev-gdcorp.tools'
 };
 let developmentConfig = baseDevConfig;
-if (process.env.LOCAL_TENET_CONFIG === "true") {
+if (process.env.LOCAL_TENET_CONFIG === 'true') {
   developmentConfig = {
     ...baseDevConfig,
     hostname: 'local.ui.threat.int.dev-gdcorp.tools',
@@ -20,7 +20,7 @@ if (process.env.LOCAL_TENET_CONFIG === "true") {
       key: 'ui.threat.int.dev-gdcorp.tools.key',
       cert: ['ui.threat.int.dev-gdcorp.tools.crt']
     }
-  }
+  };
 }
 module.exports = {
   plugins: {
