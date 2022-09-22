@@ -2,7 +2,7 @@
 
 Threat UI aka Tenet to work with Threat API and render human-friendly results.
 
-This platform supports several threat triage modules and searchable Indicators of Compromise (IOCs).
+This platform supports several threat triage modules and Indicators of Compromise (IOCs).
 
 | Environment   | URL                                     |
 | ------------- | --------------------------------------- |
