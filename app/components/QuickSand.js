@@ -7,10 +7,6 @@ import { withRouter } from 'next/router';
 import RenderError from './common/RenderError';
 import { Form, Button, Tooltip } from '@ux/uxcore2/lib';
 
-// File types accepted by Joe Sandbox
-const acceptedFileTypes =
-  'image/*,.exe,.dll,.pif,.cmd,.bat,.com,.scr,.cpl,.pdf,.doc,.docx,.dotm,.xls,.xlsx,.xlsm,.xlsb,.ppt,.pptx,.pptm,.hwp,.jtd,.rft,.xpi,.crx,.eml,.msg,.chm,.js,.vbs,.vbe,,.lnk,.jar,.ps1,.zip,.7z,.rar,.zlib,.asp,.aspx,.apk,.mach-o,.dmg,.app,.xar,.pkg';
-
 const getTooltip = (caption, message) => (
   <Tooltip openOnHover={true} autoHideTimeout={300} message={message}>
     {caption}
@@ -21,7 +17,9 @@ class QuickSand extends Component {
   constructor() {
     super(...arguments);
     this.state = {
-      files: []
+      files: [],
+      acceptedFileTypes:
+        'image/*,video/*,audio/*,.exe,.dll,.pif,.cmd,.bat,.com,.scr,.cpl,.pdf,.doc,.docx,.docm,.xls,.xlsx,.xlsm,.xlsb,.ppt,.pptx,.pptm,.hwp,.jtd,.rft,.xpi,.crx,.eml,.msg,.chm,.js,.vbs,.vbe,,.lnk,.jar,.ps1,.zip,.7z,.rar,.zlib,.asp,.aspx,.apk,.mach-o,.dmg,.app,.xar,.pkg'
     };
     this.onChange = this.onChange.bind(this);
   }
@@ -48,21 +46,18 @@ class QuickSand extends Component {
       <Form className={'InputForm'} action=''>
         <h6>
           Submit Files
-          {getTooltip(
-            '',
-            'File types supported by Joe Sandbox: image/*,.exe,.dll,.pif,.cmd,.bat,.com,.scr,.cpl,.pdf,.doc,.docx,.dotm,.xls,.xlsx,.xlsm,.xlsb,.ppt,.pptx,.pptm,.hwp,.jtd,.rft,.xpi,.crx,.eml,.msg,.chm,.js,.vbs,.vbe,,.lnk,.jar,.ps1,.zip,.7z,.rar,.zlib,.asp,.aspx,.apk,.mach-o,.dmg,.app,.xar,.pkg'
-          )}
+          {getTooltip('', 'File types supported by Joe Sandbox: ' + this.state.acceptedFileTypes)}
         </h6>
 
         <div>
           <FileUpload
             name='quicksand-file-upload'
-            accept={acceptedFileTypes}
+            accept={this.state.acceptedFileTypes}
             maxSize={1073741824} // 1 GB
             multiple={true}
             onChange={this.onChange}
-            acceptTypeError='We don not accept that file type'
-            maxSizeError='The file exceeds our size limit'
+            acceptTypeError='We do not accept that file type'
+            maxSizeError='File size limit exceeded (500 MB file size accepted per file and 1 GB in total)'
             duplicateError='You have uploaded this file already!'
             label='Drag your files here'
             buttonLabel='Browse'
