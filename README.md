@@ -102,7 +102,7 @@ Go to `chrome://inspect` in Chrome browser and open Chrome Dev Tools for your ba
 
 ## Code Deployment
 
-Automatic deployments are setup from `main` and `develop`. The CICD pipelines (deployment workflows) can be found in the `.github\workflows' folder in this repository.
+Automatic deployments are setup from `main` and `develop`. The CICD pipelines (deployment workflows) can be found in the `.github\workflows` folder in this repository.
 
 ### Development
 
