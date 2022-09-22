@@ -63,7 +63,7 @@ cd app && npm install --production=false
 
 ### 6) Authenticate
 
-Since this is an internal GoDaddy platform intended for use by authorized GoDaddy employees only, you must be connected to the GoDaddy VPN and logged into the relevant Threat API AWS account (DEV-PRIVATE, DEV or PROD) via your terminal for running the web server locally.
+Since this is an internal GoDaddy platform intended for use by authorized GoDaddy employees only, you must be connected to the GoDaddy VPN and logged into the relevant Threat Tools AWS account (DEV-PRIVATE, DEV or PROD) via your terminal for running the web server locally.
 
 Download the `aws-cli` and `aws-okta-processor` command-line interface (CLI) tools if they are not already installed and configured on your computer. Configuration and installation instructions can be found [here](https://confluence.godaddy.com/display/ITSecurity/AWS+Tips+and+Tricks) in the `Getting Started` section. You can seek support in the `#aws-onboarding` Slack channel if you run into issues during setup.
 
