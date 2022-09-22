@@ -57,7 +57,7 @@ class QuickSand extends Component {
             multiple={true}
             onChange={this.onChange}
             acceptTypeError='We do not accept that file type'
-            maxSizeError='File size limit exceeded (500 MB file size accepted per file and 1 GB in total)'
+            maxSizeError='The files exceed our size limit (500 MB size limit per file and 1 GB in total)'
             duplicateError='You have uploaded this file already!'
             label='Drag your files here'
             buttonLabel='Browse'
