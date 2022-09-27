@@ -4,6 +4,7 @@ const express = require('express');
 const { S3Client } = require('@aws-sdk/client-s3');
 const listForensicStorage = require('../server/listForensicStorage');
 const uploadFile = require('../server/uploadFile');
+const uploadFilesToQuicksand = require('../server/uploadFilesQuicksand');
 const deleteFileFromForensicStorage = require('../server/deleteFileFromForensicStorage');
 const { REGION } = require('../server/const');
 
@@ -31,7 +32,7 @@ const PROXY_ENDPOINTS = [
   }
 ];
 
-function getApiProxy (apiBaseUrl) {
+function getApiProxy(apiBaseUrl) {
   return async function (req, originalResponse) {
     const url = apiBaseUrl + req.path.replace('/api', '/v1');
     const payload = {
@@ -62,7 +63,7 @@ function getApiProxy (apiBaseUrl) {
 }
 
 module.exports = {
-  name: 'threatpi',
+  name: 'threatapi',
   hooks: {
     middleware: {
       timing: {
@@ -99,21 +100,28 @@ module.exports = {
           }
         });
       }
-      function apiListForensicStorage (req, res) {
+      function apiListForensicStorage(req, res) {
         if (!process.env.FORENSIC_USER_CREDS) {
           res.send({ error: 'Forensic storage is not authorized. See logs' });
         } else {
           listForensicStorage.apply(this, [s3Client, ...arguments]);
         }
       }
-      function apiUploadFile (req, res) {
+      function apiUploadFile(req, res) {
         if (!process.env.FORENSIC_USER_CREDS) {
           res.send({ error: 'Forensic storage is not authorized. See logs' });
         } else {
           uploadFile.apply(this, [s3Client, ...arguments]);
         }
       }
-      function apiDeleteFileFromForensicStorage (req, res) {
+      function uploadFilesQuicksand(req, res) {
+        if (!process.env.FORENSIC_USER_CREDS) {
+          res.send({ error: 'Forensic storage is not authorized. See logs' });
+        } else {
+          uploadFilesToQuicksand.apply(this, [s3Client, ...arguments]);
+        }
+      }
+      function apiDeleteFileFromForensicStorage(req, res) {
         if (!process.env.FORENSIC_USER_CREDS) {
           res.send({ error: 'Forensic storage is not authorized. See logs' });
         } else {
@@ -123,6 +131,7 @@ module.exports = {
       app.get('/api/forensic', apiListForensicStorage);
       app.post('/api/forensic/upload', apiUploadFile);
       app.delete('/api/forensic/delete', apiDeleteFileFromForensicStorage);
+      app.post('/api/quicksand/upload', uploadFilesQuicksand);
     }
   }
 };
