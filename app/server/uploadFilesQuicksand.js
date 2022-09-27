@@ -127,7 +127,6 @@ function isValid(size) {
 
 function moveFile({ destinationDir, sourceFile, destinationFile, success, failure }) {
   fs.mkdir(destinationDir, { recursive: true }, (error) => {
-    //mkdirp(destinationDir, function (error) {
     var sourceStream, destStream;
 
     if (error) {
