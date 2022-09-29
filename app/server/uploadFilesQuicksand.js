@@ -236,6 +236,7 @@ function getChunkFilename(index, count) {
 
 function saveFileInS3({ s3Client, S3Path, fileName, filePath, destinationDir, success, error }) {
   let formattedFileName = fileName.join('');
+  S3Path = 'quicksand/' + formattedFileName.replace('.', '-');
   if (S3Path && S3Path[S3Path.length - 1] === '/') {
     S3Path = S3Path.slice(0, S3Path.length - 1);
   }
