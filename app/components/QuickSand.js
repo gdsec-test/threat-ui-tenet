@@ -4,6 +4,7 @@ import CloudUpload from '@ux/icon/cloud-upload';
 import '@ux/icon/cloud-upload/index.css';
 import '@ux/icon/x/index.css';
 import '@ux/text-input/dist/styles.css';
+import createJob from '../api/createJob';
 import { Form, Tooltip } from '@ux/uxcore2/lib';
 import { withRouter } from 'next/router';
 import 'rc-tree/assets/index.css';
@@ -49,6 +50,22 @@ if (process.browser) {
   };
 }
 
+async function createJobForFile() {
+  alert('Creating job...');
+  // const inputType = 'FILE_REF';
+  const inputType = 'DOMAIN';
+  const inputs = [
+    // TODO: Add S3 file path here based on the operational env
+    'godaddy.com'
+  ];
+  const modules = ['passivetotal'];
+  const metadata = {
+    name: 'My Test Run'
+  };
+  await Promise.resolve(createJob(inputType, inputs, modules, metadata));
+  alert('Job created successfully');
+}
+
 export const ForensicStorage = () => {
   const [refresh, setRefresh] = useState(null);
   const [uploader, setUploader] = useState(null);
@@ -59,6 +76,7 @@ export const ForensicStorage = () => {
         createUploader({
           onComplete: () => {
             setRefresh(!refresh);
+            createJobForFile();
           }
         })
       );
