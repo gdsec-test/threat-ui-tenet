@@ -1,4 +1,6 @@
+/* eslint-disable max-len */
 /* eslint-disable max-params */
+const fetch = require('@gasket/fetch');
 const fs = require('fs');
 const rimraf = require('rimraf'),
   multiparty = require('multiparty'),
@@ -11,6 +13,7 @@ const { getEventListeners, EventEmitter } = require('events');
 const uploadEmitter = new EventEmitter();
 
 const { PutObjectCommand } = require('@aws-sdk/client-s3');
+const { json } = require('express');
 
 const UPLOAD_FINISHED_EVENT = 'uploadFinished';
 
@@ -26,7 +29,7 @@ function uploadFileToQuicksand(s3Client, req, res) {
     if (!getEventListeners(uploadEmitter, eventName).length) {
       uploadEmitter.once(eventName, function ({ fileName, fileDestination, destinationDir, success, failure }) {
         uploadEmitter.removeAllListeners(eventName);
-        saveFileInS3({
+        let s3FilePath = saveFileInS3({
           s3Client,
           S3Path,
           fileName,
@@ -35,6 +38,8 @@ function uploadFileToQuicksand(s3Client, req, res) {
           success: success,
           error: failure
         });
+        createJobForFile(req, s3FilePath);
+        // TODO: Pass job ID to results page
       });
     }
     if (partIndex == null) {
@@ -234,6 +239,36 @@ function getChunkFilename(index, count) {
   return (zeros + index).slice(-digits);
 }
 
+async function createJobForFile(req, ioc) {
+  console.log(ioc);
+  const uri = req.apiBaseUrl + '/v1/jobs';
+  const method = 'POST';
+  const job = {
+    iocType: 'FILE_REF',
+    iocs: [ioc],
+    modules: ['joesandbox'],
+    metadata: {
+      name: 'My Test Run'
+    }
+  };
+  const payload = {
+    method,
+    body: JSON.stringify(job),
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'sso-jwt ' + req.cookies['auth_jomax']
+    }
+  };
+  let jobId;
+  await fetch(uri, payload)
+    .then((resp) => resp.json())
+    .then((json) => {
+      jobId = json;
+    });
+  return jobId;
+}
+
 function saveFileInS3({ s3Client, S3Path, fileName, filePath, destinationDir, success, error }) {
   let formattedFileName = fileName.join('');
   S3Path = 'quicksand/' + formattedFileName.replace('.', '-');
@@ -272,6 +307,8 @@ function saveFileInS3({ s3Client, S3Path, fileName, filePath, destinationDir, su
         error();
       });
   });
+  // Return full S3 file path after saving file
+  return 's3://' + S3Path + '/' + formattedFileName;
 }
 
 module.exports = uploadFileToQuicksand;
