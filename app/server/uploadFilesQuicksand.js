@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable max-params */
 const fetch = require('@gasket/fetch');
 const fs = require('fs');
@@ -13,12 +12,12 @@ const { getEventListeners, EventEmitter } = require('events');
 const uploadEmitter = new EventEmitter();
 
 const { PutObjectCommand } = require('@aws-sdk/client-s3');
-const { json } = require('express');
 
 const UPLOAD_FINISHED_EVENT = 'uploadFinished';
 
 function uploadFileToQuicksand(s3Client, req, res) {
   var form = new multiparty.Form();
+  var host = req.headers['host'];
 
   form.parse(req, function (err, fields, files) {
     const partIndex = fields.qqpartindex;
@@ -36,7 +35,8 @@ function uploadFileToQuicksand(s3Client, req, res) {
           filePath: fileDestination,
           destinationDir,
           success: success,
-          error: failure
+          error: failure,
+          host
         });
         createJobForFile(req, s3FilePath);
         // TODO: Pass job ID to results page
@@ -240,7 +240,6 @@ function getChunkFilename(index, count) {
 }
 
 async function createJobForFile(req, ioc) {
-  console.log(ioc);
   const uri = req.apiBaseUrl + '/v1/jobs';
   const method = 'POST';
   const job = {
@@ -269,7 +268,7 @@ async function createJobForFile(req, ioc) {
   return jobId;
 }
 
-function saveFileInS3({ s3Client, S3Path, fileName, filePath, destinationDir, success, error }) {
+function saveFileInS3({ s3Client, S3Path, fileName, filePath, destinationDir, success, error, host }) {
   let formattedFileName = fileName.join('');
   S3Path = 'quicksand/' + formattedFileName.replace('.', '-');
   if (S3Path && S3Path[S3Path.length - 1] === '/') {
@@ -281,7 +280,7 @@ function saveFileInS3({ s3Client, S3Path, fileName, filePath, destinationDir, su
       throw err;
     }
     const params = {
-      Bucket: getBucket(),
+      Bucket: getBucket(host),
       // Specify the name of the new object. For example, 'index.html'.
       // To create a directory for the object, use '/'. For example, 'myApp/package.json'.
       Key: formattedFileName,
