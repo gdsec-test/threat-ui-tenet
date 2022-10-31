@@ -1,3 +1,4 @@
+/* eslint-disable max-params */
 const fs = require('fs');
 const rimraf = require('rimraf'),
   multiparty = require('multiparty'),
@@ -14,8 +15,9 @@ const { PutObjectCommand } = require('@aws-sdk/client-s3');
 // app.delete("/uploads/:uuid", onDeleteFile);
 const UPLOAD_FINISHED_EVENT = 'uploadFinished';
 
-function uploadFile (s3Client, req, res) {
+function uploadFile(s3Client, req, res) {
   var form = new multiparty.Form();
+  var host = req.headers['host'];
 
   form.parse(req, function (err, fields, files) {
     const partIndex = fields.qqpartindex;
@@ -33,7 +35,8 @@ function uploadFile (s3Client, req, res) {
           filePath: fileDestination,
           destinationDir,
           success: success,
-          error: failure
+          error: failure,
+          host
         });
       });
     }
@@ -45,7 +48,7 @@ function uploadFile (s3Client, req, res) {
   });
 }
 
-function onSimpleUpload (fields, file, res) {
+function onSimpleUpload(fields, file, res) {
   var uuid = fields.qquuid,
     responseData = {
       success: false
@@ -70,7 +73,7 @@ function onSimpleUpload (fields, file, res) {
   }
 }
 
-function onChunkedUpload (fields, file, res) {
+function onChunkedUpload(fields, file, res) {
   var size = parseInt(fields.qqtotalfilesize),
     uuid = fields.qquuid,
     index = fields.qqpartindex,
@@ -115,13 +118,13 @@ function onChunkedUpload (fields, file, res) {
   }
 }
 
-function failWithTooBigFile (responseData, res) {
+function failWithTooBigFile(responseData, res) {
   responseData.error = 'Too big!';
   responseData.preventRetry = true;
   res.send(responseData);
 }
 
-function onDeleteFile (req, res) {
+function onDeleteFile(req, res) {
   var uuid = req.params.uuid,
     dirToDelete = uploadedFilesPath + uuid;
 
@@ -135,12 +138,12 @@ function onDeleteFile (req, res) {
   });
 }
 
-function isValid (size) {
+function isValid(size) {
   return maxFileSize === 0 || size < maxFileSize;
 }
 
-function moveFile ({ destinationDir, sourceFile, destinationFile, success, failure }) {
-  fs.mkdir(destinationDir, { recursive: true }, error => {
+function moveFile({ destinationDir, sourceFile, destinationFile, success, failure }) {
+  fs.mkdir(destinationDir, { recursive: true }, (error) => {
     //mkdirp(destinationDir, function (error) {
     var sourceStream, destStream;
 
@@ -166,7 +169,7 @@ function moveFile ({ destinationDir, sourceFile, destinationFile, success, failu
   });
 }
 
-function moveUploadedFile (file, uuid, success, failure) {
+function moveUploadedFile(file, uuid, success, failure) {
   var destinationDir = uploadedFilesPath + uuid + '/',
     fileDestination = destinationDir + file.name;
   const fileName = file.name;
@@ -182,14 +185,14 @@ function moveUploadedFile (file, uuid, success, failure) {
   });
 }
 
-function storeChunk (file, uuid, index, numChunks, success, failure) {
+function storeChunk(file, uuid, index, numChunks, success, failure) {
   var destinationDir = uploadedFilesPath + uuid + '/' + chunkDirName + '/',
     chunkFilename = getChunkFilename(index, numChunks),
     fileDestination = destinationDir + chunkFilename;
   moveFile({ destinationDir, sourceFile: file.path, destinationFile: fileDestination, success, failure });
 }
 
-function combineChunks (file, uuid, success, failure) {
+function combineChunks(file, uuid, success, failure) {
   var chunksDir = uploadedFilesPath + uuid + '/' + chunkDirName + '/',
     destinationDir = uploadedFilesPath + uuid + '/',
     fileDestination = destinationDir + file.name;
@@ -224,7 +227,7 @@ function combineChunks (file, uuid, success, failure) {
   });
 }
 
-function appendToStream (destStream, srcDir, srcFilesnames, index, success, failure) {
+function appendToStream(destStream, srcDir, srcFilesnames, index, success, failure) {
   if (index < srcFilesnames.length) {
     fs.createReadStream(srcDir + srcFilesnames[index])
       .on('end', function () {
@@ -242,14 +245,14 @@ function appendToStream (destStream, srcDir, srcFilesnames, index, success, fail
   }
 }
 
-function getChunkFilename (index, count) {
+function getChunkFilename(index, count) {
   var digits = new String(count).length,
     zeros = new Array(digits + 1).join('0');
 
   return (zeros + index).slice(-digits);
 }
 
-function saveFileInS3 ({ s3Client, S3Path, fileName, filePath, destinationDir, success, error }) {
+function saveFileInS3({ s3Client, S3Path, fileName, filePath, destinationDir, success, error, host }) {
   let formattedFileName = fileName.join('');
   if (S3Path && S3Path[S3Path.length - 1] === '/') {
     S3Path = S3Path.slice(0, S3Path.length - 1);
@@ -260,7 +263,7 @@ function saveFileInS3 ({ s3Client, S3Path, fileName, filePath, destinationDir, s
       throw err;
     }
     const params = {
-      Bucket: getBucket(),
+      Bucket: getBucket(host),
       // Specify the name of the new object. For example, 'index.html'.
       // To create a directory for the object, use '/'. For example, 'myApp/package.json'.
       Key: formattedFileName,
@@ -269,7 +272,7 @@ function saveFileInS3 ({ s3Client, S3Path, fileName, filePath, destinationDir, s
     };
     s3Client
       .send(new PutObjectCommand(params))
-      .then(data => {
+      .then((data) => {
         rimraf(destinationDir, function (rimrafError) {
           if (rimrafError) {
             console.log('Problem deleting file after sedning int to S3' + rimrafError);
@@ -277,7 +280,7 @@ function saveFileInS3 ({ s3Client, S3Path, fileName, filePath, destinationDir, s
         });
         success();
       })
-      .catch(data => {
+      .catch((data) => {
         rimraf(destinationDir, function (rimrafError) {
           if (rimrafError) {
             console.log('Problem deleting file after sedning int to S3' + rimrafError);

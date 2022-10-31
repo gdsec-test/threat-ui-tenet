@@ -4,12 +4,13 @@ const { getBucket } = require('./const');
 
 module.exports = (s3Client, req, res) => {
   let filePath = req.body.filePath;
+  host = req.headers['host'];
   s3Client
-    .send(new DeleteObjectCommand({ Bucket: getBucket(), Key: filePath }))
-    .then(data => {
+    .send(new DeleteObjectCommand({ Bucket: getBucket(host), Key: filePath }))
+    .then((data) => {
       res.send(data);
     })
-    .catch(data => {
+    .catch((data) => {
       res.send(data);
     });
 };

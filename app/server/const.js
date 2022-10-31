@@ -5,13 +5,15 @@ const BUCKET = {
 };
 
 module.exports = {
-  getBucket: () => {
-    if (process.env.NODE_ENV === 'development') {
-      if (process.env.LOCAL_TENET_CONFIG === 'true') {
-        // only this file defines local env and dev-private
-        return BUCKET['dev-private'];
-      } else {
-        return BUCKET['dev'];
+  getBucket: (host) => {
+    if (host.includes('dev')) {
+      if (process.env.NODE_ENV === 'development') {
+        if (process.env.LOCAL_TENET_CONFIG === 'true') {
+          // only this file defines local env and dev-private
+          return BUCKET['dev-private'];
+        } else {
+          return BUCKET['dev'];
+        }
       }
     } else {
       return BUCKET['prod'];
