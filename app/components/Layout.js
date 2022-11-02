@@ -8,9 +8,7 @@ const ALL_NAVIGATION_LINKS = [
   { url: '/', caption: 'Submit Job' },
   { url: '/jobs', caption: 'Jobs' },
   { url: '/modules', caption: 'Modules' },
-  { url: '/vulnwatch', caption: 'Vulnerability Watch' },
-  { url: '/forensicstorage', caption: 'Forensic Storage' },
-  { url: '/quicksand', caption: 'Quicksand' }
+  { url: '/forensicstorage', caption: 'Forensic Storage' }
 ];
 
 export const Layout = ({ children, router }) => {
