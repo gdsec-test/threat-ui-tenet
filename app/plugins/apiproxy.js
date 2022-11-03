@@ -4,6 +4,7 @@ const express = require('express');
 const { S3Client } = require('@aws-sdk/client-s3');
 const listForensicStorage = require('../server/listForensicStorage');
 const uploadFile = require('../server/uploadFile');
+const uploadFilesToQuicksand = require('../server/uploadFilesQuicksand');
 const deleteFileFromForensicStorage = require('../server/deleteFileFromForensicStorage');
 const { REGION } = require('../server/const');
 
@@ -113,6 +114,13 @@ module.exports = {
           uploadFile.apply(this, [s3Client, ...arguments]);
         }
       }
+      function uploadFilesQuicksand(req, res) {
+        if (!process.env.FORENSIC_USER_CREDS) {
+          res.send({ error: 'Forensic storage is not authorized. See logs' });
+        } else {
+          uploadFilesToQuicksand.apply(this, [s3Client, ...arguments]);
+        }
+      }
       function apiDeleteFileFromForensicStorage(req, res) {
         if (!process.env.FORENSIC_USER_CREDS) {
           res.send({ error: 'Forensic storage is not authorized. See logs' });
@@ -123,6 +131,7 @@ module.exports = {
       app.get('/api/forensic', apiListForensicStorage);
       app.post('/api/forensic/upload', apiUploadFile);
       app.delete('/api/forensic/delete', apiDeleteFileFromForensicStorage);
+      app.post('/api/quicksand/upload', uploadFilesQuicksand);
     }
   }
 };
