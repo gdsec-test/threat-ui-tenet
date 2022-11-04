@@ -8,7 +8,6 @@ const ALL_NAVIGATION_LINKS = [
   { url: '/', caption: 'Submit Job' },
   { url: '/jobs', caption: 'Jobs' },
   { url: '/modules', caption: 'Modules' },
-  { url: '/vulnwatch', caption: 'Vulnerability Watch' },
   { url: '/forensicstorage', caption: 'Forensic Storage' }
 ];
 
@@ -28,8 +27,8 @@ export const Layout = ({ children, router }) => {
           };
         });
         header.updateSidebarNav(menu);
-        header.onNavLinkClick(() => key => {
-          return evt => {
+        header.onNavLinkClick(() => (key) => {
+          return (evt) => {
             evt.preventDefault();
             router.push(evt.currentTarget.href);
             return false;
@@ -39,7 +38,9 @@ export const Layout = ({ children, router }) => {
     }
   }, [router]);
   const currentCaption =
-    router.route === '/job/[id]' ? 'Job Details' : ALL_NAVIGATION_LINKS.find(link => link.url === router.route).caption;
+    router.route === '/job/[id]'
+      ? 'Job Details'
+      : ALL_NAVIGATION_LINKS.find((link) => link.url === router.route).caption;
   return (
     <div className='Layout container m-t-3'>
       <Head title='Home' />

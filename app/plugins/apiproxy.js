@@ -31,7 +31,7 @@ const PROXY_ENDPOINTS = [
   }
 ];
 
-function getApiProxy (apiBaseUrl) {
+function getApiProxy(apiBaseUrl) {
   return async function (req, originalResponse) {
     const url = apiBaseUrl + req.path.replace('/api', '/v1');
     const payload = {
@@ -43,7 +43,6 @@ function getApiProxy (apiBaseUrl) {
     if (req.method !== 'GET') {
       payload.body = JSON.stringify(req.body);
     }
-    console.log('REQUEST ' + url);
     const response = await fetch(url, payload);
     if (response.status === 401) {
       const ssoLogin = getLoginUrlFromRequest(req);
@@ -62,7 +61,7 @@ function getApiProxy (apiBaseUrl) {
 }
 
 module.exports = {
-  name: 'threatpi',
+  name: 'threatapi',
   hooks: {
     middleware: {
       timing: {
@@ -71,6 +70,7 @@ module.exports = {
       handler: function (gasket) {
         return function (req, res, next) {
           const apiBaseUrl = gasket.config.apiBaseUrl;
+          req.apiBaseUrl = apiBaseUrl;
           req.getApiProxy = getApiProxy(apiBaseUrl);
           next();
         };
@@ -99,21 +99,21 @@ module.exports = {
           }
         });
       }
-      function apiListForensicStorage (req, res) {
+      function apiListForensicStorage(req, res) {
         if (!process.env.FORENSIC_USER_CREDS) {
           res.send({ error: 'Forensic storage is not authorized. See logs' });
         } else {
           listForensicStorage.apply(this, [s3Client, ...arguments]);
         }
       }
-      function apiUploadFile (req, res) {
+      function apiUploadFile(req, res) {
         if (!process.env.FORENSIC_USER_CREDS) {
           res.send({ error: 'Forensic storage is not authorized. See logs' });
         } else {
           uploadFile.apply(this, [s3Client, ...arguments]);
         }
       }
-      function apiDeleteFileFromForensicStorage (req, res) {
+      function apiDeleteFileFromForensicStorage(req, res) {
         if (!process.env.FORENSIC_USER_CREDS) {
           res.send({ error: 'Forensic storage is not authorized. See logs' });
         } else {

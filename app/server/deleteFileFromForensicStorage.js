@@ -3,6 +3,7 @@ const { DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const { getBucket } = require('./const');
 
 module.exports = (s3Client, req, res) => {
+  host = req.headers['host'];
   let filePath = req.body.filePath;
   host = req.headers['host'];
   s3Client

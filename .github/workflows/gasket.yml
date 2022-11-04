@@ -36,12 +36,12 @@ jobs:
           echo "NODE_ENV=production" >> $GITHUB_ENV
           echo "GD_ROOT_DOMAIN=gdcorp.tools" >> $GITHUB_ENV
 
-      - uses: actions/setup-node@56337c425554a6be30cdef71bf441f15be286854
+      - uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
           node-version: 14.19.0
 
       - name: Checkout this repo on to a job runner.
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # Checkout this repository.
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # Checkout this repository.
 
       - name: Copy artificatory token into .npmrc
         run: |
@@ -53,7 +53,7 @@ jobs:
           npm i --production=false
 
       - name: Configure AWS credentials using Cloud Key Based Service Accounts
-        uses: aws-actions/configure-aws-credentials@05b148adc31e091bafbaf404f745055d4d3bc9d2
+        uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838
         with:
           aws-access-key-id: ${{ env.AWS_DEPLOY_SECRET_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.AWS_DEPLOY_SECRET_TOKEN_VALUE }}
@@ -74,7 +74,7 @@ jobs:
 
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@aaf69d68aa3fb14c1d5a6be9ac61fe15b48453a2
+        uses: aws-actions/amazon-ecr-login@261a7de32bda11ba01f4d75c4ed6caf3739e54be
 
       - name: Tag image
         env:
@@ -83,7 +83,7 @@ jobs:
           docker tag ${{ steps.container.outputs.id }} $ECR_REGISTRY/$ECR_REPOSITORY
 
       - name: Configure AWS credentials using Cloud Key Based Service Accounts
-        uses: aws-actions/configure-aws-credentials@05b148adc31e091bafbaf404f745055d4d3bc9d2
+        uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838
         with:
           aws-access-key-id: ${{ env.PROD_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.PROD_AWS_SECRET_ACCESS_KEY }}
@@ -92,7 +92,7 @@ jobs:
           aws-region: us-west-2
 
       - name: Checkout GitHub Action for Scan Image
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
         with:
           repository: gdcorp-actions/container-scan
           ref: main
