@@ -32,7 +32,7 @@ jobs:
           echo "AWS_DEPLOY_SECRET_ACCESS_KEY_ID=${{ secrets.PROD_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_DEPLOY_SECRET_TOKEN_VALUE=${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
           echo "AWS_DEPLOY_ROLE=${{ secrets.PROD_AWS_DEPLOY_ROLE }}" >> $GITHUB_ENV
-          echo "AWS_CLUSTER_SSL_CERT_ID=0ed4b93f-b7ad-4dba-9102-572cf48cc9ad" >> $GITHUB_ENV
+          echo "AWS_CLUSTER_SSL_CERT_ID=2d98481c-771c-4e6a-be56-c85a9941a40b" >> $GITHUB_ENV
           echo "NODE_ENV=production" >> $GITHUB_ENV
           echo "GD_ROOT_DOMAIN=gdcorp.tools" >> $GITHUB_ENV
 
