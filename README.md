@@ -80,6 +80,9 @@ After completing the above steps and logging in successfully, you can proceed to
 ### 7) Run web server and open application in browser
 
 !!!Auth in AWS Account
+Login to the `Threat Tools` AWS `Dev-Private` account if you are running the app locally using VS Code (or any other IDE of your choice) for development and testing. This is required by the `Forensic Storage` Threat UI page.
+
+Make sure to be on VPN (Gateway and Portal should be phx3) else the app will not load.
 
 ```
 npm run local
