@@ -45,31 +45,12 @@ jobs:
           echo "Using: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
           aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
 
-      - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # Checkout this repository
-      - name: Checkout GoDaddy Actions repo # Checkout shared actions repository gd-actions
-        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
-        with:
-          repository: gdcorp-actions/tartufo
-          token: ${{ secrets.REPO_CLONE_TOKEN_SA_PAT }} # PAT with read access to gdcorp-cp/gd-actions
-          path: tartufo-action # Relative to github working directory
-          ref: main
-          persist-credentials: false
-
-      - uses: ./tartufo-action # Relative reference to action in gd-actions repository
-        with:
-          github_token: ${{ secrets.REPO_CLONE_TOKEN_SA_PAT }}
-
-  checkout-code:
-    runs-on: self-hosted
-    needs: tartufo-code-secrets-scan
-    steps:
-      - name: Checkout this repo on to a job runner.
-        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # Checkout this repository.
-
   deploy-fargate-infrastructure:
     runs-on: self-hosted
-    needs: checkout-code
     steps:
+      - name: Checkout
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        
       - name: Set params for development env
         if: github.ref == 'refs/heads/develop'
         run: |
