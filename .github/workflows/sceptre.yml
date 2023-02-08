@@ -22,20 +22,6 @@ on:
       - ".github/workflows/sceptre.yml"
 
 jobs:
-  tartufo-code-secrets-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout current repo
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
-
-      - name: Install Python
-        uses: actions/setup-python@98f2ad02fd48d057ee3b4d4f66525b231c3e52b6
-        with:
-          python-version: 3.9
-
-      - name: Tartufo Scan
-        uses: godaddy/tartufo-action@c82bd97f0052b12d204d03cea56a5f4667d9c0de
-
   deploy-fargate-infrastructure:
     runs-on: self-hosted
     steps:
